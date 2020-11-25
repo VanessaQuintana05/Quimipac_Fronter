@@ -1,0 +1,168 @@
+﻿@model Quimipac_.Models.MT_OrdenTrabajo
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaFecha = ViewBag.listaFecha;
+    int idMTOrdenTrabajo = ViewBag.idMTOrdenTrabajo;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormTerminarOrdenEntregaTrabajo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+<title>Fronter | Entrega Orden Trabajo</title>
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        Entrega Orden Trabajo
+    </h2>
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="@Url.Action("OrdenTrabajo", "OrdenTrabajo", new { id = idMTOrdenTrabajo })"><i class="fa fa-dashboard"></i>Orden Trabajo</a></li>
+        @*<li><a href="@Url.Action("Editar_OrdenTrabajo", "OrdenTrabajo", new { id = idMTOrdenTrabajo })"><i class="fa fa-dashboard"></i>Editar Orden Trabajo</a></li>*@
+        <li class="active">Entrega Orden Trabajo</li>
+
+    </ol>
+
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-header">
+                </div>
+                <div class="box-body">
+
+                    <div class="col-md-12">
+                        @using (Html.BeginForm("OrdenEntregaTrabajoOrden", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                @Html.HiddenFor(model => model.Id_OrdenTrabajo)
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                @*@using (Html.BeginForm("Asignar_OrdenTrabajoIntegrante", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+                                        <div class="form-horizontal">
+                                            @Html.HiddenFor(model => model.Id_Orden_Trabajo)
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>*@
+
+
+
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-md-2 control-label">Fecha Entrega Orden:</label>
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.Id_entrega_orden_trabajo, (SelectList)listaFecha, htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.Id_entrega_orden_trabajo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/jquery.timepicker.js"></script>
+    <script src="~/Content/datepair.js"></script>
+    <script src="~/Content/jquery.datepair.js"></script>
+
+
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+    <script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.3.7/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //$('.select2').select2();
+
+            $('.select2').select2({
+                dropdownParent: $('#modal1')
+            });
+
+            $('#datemask_edit2').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            $('#datemask_edit3').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+
+            $('[data-mask]').inputmask()
+
+        })
+
+    </script>
+
+}

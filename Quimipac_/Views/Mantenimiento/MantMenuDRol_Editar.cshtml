@@ -1,0 +1,224 @@
+﻿@*@using Quimipac_.Models*@
+@model IEnumerable<Quimipac_.Models.Menu_Aux>
+@{
+    @*@using Quimipac_.Models      Permisos_Rol*@
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var RolesLI = ViewBag.RolesLI;
+    var TablaGeneralHtml_LI = ViewBag.TablaGeneralHtml_LI;
+    int n = 0;
+}
+
+<title>Fronter | Mantenimiento de Roles Menu</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<section class="content-header">
+
+    <h2 style="text-align:left">Editar Menú Rol</h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("MantMenuDRol", "Mantenimiento")">
+                <i class="fa fa-link">
+                </i>Mantenimiento Menu Roles &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li>
+            Editar Menu Roles
+        </li>
+
+    </ol>
+    @*<br>*@
+    <div class="row">
+        @*<div class="col-md-2">
+                <button id="btnAgregarTablas" type="button" class="Crear_MTPR btn btn-warning " data-toggle="modal" data-target="#modalAgregarRol">
+                    <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Rol
+                </button>
+            </div>*@
+        <div class="vFlotante">
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    @*<br>*@
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Tablas</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+                    <div class="col-md-12">
+
+                        @using (Html.BeginForm("GuardarMenuSelected", "Mantenimiento", FormMethod.Post))
+                        {
+                            <div class="col-md-4">
+                                <!--Menu-->
+                                <div style="font-weight:bold;margin:10px auto;">Item Menú </div>
+                                <div style="border: 1px #dddddd solid;padding:10px;">
+                                    <ul class="sidebar-menu" data-widget="tree">
+                                        @{
+                                            //using (Html.BeginForm("GuardarMenuSelected", "Mantenimiento", FormMethod.Post))
+                                            //{
+                                            int RolID = ViewBag.RolID;
+                                            List<Quimipac_.Models.MenuRol> opcPermitidas = ViewBag.opcPermitidas;
+                                            <input type="hidden" name="RolID" value="@RolID" />
+
+                                            foreach (var item in Model)
+                                            {
+                                                var marginLMN = item.Nivel_Profundidad == 2 ? "margin-left:15px;" : "";
+                                                var chkSelected = opcPermitidas.Exists(vq => vq.Id_Menu == item.Id_Menu) != true ? "" : " checked";
+                                                @*@(item.IsSelected == true ? "checked" : "")*@
+
+                                                <p style="margin-top:-6px;margin-bottom:-6px;@marginLMN">
+                                                    <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                        <input type='checkbox' name='MenuSelectedLI' value="@item.Id_Menu" @chkSelected> @item.Descripcion_Menu <span class=''></span>
+                                                    </label>
+                                                </p>
+                                            }
+                                            @*@Html.Hidden("RolID", ViewBag.RolID);*@
+                                            @*<div class="col-md-12">
+                                                    <input type="submit" value="Guardar" />
+                                                </div>*@
+                                            // }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-12" style="font-weight:bold;margin:10px auto;">
+                                    Nombre del Rol:&nbsp;&nbsp;&nbsp;@*<span style="padding: 5px 15px;background: #fafafa;font-weight: normal;margin: 10px auto; border: 1px #dddddd solid;">@ViewBag.NombreRol</span>*@
+
+                                    <input type="text" id="nombre_Rol" name="nombre_Rol" class="form-control" value="@ViewBag.NombreRol" style="width:auto;" required />
+
+                                    @*@Html.EditorFor(model => model.Codigo_Cliente, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })*@
+
+                                </div>
+                                <div class="col-md-12">
+                                    <br />
+                                    <input type="submit" value="Guardar" class="btn btn-warning" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Roles Menu&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de Roles Menu</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTablas/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+
+    <script type="text/javascript">
+      
+    </script>
+}
+
+

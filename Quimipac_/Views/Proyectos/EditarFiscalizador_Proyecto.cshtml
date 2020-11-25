@@ -1,0 +1,103 @@
+﻿
+@model Quimipac_.Models.MT_Fiscalizador
+
+@{
+    Layout = null;
+
+
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarFiscalizadorProyecto");
+    attributes.Add("autocomplete", "off");
+
+}
+
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@using (Html.BeginForm("EditarFiscalizador_Proyecto", "Proyectos", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Fiscalizador)
+        @Html.HiddenFor(model => model.Id_Proyecto_Contrato)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Nombre Fiscalizador:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+<!--cmbFiltro-->
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+    //INICIO COMBOX FILTRO
+    $(document).ready(function () {        //$('.select2').select2();
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    });//FIN COMBOX FILTRO
+
+    $('#modal1').bootstrapValidator({
+        message: "Este valor no es valido",
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        }//,
+
+        ////"text": {
+        //    ".txtObligatorio": {
+        //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+        //                 stringLength: {
+        //                     min: 3,
+        //                     max: 5,
+        //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+        //                 }
+        //             }
+        //    }
+        ////}
+
+    });
+
+
+</script>
+

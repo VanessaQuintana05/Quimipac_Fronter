@@ -1,0 +1,5 @@
+07/10/2020 10:11:03,En La orden 93138615 El tipo trabajo y/o estacion no se encuentran registrados. Favor revise y/o ingrese el tipo trabajo que deseee utilizar. 
+En La orden 93138802 El tipo trabajo y/o estacion no se encuentran registrados. Favor revise y/o ingrese el tipo trabajo que deseee utilizar. 
+En La orden 93139030 El tipo trabajo y/o estacion no se encuentran registrados. Favor revise y/o ingrese el tipo trabajo que deseee utilizar. 
+ 
+.

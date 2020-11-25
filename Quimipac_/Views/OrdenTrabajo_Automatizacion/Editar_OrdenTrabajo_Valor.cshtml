@@ -1,0 +1,172 @@
+﻿@model Quimipac_.Models.MT_OrdenTrabajo_Valor
+
+@{
+    /**/
+
+    Layout = null;
+
+    var listaItems = ViewBag.listaItems;
+    var listaTipo_Valor = ViewBag.listaTipo_Valor;
+    var listaMoneda = ViewBag.listaMoneda;
+    var listaUnidad = ViewBag.listaUnidad;
+    
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarValorOrdenTrabajo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Editar_OrdenTrabajo_Valor", "OrdenTrabajo_Automatizacion", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_OrdenTrabajo_Valor)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Items:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Item, (SelectList)listaItems, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Item, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo :</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo_Valor, (SelectList)listaTipo_Valor, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Tipo_Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Moneda:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Moneda, (SelectList)listaMoneda, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Moneda, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Unidad:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Unidad, (SelectList)listaUnidad, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Unidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Cantidad:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Precio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Precio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control is-valid", @type="decimal", @step="any", @name="numero", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Costo:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Costo, new { htmlAttributes = new { @class = "form-control is-valid", @type="decimal", @step="any", @name="numero", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })
+                @*<input type="number" placeholder="0" required name="monto" min="0" value="@Model.monto " step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$" onblur="
+                this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'
+                ">*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Iva:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Iva, new { htmlAttributes = new { @class = "form-control is-valid", @type="decimal", @step="any", @name="numero", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Iva, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+        $('#modal1').bootstrapValidator({
+            //    message:"Este valor no es valido",
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }//,
+
+            //fields: {
+            //    txtObligatorio: {
+            //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+            //                 stringLength: {
+            //                     min: 3,
+            //                     max: 5,
+            //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+            //                 }
+            //             }
+            //    }
+            //}
+
+        });
+    })
+
+   
+
+
+</script>

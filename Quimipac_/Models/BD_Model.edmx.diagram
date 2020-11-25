@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="496ee392eaf4438cadbb21bd404616af" Name="Diagram1">
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.Menu" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MenuRol" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Actividad" Width="1.5" PointX="19.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Campamento" Width="1.5" PointX="5.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Contrato" Width="1.5" PointX="15" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Contrato_Documentado" Width="1.5" PointX="17.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Contrato_Prorroga" Width="1.5" PointX="17.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_ContratoAlerta" Width="1.5" PointX="17.25" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_EntregaOrden_Trabajo" Width="1.5" PointX="19.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Equipo" Width="1.5" PointX="19.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Equipo_Evento" Width="1.5" PointX="19.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Estacion" Width="1.5" PointX="19.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Fiscalizador" Width="1.5" PointX="12.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Formulario" Width="1.5" PointX="14.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_GrupoTrabajo" Width="1.5" PointX="16.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_GrupoTrabajoEquipo" Width="1.5" PointX="21.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_GrupoTrabajoIntegrante" Width="1.5" PointX="21.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Items" Width="1.5" PointX="21.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_ItemsBodega" Width="1.5" PointX="21.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Materiales_Solicitud" Width="1.5" PointX="21.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Notificacion_Persona" Width="1.5" PointX="21.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Notificaciones" Width="1.5" PointX="21.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo" Width="1.5" PointX="0.75" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Actividad" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Anexo" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_CausaRaiz" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Egreso" Width="1.5" PointX="3" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Equipo" Width="1.5" PointX="3" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Estado" Width="1.5" PointX="3" PointY="22.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Formulario" Width="1.5" PointX="3" PointY="26.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Integrante" Width="1.5" PointX="3" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Medida" Width="1.5" PointX="3" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Novedad" Width="1.5" PointX="3" PointY="35.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_OrdenTrabajo_Valor" Width="1.5" PointX="3" PointY="39.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Permiso" Width="1.5" PointX="18.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Planilla" Width="1.5" PointX="23.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Planilla_Detalle" Width="1.5" PointX="23.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_PrecioReferencial" Width="1.5" PointX="10.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Presupuesto" Width="1.5" PointX="23.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Presupuesto_Detalle" Width="1.5" PointX="12.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_ProgramaTrabajo" Width="1.5" PointX="14.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Prospecto" Width="1.5" PointX="15" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.Mt_Prospecto_Alerta" Width="1.5" PointX="17.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Prospecto_Documentado" Width="1.5" PointX="17.25" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto" Width="1.5" PointX="5.75" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad" Width="1.5" PointX="8" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad_Anexo" Width="1.5" PointX="10.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad_Equipo" Width="1.5" PointX="10.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad_Integrante" Width="1.5" PointX="10.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad_Novedad" Width="1.5" PointX="10.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Actividad_Valor" Width="1.5" PointX="10.25" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_ActividadEgreso" Width="1.5" PointX="10.25" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Alerta" Width="1.5" PointX="8" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Documento" Width="1.5" PointX="8" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Parametro" Width="1.5" PointX="8" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Proyecto_Prorroga" Width="1.5" PointX="8" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Sector" Width="1.5" PointX="20.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Servicio" Width="1.5" PointX="25.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Solicitud" Width="1.5" PointX="25.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_TablaDetalle" Width="1.5" PointX="12.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Tablas" Width="1.5" PointX="25.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_Tipo_Trabajo_Medida" Width="1.5" PointX="25.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_TipoTrabajo" Width="1.5" PointX="25.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.MT_TipoTrabajo_Item" Width="1.5" PointX="25.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.Roles" Width="1.5" PointX="25.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.Roles_Usuario" Width="1.5" PointX="25.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.sysdiagrams" Width="1.5" PointX="27.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BD_QUIMIPACModel.tb_quimi_mant_contratos_proyectos" Width="1.5" PointX="27.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Contrato_Documentado_MT_Contrato" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Contrato_MT_TablaDetalle" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Contrato_Prorroga_MT_Contrato" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_ContratoAlerta_MT_Contrato" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Actividad_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Anexo_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_CausaRaiz_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Egreso_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Equipo_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Estado_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Formulario_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Integrante_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Medida_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Novedad_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_OrdenTrabajo_Valor_MT_OrdenTrabajo" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_Mt_Prospecto_Alerta_MT_Prospecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Prospecto_Documentado_MT_Prospecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Prospecto_MT_TablaDetalle" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_MT_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Alerta_MT_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Documento_MT_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Parametro_MT_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Prorroga_MT_Proyecto" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_Anexo_MT_Proyecto_Actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_Equipo_MT_Proyecto_Actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_Integrante_MT_Proyecto_Actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_Novedad_MT_Proyecto_Actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_Actividad_Valor_MT_Proyecto_Actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="BD_QUIMIPACModel.FK_MT_Proyecto_ActividadEgreso_MT_Proyecto_Actividad" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

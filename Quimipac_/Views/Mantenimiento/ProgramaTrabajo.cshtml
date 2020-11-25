@@ -1,0 +1,747 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models;
+@model Quimipac_.Models.MT_ProgramaTrabajo
+@{
+    ViewBag.Title = "Programa Trabajo";
+    //Layout = "~/Views/Shared/MainView.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_Result> list = ViewBag.ProgramaTrabajo as List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_Result>;
+
+
+    //var jsonHorarioEstudiante = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(list);
+
+    var listaContrato = ViewBag.listaContrato;
+    var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+    var listaGrupoTrabajo = ViewBag.listaGrupoTrabajo;
+
+
+
+
+    var jsonProgramaTrab = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(list);
+
+    /*    /* * * *
+
+    List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_Contratos_Result> lkcontratoProg = ViewBag.lkcontratoProg as List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_Contratos_Result>;
+    var lkcontratosNoOt = ViewBag.lkcontratosNoOt;// as List<ReturnIdInt>;
+
+    for (int i = 0; i < lkcontratosNoOt.Count; i++)
+    {
+
+        lkcontratoProg.RemoveAll(vq=> !vq.Id_Contrato.ToString().Contains(lkcontratosNoOt[i].ToString()));
+        //bool band = lkcontratoProg.Find(vq => vq.Id_Contrato == lkcontratosNoOt[i]) == null ? false : true;
+        //  if (band){
+        /// lkcontratoProg.Remove()
+                //}
+
+    }
+
+    var n = lkcontratoProg.Count();
+    List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_OT_Result> lkOrdenTrabajo = ViewBag.lkOrdenTrabajo as List<sp_Quimipac_ConsultaMt_ProgramaTrabajo_OT_Result>;
+    */
+    DataBase_Externo db = new DataBase_Externo();
+    //var listaPrograma = db.ObtenerPrograma();
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/fullcalendar/dist/fullcalendar.min.css" />
+<link rel="stylesheet" href="~/Content/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css" />
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css" />
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<title>Fronter | Programa Trabajo</title>
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        Programa Trabajo
+    </h2>
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li class="active">Programa Trabajo</li>
+    </ol>
+
+
+    <br>
+    @*<ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Calendar</li>
+        </ol>*@
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger" id="DivError">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success" id="DivCorrecto">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning" id="DivActualizado">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+</section>
+
+
+
+<section class="content">
+
+
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+
+        <!--<div class="col-md-2" id="divColores">
+            <div class="col-md-12">
+                <div class="box box-warning">
+                    <div class="box-body">
+                       <div class="form-group">
+                            <label for="status" class="text-bold col-md-8 control-label">Grupo:</label>
+                            <div class="col-md-3">
+                                <label for="status" class="text-bold col-md-2 control-label" style="background-color:aquamarine">n</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="col-md-10">
+            <div class="box box-warning">
+                <div class="box-body">
+                    <div class="col-md-2 border-right" id="DivColores" style="height:595px; overflow-y: auto;">
+                        <h4><label for="status" class="text-bold control-label" style="margin-top: 5px;"><span class="fa fa-group"></span>&nbsp;Grupos</label></h4>
+                        <hr style="margin-top: 5px;" />
+                    </div>
+
+                    <div class="col-md-10">
+                        <div id="calendar" style="background-color:white;border:1px solid #dddddd">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+        </div>
+    </div>
+    @*</div>*@
+</section>
+<!-- Modal
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  -->
+<div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;  Agregar &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @*<form action="">*@
+
+                @using (Html.BeginForm("Agregar_ProgramaTrabajo", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    @*<label for="">Fecha:</label>
+                                    <input type="date" id="fecha">
+                                    <br/>
+                                    <label for="">Descripcion:</label>
+                                    <input type="text">
+                                    <br/>
+                                    <label for="">Direccion:</label>
+                                    <input type="text">
+                                    <br/>
+                                    <label for="">Ubicacion:</label>
+                                    <input type="text">
+                                    <br/>
+                                    <label for="">Fecha Inicio:</label>
+                                    <input type="date">
+                                    <br/>
+                                    <label for="">Fecha Fin:</label>
+                                    <input type="date">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="Crear_MTPR btn btn-warning">
+                            @*<button id="btnAgregarTipoTrabajo" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarTipoTrabajo">Save changes</button>
+                            </form>
+                        </div>*@
+
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status" class="text-bold col-md-2 control-label">Contrato:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.Id_Contrato, (SelectList)listaContrato, new { @class = "form-control select2", @style = "width: 100%" })
+                                @Html.ValidationMessageFor(model => model.Id_Contrato, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*COMBO FILTRABLE CLIENTE*@
+                        <div class="form-group">
+                            <label for="status" class="text-bold col-md-2 control-label">Tipo Trabajo:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.Id_TIpo_Trabajo, (SelectList)listaTipoTrabajo, new { @class = "form-control select2", @style = "width: 100%" })
+                                @Html.ValidationMessageFor(model => model.Id_TIpo_Trabajo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status" class="text-bold col-md-2 control-label">Grupo Trabajo:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.Id_GrupoTrabajo, (SelectList)listaGrupoTrabajo, new { @class = "form-control select2", @style = "width: 100%" })
+                                @Html.ValidationMessageFor(model => model.Id_GrupoTrabajo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label text-success">Direccion:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label text-success">Ubicacion:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Ubicacion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                                @Html.ValidationMessageFor(model => model.Ubicacion, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Descripci&oacute;n:</label>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @type = "text", @rows = "5" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Fecha_Ini, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Fecha_Ini, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Fecha Registro:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Fecha_Registro, new { htmlAttributes = new { @class = "form-control is-valid", @id = "fecha", @type = "text", @required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Fecha_Registro, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo" }), new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            @*<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                <input type="submit" value="Crear" class="Crear_MTPR btn btn-warning" />*@
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-warning" onclick="ValidaFecha(this)">Crear</button>
+                            <input type="submit" id="btnSubmitValidaFecha" hidden="hidden" />
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+    
+    <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+    <script src="~/Content/bower_components/moment/moment.js"></script>
+   
+    <script src="~/Content/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+
+    <!--Alert Sweet2-->
+    <script src="~/Scripts/sweetalert2-7.32.2/package/dist/sweetalert2.all.min.js"></script>
+
+    <script type="text/javascript">
+
+        start = new Date(moment().subtract(1, 'days'));
+        end = new Date(moment());
+
+        $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'));
+        $('#datepickerOpenA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+        $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'));
+        $('#datepickerCloseA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+
+        function ValidaFecha(form) {
+
+            var fechaRegistro = $('#fecha').val();
+
+            var horaRegistro = moment().format('LTS');  // 5:22:24 PM
+
+
+            var SeparadorFR = fechaRegistro.split("-");
+            var newfechaRegistro = SeparadorFR[2] + '/' + SeparadorFR[1] + '/' + SeparadorFR[0];
+            var SeparadorHoras = horaRegistro.split(" ");
+            var newHoras = SeparadorHoras[0];
+
+            var fecha_hora = newfechaRegistro + ' ' + newHoras;
+         //   console.log('fecha_apertura ' + fecha_hora);
+            
+            //. . . .
+            var fecha_ini = $('#datepickerOpenA').val();
+            var fecha_fin = $('#datepickerCloseA').val();
+         //   console.log('fecha_ini' + fecha_ini + ' fecha_fin' + fecha_fin);
+
+
+            var datearray0 = newfechaRegistro.split("/");
+            var newdate_reg = datearray0[1] + '/' + datearray0[0] + '/' + datearray0[2];
+         //   console.log('newfechaRegistro ' + newdate_reg);
+
+            var datearray1 = fecha_ini.split("/");
+            var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+          //  console.log('fecha_ini ' + newdate_ap);
+
+            var datearray2 = fecha_fin.split("/");
+            var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+           // console.log('fecha_fin ' + newdate_ci);
+
+
+            var registro = Date.parse(newdate_reg);
+            var primera = Date.parse(newdate_ap);
+            var segunda = Date.parse(newdate_ci);
+            //console.log('FRegistro'+ primera + 'FFin' + segunda);
+
+            if (primera < newfechaRegistro) {
+                swal('', 'Fecha de inicio no puedo ser menor que fecha registro', 'error');
+            }
+            else {
+
+                if (segunda < primera) {
+                    swal('', 'Fecha fin no debe ser menor que fecha de inicio', 'error');
+                } else {
+                    var obj = document.getElementById("btnSubmitValidaFecha");
+
+                    if (obj) {
+                        obj.click();
+                    }
+                }
+            }
+        }
+
+
+     var data = [];
+     var h = '';
+     var k = '';
+     var HI = '';
+        var HF = '';
+
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+            /* initialize the calendar
+             -----------------------------------------------------------------*/
+            //Date for the calendar events (dummy data)
+            var date = new Date()
+            var d = date.getDate(),
+                m = date.getMonth(),
+                y = date.getFullYear()
+
+            //variable para colores
+            var contGral = 0;
+
+
+            $(document).ready(function () {
+
+                $.noConflict();
+                $('#calendar').fullCalendar({
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+
+
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    buttonText: {
+                        today: 'Hoy',
+                        month: 'Mes',
+                        week: 'semana',
+                        day: 'Dia'
+                    },
+                    //Random default events
+
+                    dayClick: function (date, jsEvent, view) {
+                        
+                        $("#exampleModal").modal("show");
+                        $("#fecha").val(date.format());
+                    },
+                    eventClick: function (calEvent, start, end) {
+                        mostrarDetalle(calEvent, start, end);// console.log(calEvent);
+                    },
+                    editable: true,
+                    droppable: true, // this allows things to be dropped onto the calendar
+                    drop: function (date, jsEvent, ui, resourceId) {
+                        alert("drop: " + date.format());
+                    },
+                    eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
+                        var urlFecha = '@Url.Action("UPD_FechaEvento", "Mantenimiento")';
+
+                       // alert(event.group_id + ' i:' + event.start.format() + 'f:' + event.end.format());
+
+                        var SeparadorFI = (event.start.format()).split("T");
+                        var FechaInicio = SeparadorFI[0];
+
+                        var SeparadorFF = (event.end.format()).split("T");
+                        var FechaFin = SeparadorFF[0];
+
+                        //alert('I: ' + FechaInicio + '  F: ' + FechaFin);
+                        ejecutarAjax_UPD_Fecha(urlFecha, event.group_id, FechaInicio, FechaFin);
+                     //...................   console.log(event); console.log(delta); console.log(revertFunc); console.log(jsEvent); console.log(ui); console.log(view);
+                        // alert("eventDrop: " + event.start.format() + ' - ' + event.end.format());
+                      /*  swal({
+                            title: '',
+                            text: "Desea crear como orden de trabajo?",
+                            html: '<br><br><div><font size=2><b>Fecha Inicio:&nbsp;</b>   </font></div><br><div><font size=2><b>Fecha Fin:&nbsp;</b>    </font></div><br>',
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#f39c12',// '#3085d6',
+                            cancelButtonColor: '#8d92b4',
+                            confirmButtonText: 'Aceptar!'
+                        }).then((result) => {
+                            if (result.value) {
+
+
+                            } else {
+
+                            }
+                        });*/
+
+                    }
+                });
+
+                var ObjProgramaTrab = @Html.Raw(Json.Encode(jsonProgramaTrab));
+                var f = [];
+
+                f = JSON.parse(ObjProgramaTrab);
+                console.log(f);
+                var Colores = [];
+                var colorFondo;
+
+                for (var i = 0; i < f.length; i++) {
+
+
+
+                    //var colorFondo = "#3c8dbcaaaa";
+                    var borde = "#000000";
+
+                    if (contGral == 0) {
+                        colorFondo = Obtener_color();
+                        Colores.push(f[i].NombreGrupo);
+                        Colores.push(colorFondo); //alert('0:' + colorFondo);
+                        $('#DivColores').append('<div class="" style="">'
+                            + '<label for="status" class="control-label"><font color="' + colorFondo +'"><span class="fa fa-square"></span></font>&nbsp;'+f[i].NombreGrupo+'</label>'
+                                                //            +'<div class="col-md-4">'
+                            //+ '<label for="status" class="text-bold control-label" style="border-color:#000000;background-color:' +colorFondo+'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>'
+                          //  + '</div>
+                            +'</div > ');
+
+                    } else {
+                        var npos = Colores.indexOf(f[i].NombreGrupo);
+
+                            if (npos != -1) {
+                                colorFondo = Colores[npos + 1];
+                            }
+                            else {
+                                        var npos;
+                                        do {
+                                            colorFondo = Obtener_color();
+                                            npos = Colores.indexOf(colorFondo);
+                                        } while (npos != -1)
+                                        Colores.push(f[i].NombreGrupo);
+                                        Colores.push(colorFondo);
+                                        $('#DivColores').append('<div class="" style="">'
+                                            + '<label for="status" class="control-label"><font color="' + colorFondo +'"><span class="fa fa-square"></span></font>&nbsp;' + f[i].NombreGrupo + '</label>'
+                                            //+ '<div class="col-md-4">'
+                                            //+ '<label for="status" class="text-bold control-label" style="border-color:#000000;background-color:' + colorFondo + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>'
+                                            //+ '</div>
+                                            + '</div > ');
+                                }
+                    }
+
+                    contGral++;
+
+
+                    var segundosFR = f[i].Fecha_Registro.replace('/', '').replace('(', '').replace(')', '').replace('Date', '');
+                    FR = new Date(parseInt(segundosFR));
+                    FR = moment(FR).format("YYYY-MM-DD HH:mm:ss");
+
+                    var segundosFI = f[i].Fecha_Ini.replace('/', '').replace('(', '').replace(')', '').replace('Date', '');
+                    FI = new Date(parseInt(segundosFI));
+                    FI = moment(FI).format("YYYY-MM-DD HH:mm:ss");
+
+                    var segundosFF = f[i].Fecha_Fin.replace('/', '').replace('(', '').replace(')', '').replace('Date', '');
+                    FF = new Date(parseInt(segundosFF));
+                    FF = moment(FF).format("YYYY-MM-DD HH:mm:ss");
+
+                    //data = [{ "title": "" + f[i].Descripcion + ' - ' + f[i].NombreContrato + "", "start": "" + FR + "", "end": "" + FI + "", "backgroundColor": "" + colorFondo + "", "borderColor": "" + borde + "", "url": "" + 'https://www.google.com.ec/' + "" }];
+                    data = [{ "title": "" + f[i].Descripcion + ' - ' + f[i].NombreContrato + ' - ' + f[i].NombreGrupo + "", "start": "" + FI + "", "end": "" + FF + "", "backgroundColor": "" + colorFondo + "", "borderColor": "" + borde + "", "url": "" + 'https://www.google.com.ec/' + "", "group_id": "" + f[i].Id_ProgramaTrabajo+""}];
+
+                    /*......console.log('data');
+                    console.log(data);....*/
+                    var originalEventObject = $(this).data('eventObject')
+
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject)
+
+                    // assign it the date that was reported
+                    copiedEventObject.title = data[0].title
+                    /*copiedEventObject.start = new Date(FR)
+                    copiedEventObject.end = new Date(FI) //data[0].end*/
+
+                    copiedEventObject.start = new Date(FI)
+                    copiedEventObject.end = new Date(FF) //data[0].end
+                    copiedEventObject.backgroundColor = data[0].backgroundColor
+                    copiedEventObject.borderColor = data[0].borderColor
+                    copiedEventObject.group_id = data[0].group_id; // Group ID   IdProgramaTrabajo": "" + f[i].Id_ProgramaTrabajo
+
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                } //console.log(Colores);
+            });
+
+        //Obtener Colores en hexadeciimal
+            function Obtener_color() {
+                hexadecimal = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+                color_aleatorio = "#";
+                for (i = 0; i < 6; i++) {
+                    posarray = aleatorio(0, hexadecimal.length)
+                    color_aleatorio += hexadecimal[posarray]
+                }
+                return color_aleatorio
+            }
+            function aleatorio(inferior, superior) {
+                numPosibilidades = superior - inferior
+                aleat = Math.random() * numPosibilidades
+                aleat = Math.floor(aleat)
+                return parseInt(inferior) + aleat
+            }
+
+
+            function mostrarDetalle(calEvent, start, end) {
+                var titulo = calEvent.title;
+                var fi = moment(new Date(calEvent.start)).format('YYYY-MM-DD HH:mm');
+                var ff = moment(new Date(calEvent.end)).format('YYYY-MM-DD HH:mm');
+             //   console.log(calEvent);
+             //   console.log('fi:' + fi + ' ff:' + ff);
+               // alert(calEvent.group_id);
+                //Swal('Fecha Inicio: ' + fa + ' ' + 'Fecha Fin: ' + fi + ' ' + calEvent.title, '', 'info');
+                /*
+                swal({
+                    title: '<h4><strong><label style="color:#3085d6">'+calEvent.title+'</label></strong></h4>',
+                    // type: 'info',
+                    html: '<div><font size=2><b>Fecha Inicio:&nbsp;</b>' + fi + '</font></div><br><div><font size=2><b>Fecha Fin:&nbsp;</b> ' + ff +'</font></div><br>',
+                    focusConfirm: false,
+                    confirmButtonText: '<i class=""></i> Ok',
+                    confirmButtonAriaLabel: 'Thumbs',
+                });*/
+                swal({
+                    title: titulo,
+                    text: "Desea crear como orden de trabajo?",
+                    html: '<br><br><div><font size=2><b>Fecha Inicio:&nbsp;</b>' + fi + '</font></div><br><div><font size=2><b>Fecha Fin:&nbsp;</b> ' + ff + '</font></div><br>',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f39c12',// '#3085d6',
+                    cancelButtonColor: '#8d92b4',
+                    confirmButtonText: 'Crear Orden Trabajo!'
+                }).then((result) => {
+                    if (result.value) {
+
+                        var urlx = '@Url.Action("GetDataMT_ProgTrabajo", "Mantenimiento")';
+                        ejecutarAjaxProgTrab(urlx, calEvent.group_id);
+
+                        //Swal(
+                        //    'Orden de Trabajo Creada!',
+                        //    'Se ha añadido a orden de trabajo correctamente.',
+                        //    'success'
+                        //);
+                    }
+                });                // alert('Fecha Inicio: ' + fa + ' ' + 'Fecha Fin: ' + fi + ' ' + calEvent.title);
+            }
+
+            function ejecutarAjaxProgTrab(url, Id_ProgramaTrab) {
+                var jsonObject = { Id_ProgramaTrab: Id_ProgramaTrab }
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(jsonObject),
+
+                    success: function (mensaje) {
+                        if (mensaje.indexOf('!') != -1) {
+                            Swal(
+                                'Ops!',
+                                'ha ocurrido un error durante el proceso.',
+                                'error'
+                            );
+
+                          /*  $("#DivDanger").css('display', 'block');
+                            $("#CadenaDanger").html(mensaje);
+                            $("#DivDanger").delay(4000).fadeOut(300);
+                            console.log(mensaje); //alert(mensaje);*/
+                        } else {
+                            Swal(
+                                'Orden de Trabajo Creada!',
+                                'Se ha añadido a orden de trabajo correctamente.',
+                                'success'
+                            );
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        //$("#DivError").css('display', 'block');
+                        //$("#DivError").delay(1000).fadeOut(300);
+                        Swal(
+                            'Ops!',
+                            'ha ocurrido un error de conexión durante el proceso.',
+                            'error'
+                        );
+                    }
+                });
+            }
+
+
+            function ejecutarAjax_UPD_Fecha(url, IdProgTrabajo,Fini,Ffin) {
+                var jsonObjectUPD = { IdProgTrabajo: IdProgTrabajo, Fini: Fini, Ffin: Ffin }
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(jsonObjectUPD),
+
+                    success: function (mensaje) {
+                        if (mensaje.indexOf('!') != -1) {
+                            Swal(
+                                'Ops!',
+                                'ha ocurrido un error durante el proceso.',
+                                'error'
+                            );
+
+                        } else {
+                            Swal(
+                                'Orden de Trabajo Creada!',
+                                'Se ha añadido a orden de trabajo correctamente.',
+                                'success'
+                            );
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        Swal(
+                            'Ops!',
+                            'ha ocurrido un error de conexión durante el proceso.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        
+        //Quita Div de alerta
+            $("#DivCorrecto").delay(2000).fadeOut(300);
+
+
+    </script>
+}

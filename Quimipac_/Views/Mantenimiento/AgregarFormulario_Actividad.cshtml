@@ -1,0 +1,72 @@
+﻿@model Quimipac_.Models.MT_Formulario
+
+@{
+    Layout = null;
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarFormulario_Actividad");
+    attributes.Add("enctype", "multipart/form-data");
+    attributes.Add("autocomplete", "off");
+
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+@using (Html.BeginForm("AgregarFormulario_Actividad", "Mantenimiento", FormMethod.Post, attributes))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;C&oacute;digo:</label>
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required",@id ="txtObligatorio"  } })
+                @Html.ValidationMessageFor(model => model.Codigo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Descripci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="InputFile" class="col-md-2 control-label">Archivo:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreArchivo, new { htmlAttributes = new { @class = "form-control", @type = "file", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.NombreArchivo, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="btn btn-warning" />
+        </div>
+
+
+    </div>
+}
+

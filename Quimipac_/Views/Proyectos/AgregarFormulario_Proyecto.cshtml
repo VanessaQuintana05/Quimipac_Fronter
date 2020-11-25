@@ -1,0 +1,149 @@
+﻿@model Quimipac_.Models.MT_Proyecto_Documento
+
+@{
+    Layout = null;
+    var listaTipoP = ViewBag.listaTipoP;
+    var attributes = new Dictionary<string, object>
+();
+    attributes.Add("Id", "FormAgregarFormulario_Proyecto");
+    attributes.Add("enctype", "multipart/form-data");
+    attributes.Add("autocomplete", "off");
+
+
+}
+
+@using (Html.BeginForm("AgregarFormulario_Proyecto", "Proyectos", FormMethod.Post, attributes))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        @*  <div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">(*)C&oacute;digo:</label>
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.Id_Contrato_Documentado, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Id_Contrato_Documentado, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>
+                                        () { "A", "I" }), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo, (SelectList)listaTipoP, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @* <div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Tipo:</label>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Tipo, new { @class = "form-control", @type = "text", @rows = "5" })
+                </div>
+            </div>*@
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Descripci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="InputFile" class="col-md-2 control-label">Archivo:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreArchivo, new { htmlAttributes = new { @class = "form-control", @type = "file", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.NombreArchivo, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Registro, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Registro, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Validez, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Validez, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="Crear_MTPR btn btn-warning" />
+        </div>
+
+
+    </div>
+}
+
+@*COMBO FILTRABLE*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+
+<script type="text/javascript">
+
+
+
+        start = new Date(moment().subtract(6, 'days'));
+        end = new Date(moment());
+
+        $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+        $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+        $('#datepickerOpenA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+        $('#datepickerCloseA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+

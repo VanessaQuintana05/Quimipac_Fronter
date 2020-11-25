@@ -1,0 +1,59 @@
+﻿#infBarra {
+	width: 50px;
+	height: 50px;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+.vFlotante {
+	position: absolute;
+	left: 95%;
+	top: 60%;
+	width: 4500px;
+	height: 400px;
+	transition: all .4s ease-in;
+	-webkit-transition: all .4s ease-in;
+	-moz-transition: all .4s ease-in;
+	-o-transition: all .4s ease-in;
+}
+
+/*.vFlotante:hover {
+			left: 73%;
+		}*/
+
+/*.titulo {
+		transform: rotate(270deg);
+		-webkit-transform: rotate(270deg);
+		-moz-transform: rotate(270deg);
+		-o-transform: rotate(270deg);
+	}*/
+
+/*Cambios Realizados*/
+#botonimagen {
+	/*background-image: url(../cssImgInf/info.png);*/
+	background-repeat: no-repeat;
+	width: 36px;
+	height: 36px;
+	background-size: cover;
+	background-position: center;
+}
+
+
+
+
+.btn-circleNO {
+	width: 40px;
+	height: 40px;
+	padding: 6px 0px;
+	border-radius: 15px;
+	text-align: center;
+	font-size: 12px;
+	line-height: 1.42857;
+}
+
+#tamImg {
+	/* width: 100px;
+    height: 100px;*/
+}

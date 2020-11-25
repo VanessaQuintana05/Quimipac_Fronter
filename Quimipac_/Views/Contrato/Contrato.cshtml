@@ -1,0 +1,1438 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.sp_Quimipac_ConsultaMT_ContratoGeneral_Result
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaContrato = ViewBag.listaContrato as List<sp_Quimipac_ConsultaMT_ContratoGeneral_Result>;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+
+    var listalkTipo = ViewBag.listalkTipo;
+    var listalkClienteC = ViewBag.listalkClienteC;
+    var listalkContratoPadre = ViewBag.listalkContratoPadre;
+    var listalkEstadoC = ViewBag.listalkEstadoC;
+    //var listalkLinea = ViewBag.listalkLinea;
+    //var listalkCategoria = ViewBag.listalkCategoria;
+    //var listakSubcategoria = ViewBag.listakSubcategoria;
+    var listalkReferencia = ViewBag.listalkReferencia;
+    var listalkLocalidad = ViewBag.listalkLocalidad;
+    var listakResponsable = ViewBag.listakResponsable;
+
+    var lkFiltro = TempData["listaFiltro"] as List<sp_Quimipac_ConsultaMT_ContratoGeneral_Result>;
+    var ParametroBusqueda = TempData["ParametroBusqueda"] as string;
+
+    if (lkFiltro != null)
+    {
+        listaContrato = lkFiltro;
+    }
+    //int i = 0;
+}
+
+    <title>Fronter | Origen</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+@*<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css" />*@
+<style type="text/css">
+    table thead tr th.ancho_contrato_enc {
+        width: 900px !important;
+    }
+
+    table tbody tr td.ancho_contrato {
+        width: 900px !important;
+    }
+
+    table thead tr th.ancho_contratopadre_enc {
+        width: 1250px !important;
+    }
+
+    table tbody tr td.anchopadre_contrato {
+        width: 1250px !important;
+    }
+
+    .row-filtro > div {
+        margin-right: 10px;
+    }
+
+    .select2-container {
+        width:280px !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: left !important;
+    }
+    #tablaContrato_length{
+    float: right;
+    }
+
+
+</style>
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Origen
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li class="breadcrumb-item active">Origen</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        
+            @if (oPermiso != null)
+            {
+                if (oPermiso.Crear == true)
+                {
+                    <div class="col-md-2">
+                            @*<button id="btnAgregarContrato" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarContrato">
+                                    <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Contrato
+                                </button>*@
+                    <a href="@Url.Action("Agregar_Contrato", "Contrato")" type="button" class="btn btn-sm btn-warning" data-original-title="Agrega Contrato">
+                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Agregar Origen
+                    </a>
+                    </div>
+                }
+            }
+            else { 
+            
+            <div class="col-md-2" style="width: 40%; color:red">
+                <h2>Debe asignar permisos para poder agregar Origen</h2>
+
+            </div>
+            }
+        
+
+
+
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Contrato</h3>
+                    </div>*@
+
+
+                <div class="box-body" id="CssDivBox">
+                    <!--Div botones-->
+                    <div class="row col-md-12" style="margin-bottom:10px;">
+                        <div class="col-md-12" style="display:inline-flex;">
+                            @*<div class="">
+                                <button type="button" class="btn btn-xs" style="background-color:#865fc5" onclick="mostrarDivFiltro()">
+                                    <span class="glyphicon glyphicon-filter" style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font>
+                                </button>
+                            </div>*@
+                            <!--*-->
+
+                            <div class="col-md-12" id="divFiltro" style="display:none;">
+                                @using (Html.BeginForm("Contrato_Filter", "Contrato", new { @id = string.Empty }, FormMethod.Post, new { @id = "formFilter" }))
+                                {
+                                    string default_fDE = DateTime.Today.AddDays(-6).ToString("yyyy-MM-dd");
+                                    string default_fHASTA = DateTime.Today.ToString("yyyy-MM-dd");
+
+                                    <div class="row col-md-12" style="display:inline-flex;margin-left:0;">
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='checkbox' name='MenuSelectedFecha' value="1" id="chk_fecha" /> <span class=''>Fecha</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="and" /> <span class=''>and</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="or" /> <span class=''>or</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class=" row-filtro col-md-12" id="fechas_busqueda">
+                                        <div style="display:inline-flex;width:100%;margin-top: 6px;margin-bottom: 10px;">
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">De:</div>
+                                            <div class="">
+                                                @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @name = "Fecha_Inicio", @class = "form-control is-valid", @type = "date", @required = "required", @id = "FeInicio", @style = "height:22px;font-size: 9pt; ", @Value = @default_fDE } })
+                                                @*@Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })*@
+                                            </div>
+
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">Hasta:</div>
+                                            <div>
+                                                @*<input type="date" name="FeFin" id="FeFin" value="@default_fHASTA" class="form-control is-valid" style="height:22px;font-size: 9pt;" required />*@
+                                                @Html.EditorFor(model => model.Fecha_registro, new { htmlAttributes = new { @name = "Fecha_registro", @id = "FeFin", @class = "form-control is-valid", @type = "date", @required = "required", @style = "height:22px;font-size: 9pt;", @Value = @default_fHASTA } })
+                                                @*@Html.ValidationMessageFor(model => model.Fecha_registro, "", new { @class = "text-danger" })*@
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-bold control-label" style="text-align:left;width:100%;margin-left:15px;">Parámetro:</div>
+                                    <div class=" row-filtro col-md-12" style="display:inline-flex;">
+                                        <div class="btnParametroBoton_C">
+                                            <div class="row col-md-12">
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="
+        margin-top: 1px;
+        margin-bottom: 1px;
+        width: 40%
+   ">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="TIPO" id="check_tipo" /> <span class=''>Tipo</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formTipo">
+                                                        @Html.DropDownListFor(model => model.tipo, (SelectList)listalkTipo, new { @class = "form-control select2", @style = "height:27px; width: 135px; font-size:6pt", @id = "comboTipo" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_cliente' value="check_cliente" id="check_cliente" /> <span class=''>Cliente</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="CLIENTE" id="check_cliente" /> <span class=''>Cliente</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formCliente">
+                                                        @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listalkClienteC, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCliente" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_contratopadre' value="1" id="check_contratopadre" /> <span class=''>Contrato Padre</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="CONT_PADRE" id="check_contratopadre" /> <span class=''>Contrato Padre</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formContratoPadre">
+                                                        @Html.DropDownListFor(model => model.Contrato_Padre, (SelectList)listalkContratoPadre, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboContratoPadre" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_estado' value="1" id="check_estado" /> <span class=''>Estado</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="ESTADO" id="check_estado" /> <span class=''>Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formEstado">
+                                                        @Html.DropDownListFor(model => model.Estado, (SelectList)listalkEstadoC, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstado" })
+                                                    </div>
+                                                </div>
+                                                @*<div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="LINEA" id="check_linea" /> <span class=''>Unidad de Negocio</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formUnidadNegocio">
+                                                        @Html.DropDownListFor(model => model.Id_Linea, (SelectList)listalkLinea, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboUnidadNegocio" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="CATEGORIA" id="check_categoria" /> <span class=''>Tipo Servicio</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formCategoria">
+                                                        @Html.DropDownListFor(model => model.Categoria, (SelectList)listalkCategoria, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCategoria" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="SUBCATEGORIA" id="check_subcategoria" /> <span class=''>Centro Costo</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formSubcategoria">
+                                                        @Html.DropDownListFor(model => model.Subcategoria, (SelectList)listakSubcategoria, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSubcategoria" })
+                                                    </div>
+                                                </div>*@
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_referencia' value="1" id="check_referencia"/> <span class=''>Referencia</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="REFERENCIA" id="check_referencia" /> <span class=''>Referencia</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formReferencia">
+                                                        @Html.DropDownListFor(model => model.Referencia, (SelectList)listalkReferencia, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboReferencia" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_localidad' value="1" id="check_localidad"/> <span class=''>Localidad</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="LOCALIDAD" id="check_localidad" /> <span class=''>Localidad</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formLocalidad">
+                                                        @Html.DropDownListFor(model => model.Localidad, (SelectList)listalkLocalidad, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboLocalidad" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_responsable' value="1" id="check_responsable" /> <span class=''>Responsable</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="RESPONSABLE" id="check_responsable" /> <span class=''>Responsable</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formResponsable">
+                                                        @Html.DropDownListFor(model => model.Responsable, (SelectList)listakResponsable, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboResponsable" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            @*@Html.DropDownListFor(model => model.Origen, new SelectList(new List<string>() {
+                        "Ninguno", "Tipo", "Cliente", "Contrato_Padre",
+                        "Estado", "Unidad_Negocio", "Categoria", "Subcategoria", "Referencia",
+                        "Localidad", "Responsable" }), new { @id = "CmbParametro", @class = "form-control select2", @style = "height:27px;width:145px;font-size:8pt", @onchange = "CmbParametroSelected();" })*@
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div>
+                                            <button type="button" style="background-color:#865fc5;border-color:#865fc5;color:white;padding:5px 15px;margin: 20px 30px;margin-botom:6px;" onclick="Set_DataForm_filter(this)">Buscar</button>
+                                            @*<input type="submit" id="btnSubmitFiltro_Busq" hidden="hidden"/>*@
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+
+                            <!--*-->
+                            @*<div class="">
+                                <a href='/reporte/reportecontrato' style="background: #865fc5;color: #ffff; margin-left: 5px; padding:4px 4px; font-family:inherit; font-size:12px;" class="link_reporte_CONT">
+                                <span class="fa fa-files-o"></span><font color="white">&nbsp;&nbsp;Reportes&nbsp;&nbsp;</font></a>
+                            </div>*@
+                        </div>
+
+
+
+
+                        </div>
+                    <!--END Div botones-->
+                    @{
+                        
+
+                            if (listaContrato.Count != 0)
+                            {
+
+                            <div class="table-responsive col-md-12">
+                                <table id="tablaContrato" class="js-dynamitable table table-bordered " style="font-size:12px" border="0" cellpadding="0" cellspacing="0">
+                                    @*          table table-bordered table-hover  ">*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acciones</th>
+                                            @* <th>
+            Cliente
+            @*<span class="js-sorter-desc lyphicon glyphicon-chevron-down pull-right"></span><span class="js-sorter-asc glyphicon glyphicon-chevron-up pull-right"></span>
+        </th>*@
+                                            <th>C&oacute;digo</th>
+                                            <th>C&oacute;digo Interno</th>
+                                            <th>Nombre</th>
+                                            <th>Cliente</th>
+                                            @*<th>Unidad de Negocio</th>
+                                            <th>Tipo de Servicio</th>
+                                            <th>Centro de Costo</th>*@
+                                            <th>Estado</th>
+                                            <th>Contrato Padre</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>Localidad</th>
+                                            <th>Referencia</th>
+                                            <th>Responsable</th>
+
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <th>
+                                            </th>
+                                            <th><input class="js-filter form-control" value="" placeholder="Codigo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo Interno"></th>
+                                            <th class="ancho_contrato_enc"><input class="js-filter form-control" type="text" value="" placeholder="Nombre"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Cliente"></th>
+                                            @*<th><input class="js-filter form-control" type="text" value="" placeholder="Unidad de Negocio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo de Servicio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Centro de Costo"></th>*@
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
+                                            <th class="ancho_contratopadre_enc"><input class="js-filter form-control" type="text" value="" placeholder="Contrato Padre"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Inicio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Plazo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Localidad"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Referencia"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Responsable"></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaContrato_body">
+
+
+                                        @{int cntFila = 0; string estilo = string.Empty; string fecha_Fin = "";}
+                                        @foreach (var contrato in listaContrato)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                        <tr style="@estilo">
+                                            <td nowrap>
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Modificar == true)
+                                                    {
+
+                                                        @*<button type="button" class="Modificar_MTPR btn btnEditarBoton class_editar_Contrato" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarContrato" data-id="@contrato.Id_Contrato"></button>*@
+                                                        <a href="@Url.Action("Editar_Contrato", "Contrato", new { id = contrato.Id_Contrato })" data-popup="tooltip" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_Contrato" title="Editar" target="_self">
+
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Consultar == true)
+                                                    {
+                                                        <a href="@Url.Action("Formularios_Contrato", "Contrato", new { id = contrato.Id_Contrato })" target="_self" class="Consultar_MTPR btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Consultar == true)
+                                                    {
+                                                        <a href="@Url.Action("Alerta_Contrato", "Contrato", new { id = contrato.Id_Contrato })" target="_self" class="Consultar_MTPR btn btnAlertaBoton_OT" title="Alerta" style="text-align:center">
+                                                        </a>
+                                                    }
+                                                }
+                                                
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Consultar == true)
+                                                    {
+                                                        <a href="@Url.Action("Prorroga_Contrato", "Contrato", new { id = contrato.Id_Contrato })" target="_self" class="Consultar_MTPR btn btnProrrogaBoton_OT" title="Prórroga" style="text-align:center">
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Consultar == true)
+                                                    {
+                                                        <a href="@Url.Action("Fiscalizador", "Contrato", new { id = contrato.Id_Contrato })" target="_self" class="Consultar_MTPR btn btnFiscalizadorBoton_OT" title="Fiscalizador" style="text-align:center">
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso != null)
+                                                {
+                                                    if (oPermiso.Eliminar == true)
+                                                    {
+                                                        <a href="@Url.Action("EliminarContrato", "Contrato", new { id = contrato.Id_Contrato })" target="_self" class="Eliminar_MTPR btn btnEliminarBoton_OT" title="Eliminar" style="text-align:center">
+                                                        </a>
+                                                    }
+                                                }
+
+                                                <button type="button" @*class="btn btn-primary btn-lg"*@ onclick="addSysBase(@contrato.Id_Contrato);" data-toggle="modal" data-target="#miModal">
+
+                                                    <span class="fa fa-refresh"></span>
+                                                </button>
+
+
+
+
+
+
+                                            </td>
+                                            <td nowrap>@Html.DisplayFor(model => contrato.Codigo_Cliente)</td>
+                                            <td nowrap>@Html.DisplayFor(model => contrato.Codigo_Interno)</td>
+                                            <td class="ancho_contrato ">@Html.DisplayFor(model => contrato.Nombre)</td>
+                                            <td nowrap class="class_cliente_filter_busq">@Html.DisplayFor(model => contrato.nombreCliente)</td>
+                                            @*<td nowrap class="class_linea_filter_busq">@Html.DisplayFor(model => contrato.lineaContrato)</td>
+                                            <td nowrap class="class_categoria_filter_busq">@Html.DisplayFor(model => contrato.nombre_Categoria)</td>
+                                            <td nowrap class="class_subcategoria_filter_busq">@Html.DisplayFor(model => contrato.nombre_Subcategoria)</td>*@
+                                            <td nowrap class="class_estado_filter_busq">@Html.DisplayFor(model => contrato.descripcion)</td>
+                                            <td class="anchopadre_contrato class_ContratoPadre_filter_busq">@Html.DisplayFor(model => contrato.Nomb_ContratoPadre)</td>
+                                            <td nowrap class="class_tipo_filter_busq">@Html.DisplayFor(model => contrato.Tipo_Contrato)</td>
+                                            @{
+                                                string fecha_Inicio = contrato.Fecha_Inicio.ToString();
+                                                fecha_Inicio = Convert.ToDateTime(fecha_Inicio).ToString("dd/MM/yyyy");
+
+                                                //string fecha_Fin = contrato.Fecha_Fin.ToString();
+                                                //fecha_Fin = Convert.ToDateTime(fecha_Fin).ToString("dd/MM/yyyy");
+                                                if (contrato.Fecha_Fin != null)
+                                                {
+                                                    fecha_Fin = contrato.Fecha_Fin.ToString();
+                                                    fecha_Fin = Convert.ToDateTime(fecha_Fin).ToString("dd/MM/yyyy");
+                                                }
+                                                else
+                                                {
+                                                    fecha_Fin = "";
+                                                }
+
+                                            }
+                                            <td nowrap>
+                                                @Html.DisplayName(fecha_Inicio)
+                                            </td>
+                                            <td nowrap>
+                                                @Html.DisplayName(fecha_Fin)
+                                            </td>
+                                            <td nowrap class="class_Localidad_filter_busq">@Html.DisplayFor(model => contrato.nom_Localidad)</td>
+                                            <td class="class_Referencia_filter_busq">@Html.DisplayFor(model => contrato.nom_Referencia)</td>
+                                            <td nowrap class="class_Responsable_filter_busq">@Html.DisplayFor(model => contrato.Nombres_Completos)</td>
+
+
+                                        </tr>
+                                                        cntFila++;
+                                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                                                            }
+
+                        
+                      }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--vq-->
+<!--vq-->
+<div id="modalAgregarContrato" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Origen&nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaContrato">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion Origen&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute;n los Origen </center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="modalEditarContrato" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Origen&nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-editaContrato">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"> </h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="modaoContent">
+                    @using (Html.BeginForm("Insertar_ContratoSYSBASE", "Contrato", FormMethod.Post))
+                    {
+                        @Html.Hidden("ContratoID");
+                        <input type="submit" value="Enviar a ..." />
+
+                    }
+                    @*<a href="@Url.Action("", "", new { id = contrato.Id_Contrato })" target="_self" class="Consultar_MTPR btn btnProrrogaBoton" title="Prórroga" style="text-align:center">
+                        </a>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+    @*<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>*@
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <script type="text/javascript">
+    function Redirigir() {
+					location.href = "@Url.Action("Default1", "Main")";
+				}
+    </script>
+    <script type="text/javascript">
+
+        $('.select2').select2();
+
+        $(document).ready(function () {
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+
+            $.noConflict();
+            $('#tablaContrato').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': true,
+                //"lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                /*
+                 * //"serverSide": true // recommended to use serverSide when data is more than 10000 rows for performance reasons
+                "lengthMenu": [
+                    [10, 25, 50, 100,-1],
+                    [10, 25, 50, 100,-1]
+                ],
+                "processing": true,
+                "serverSide": true,
+                "responsive": true,
+                "scrollX": true,*/
+            });
+            $('div#tablaContrato_filter').html();
+            $('div#tablaContrato_filter').append(`<button type="button" class="btn btn-xs" style="background-color:#865fc5; margin-right: 10px; padding:2px 4px; float:left;" onclick="mostrarDivFiltro()"><span class="glyphicon glyphicon-filter" style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font></button>`);
+            $('div#tablaContrato_filter').append(`<a href='/reporte/reportecontrato' style="background: #00c0ef;color: #ffff; margin-left: 5px; padding:7px 4px 4px 4px; font-family:inherit; font-size:12px; border-radius: 4px;" class="link_reporte_CONT"><span class="fa fa-files-o"></span><font color="white">&nbsp;&nbsp;Reportes&nbsp;&nbsp;</font></a>`);
+
+            //$('div#tablaContrato_filter').append(`<a href='/reporte/reportecontrato' style ='padding: 8px 6px;background: #865fc5;color: #ffff; margin-left: 25px;' class='link_reporte_CONT ' title='buscar reporte'><span class='fa fa-files-o'></span><font color="white" style="font-size: 12px">&nbsp;&nbsp;Reportes&nbsp;&nbsp;</font></a>`);
+
+
+            $('div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').css({ 'float': 'right' })
+            $('div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:last-child').css({ 'float': 'left' })
+            $('div.dataTables_wrapper div.dataTables_filter').css({ 'text-align': 'left !important' })
+
+            //$('#tablaTiposTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+        });
+
+
+        function addSysBase(x) {
+            //var _id = x.id;
+            //debugger;
+            console.log(x);
+            $("#ContratoID").val(x);
+
+        }
+        // Mostrar informacion de pagina
+        var i = 2;
+        function insertHtml() {
+            if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento de trabajo</span><br>") }
+            else {
+                $("#htmlins").html("")//remove();
+            }//.html("<span>este codigo html fue insertado</span>") }
+
+            i++;
+        };
+
+        //boton_busqueda();
+        function boton_busqueda() {
+            $('div#tablaContrato_filter').html();
+            $('div#tablaContrato_filter').append(`<a href='/reporte/reportecontrato' class'btn' title='buscar reporte'></a><label>Buscar:<input type="search" class="form-control input-sm" placeholder="" aria-controls="tablaContrato"></label>`);
+            alert('ttttt');
+            //<div id="tablaContrato_filter" class="dataTables_filter"></div>
+
+        }
+
+        var contFiltro = 0;
+        function mostrarDivFiltro() {
+
+            if (contFiltro % 2 == 0) {
+                document.getElementById('divFiltro').style.display = 'block';
+
+                //contLista = 0;
+            }
+            else {
+                document.getElementById('divFiltro').style.display = 'none';
+            }
+            contFiltro = contFiltro + 1;
+        }
+        /*
+              start = new Date(moment().subtract(6, 'days'));
+              end = new Date(moment());
+
+              $('#FeInicio').val(moment(start).format('DD/MM/YYYY'))
+              $('#FeFin').val(moment(end).format('DD/MM/YYYY'))
+
+              $('#FeInicio').datepicker(
+              {
+                  format: "dd/mm/yyyy",
+                  autoclose: true
+              });
+
+              $('#FeFin').datepicker(
+              {
+                  format: "dd/mm/yyyy",
+                  autoclose: true
+              });
+
+              */
+
+
+        $('#formTipo').prop("hidden", true);
+        $('#formCliente').prop("hidden", true);
+        $('#formContratoPadre').prop("hidden", true);
+        $('#formEstado').prop("hidden", true);
+        $('#formUnidadNegocio').prop("hidden", true);
+        $('#formCategoria').prop("hidden", true);
+        $('#formSubcategoria').prop("hidden", true);
+        $('#formReferencia').prop("hidden", true);
+        $('#formLocalidad').prop("hidden", true);
+        $('#formResponsable').prop("hidden", true);
+
+        function CmbParametroSelected() {
+            //var cod = document.getElementById("CmbParametro").value;
+
+            var combo = document.getElementById("CmbParametro");
+            var selected = combo.options[combo.selectedIndex].text;
+            //alert(selected);
+
+            // $('#CmbParametro').change(function (e) {
+
+            if (selected == 'Ninguno') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Tipo') {
+                $('#formTipo').prop("hidden", false);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Cliente') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", false);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Contrato_Padre') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", false);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Estado') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", false);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Unidad_Negocio') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", false);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Categoria') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", false);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Subcategoria') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", false);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Referencia') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", false);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Localidad') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", false);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Responsable') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", false);
+            }
+        }
+
+        //check fechas busqueda
+        $("#chk_fecha").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        });
+
+        if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+        }
+
+        function show_id_elemente(id_element_filter,div_id_filter) {
+            if ($(String(id_element_filter)).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById(String(div_id_filter)).style.display = 'block';
+            } else {
+                document.getElementById(String(div_id_filter)).style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        }
+
+        $("#check_tipo").on('change', function () {
+            show_id_elemente("#check_tipo","formTipo");
+        });
+        $("#check_cliente").on('change', function () {
+            show_id_elemente("#check_cliente","formCliente");
+        });
+        $("#check_contratopadre").on('change', function () {
+            show_id_elemente("#check_contratopadre","formContratoPadre");
+        });
+        $("#check_estado").on('change', function () {
+            show_id_elemente("#check_estado","formEstado");
+        });
+        $("#check_linea").on('change', function () {
+            show_id_elemente("#check_linea","formUnidadNegocio");
+        });
+        $("#check_categoria").on('change', function () {
+            show_id_elemente("#check_categoria","formCategoria");
+        });
+        $("#check_subcategoria").on('change', function () {
+            show_id_elemente("#check_subcategoria","formSubcategoria");
+        });
+        $("#check_referencia").on('change', function () {
+            show_id_elemente("#check_referencia","formReferencia");
+        });
+        $("#check_localidad").on('change', function () {
+            show_id_elemente("#check_localidad","formLocalidad");
+        });
+        $("#check_responsable").on('change', function () {
+            show_id_elemente("#check_responsable","formResponsable");
+        });
+
+        /*
+        function filtro_tabla()
+        {
+            var busqueda = document.getElementById('buscar');
+            var table = document.getElementById("tablaContrato").tBodies[0];
+
+            buscaTabla = function(){
+                texto = busqueda.value.toLowerCase();
+                var r=0;
+                while(row = table.rows[r++])
+                {
+                if ( row.innerText.toLowerCase().indexOf(texto) !== -1 )
+                    row.style.display = null;
+                else
+                    row.style.display = 'none';
+                }
+            }
+
+            busqueda.addEventListener('keyup', buscaTabla);
+        }*/
+        function Set_DataForm_filter(form)
+        {
+            active_check_param_ID("#check_tipo", "#comboTipo");
+            active_check_param_ID("#check_contratopadre", "#comboContratoPadre");
+            active_check_param_ID("#check_linea", "#comboUnidadNegocio");
+            active_check_param_ID("#check_categoria", "#comboCategoria");
+            active_check_param_ID("#check_subcategoria", "#comboSubcategoria");
+            active_check_param_ID("#check_localidad", "#comboLocalidad");
+            active_check_param_ID("#check_cliente", "#comboCliente");
+            active_check_param_ID("#check_estado", "#comboEstado");
+            active_check_param_ID("#check_referencia", "#comboReferencia");
+            active_check_param_ID("#check_responsable", "#comboResponsable");
+            $("#formFilter").submit();
+        }
+
+        function ValidaFecha(form)
+        {
+            var bandFechaSelect = false;
+            var date_fin = '';
+            var date_fin = '';
+            var fDE_filtro = '';
+            var fHASTA_filtro = '';
+
+            if ($("#chk_fecha").is(':checked'))
+            {
+                var fecha_ap = $('#FeInicio').val();
+                var fecha_ci = $('#FeFin').val();
+
+                var datearray1 = fecha_ap.split("/");
+                var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+
+                var datearray2 = fecha_ci.split("/");
+                var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+
+                var primera = Date.parse(newdate_ap);
+                var segunda = Date.parse(newdate_ci);
+                if (segunda < primera) {
+                    swal('', 'Fecha hasta debe ser mayor', 'error');
+                }
+                else {
+                    /*  ? DESCOMENTAR ASP
+                     *  var obj = document.getElementById("btnSubmitFiltro");
+
+                    if (obj) {
+                        obj.click();
+                    }*/
+                }
+
+                /*?
+                 * bandFechaSelect = true;
+                date_ini = String($('#date-input').val()).split("-");
+                fDE_filtro = (parseInt(date_ini[2]) > 9 ? date_ini[2] : ('0' + date_ini[2])) + '/' + (parseInt(date_ini[1]) > 9 ? date_ini[1] : ('0' + date_ini[1])) + '/' + date_ini[0];
+                date_fin = String($('#date-input').val()).split("-");
+                fHASTA_filtro = (parseInt(date_fin[2]) > 9 ? date_fin[2] : ('0' + date_fin[2])) + '/' + (parseInt(date_fin[1]) > 9 ? date_fin[1] : ('0' + date_fin[1])) + '/' + date_fin[0];
+                */
+
+            }
+
+
+            var str_bandRadio_and_or = '';
+            if ($('input:radio[name=SelectedAndOr]:checked').val()) {//el radio and ó or esta activo
+                str_bandRadio_and_or = String($('input:radio[name=SelectedAndOr]:checked').val());
+                console.log(str_bandRadio_and_or);
+             }
+
+            var paramLI = [];
+            var item_param = null;
+            //parámetros
+            var bandTipo = active_check_param_2("#check_tipo", "#comboTipo");
+            var aux_description = '';
+
+            if (bandTipo.length > 0) {// = ! null) {
+                item_param = { name:'Tipo',description: bandTipo }
+                paramLI.push(item_param);
+            }
+            var bandContratoPadre = active_check_param_2("#check_contratopadre", "#comboContratoPadre");
+            if (bandContratoPadre.length > 0) {
+                item_param = { name:'Cont_Padre',description: bandContratoPadre }
+                paramLI.push(item_param);
+            }
+            var bandLinea = active_check_param_2("#check_linea", "#comboUnidadNegocio");
+             if (bandLinea.length > 0) {
+                item_param = { name:'Linea',description: bandLinea }
+                paramLI.push(item_param);
+            }
+            var bandCategoria = active_check_param_2("#check_categoria", "#comboCategoria");
+            if (bandCategoria.length > 0) {
+                item_param = { name:'Categoria',description: bandCategoria }
+                paramLI.push(item_param);
+            }
+            var bandSubCategoria = active_check_param_2("#check_subcategoria", "#comboSubcategoria");
+            if (bandSubCategoria.length > 0) {
+
+                item_param = { name:'SubCategoria',description: bandSubCategoria }
+                paramLI.push(item_param);
+            }
+            var bandLocalidad = active_check_param_2("#check_localidad", "#comboLocalidad");
+            if (bandLocalidad.length > 0) {
+                item_param = { name:'Localidad',description: bandLocalidad }
+                paramLI.push(item_param);
+            }
+            var bandCliente = active_check_param_2("#check_cliente", "#comboCliente");
+            if (bandCliente.length > 0) {
+                item_param = { name:'Cliente',description: bandCliente }
+                paramLI.push(item_param);
+            }
+            var bandEstado = active_check_param_2("#check_estado", "#comboEstado");
+            if (bandEstado.length > 0) {
+                item_param = { name:'Estado',description: bandEstado }
+                paramLI.push(item_param);
+            }
+            var bandReferencia = active_check_param_2("#check_referencia", "#comboReferencia");
+            if (bandReferencia.length > 0) {
+                item_param = { name:'Referencia',description: bandReferencia }
+                paramLI.push(item_param);
+            }
+            var bandResponsable = active_check_param_2("#check_responsable", "#comboResponsable");
+            if (bandResponsable.length > 0) {
+                item_param = { name:'Responsable',description: bandResponsable }
+                paramLI.push(item_param);
+            }
+            console.log(paramLI);
+
+
+            //var busqueda = document.getElementById('buscar');
+            //??'''var table = document.getElementById("tablaContrato").tBodies[0];
+
+
+            //buscaTabla = function(){
+            if (paramLI.length > 0)
+            {
+
+                //alert(paramLI);
+
+                //toLowerCase
+                    //texto = bandContratoPadre + '';//String(paramLI[0]).toLowerCase();
+                /*var r=0;
+                while(row = table.rows[r++])
+                {
+                    for (var i = 0; i < paramLI.length; i++)
+                    {
+                        texto = String(paramLI[i].description).toLowerCase();
+                        if (row.innerText.toLowerCase().indexOf(texto) !== -1 )
+                            row.style.display = null;
+                        else
+                            row.style.display = 'none';
+                       $("#tablaContrato").find('tr').find('tr:contains("'+texto+'")').css('display', 'none');
+                    }
+                }
+                */
+
+                var filaTR = $("#tablaContrato_body").find("tr");
+                for (vq = 0; vq < filaTR.length; vq++) {
+
+                    //var text_aux = '';
+                    if (str_bandRadio_and_or == 'or') {
+                        //var busqueda = document.getElementById('buscar');
+                        var table = document.getElementById("tablaContrato").tBodies[0];
+
+                        var r = 0;
+                        while (row = table.rows[r++]) {
+                            for (var i = 0; i < paramLI.length; i++) {
+                                texto = String(paramLI[i].description).toLowerCase();
+                                if (row.innerText.toLowerCase().indexOf(texto) !== -1)
+                                    row.style.display = null;
+                                else
+                                    row.style.display = 'none';
+                                //$("#tablaContrato").find('tr').find('tr:contains("'+texto+'")').css('display', 'none');
+                            }
+                        }
+                    }
+                    else {// if (str_bandRadio_and_or == 'and') {
+                        //function
+                        filter_tbody_contrato(paramLI, 'Cliente', 'td.class_cliente_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Linea', 'td.class_linea_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Categoria', 'td.class_categoria_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'SubCategoria', 'td.class_subcategoria_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Estado', 'td.class_estado_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Cont_Padre', 'td.class_ContratoPadre_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Tipo', 'td.class_tipo_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Localidad', 'td.class_Localidad_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Referencia', 'td.class_Referencia_filter_busq', filaTR);
+                        filter_tbody_contrato(paramLI, 'Responsable', 'td.class_Responsable_filter_busq', filaTR);
+                    }
+                    /*else if (str_bandRadio_and_or == undefined)
+                    {
+                        if (bandFechaSelect == true) {
+
+                        }
+                       ;fDE_filtro
+
+                    }*/
+
+                }
+            }
+
+            /*
+            var filaTR = $("#tablaContrato").find("tr");
+            var resultadoProyectos = [];// = "";
+            var band_Check = 0;
+            for (vq = 0; vq < filaTR.length; vq++) {
+                //var celdasTD = $(filaTR[vq]).find("td");
+	            //Emp_Cont_Proy = $(celdasTD[0]).text(); //Celda Cliente
+                $("#tablaContrato").find('tr:contains("hol")').css('display', 'none');
+                console.log($("#tablaContrato").find('tr:contains("hol")').css('display', 'none'));
+            }*/
+        }
+
+        //Check Parámetros´JAvas cript
+        function active_check_param_2(id_element_filter_param,id_select_cmb)
+        {
+            //,debugger;
+            if ($(String(id_element_filter_param)).is(':checked')) {
+                //alert(String($(id_select_cmb + ' option:selected').text()));
+                var txtTipo = String($(id_select_cmb + ' option:selected').text());
+
+                return txtTipo+'';
+            }
+            return '';// null;
+        }
+        //Check Parámetros
+        function active_check_param_ID(id_element_filter_param,id_select_cmb)
+        {
+            if ($(String(id_element_filter_param)).is(':checked')) {
+                var anterior_value_chk = $(String(id_element_filter_param +':checked')).val();
+                var Aux_ID_ = String($(id_select_cmb + ' option:selected').val());
+                $(String(id_element_filter_param)).val(String(anterior_value_chk+':'+Aux_ID_));
+                //return ;
+            }
+            //return '0';// null;
+        }
+        //
+        function filter_tbody_contrato(paramLI,name_param,class_filter_tparametro,filaTR)
+        {
+            var vqLI = paramLI.find(vq => vq.name == name_param);
+            //console.log(vqLI);
+            if (vqLI != undefined) {
+                var celdasTD_AUX = String($(filaTR[vq]).find(String(class_filter_tparametro)).text()).toLowerCase();
+                var bandaux_active = celdasTD_AUX == String(vqLI.description).toLowerCase() ? true : false;
+                var elemnet_hide_show = bandaux_active ==true ?$(filaTR[vq]).css("display","null"):$(filaTR[vq]).css("display", "none");
+            }
+        }
+
+        $('#comboTipo').on('change', function (event) {
+            console.log('entrá');
+            //debugger;
+            //alert('Hola');
+
+            var id_tipo_Change = $('#comboTipo').val();
+            //var opcselectText = $('#comboTipo option:selected').text();
+            //switch (opcselectText) {
+            //    case 'PROSPECTO': showProspecto(); break;
+            //    case 'PROYECTO DE MEJORA': showProspecto(); break;
+            //    case 'LICITACION': showLicitacion(); break;
+            //    case 'CONTRATO': showTotalCTR(); break;
+            //    default: showTotalPRY(); break;
+            //}
+
+            ejecutaAjaxDefaultTipo_Estado('#comboEstado', id_tipo_Change);
+
+
+
+        });
+
+       
+
+        function ejecutaAjaxDefaultTipo_Estado(id, id_tipo_Tipo)
+            {
+
+
+                var obj = {
+
+
+                    id_tipo_Tipo: id_tipo_Tipo
+
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("GetContratoTipo_Estado", "Contrato")",
+                    data: JSON.stringify(obj),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    //alert("");
+                    $(id).empty(); var seleccion = '';
+                    //$(id).append("<option value='0'>Ninguno</option>")
+                    //debugger;
+                    $.each(data, function (i, item) {
+                        var tp_prospecto_selected = "";
+                        if (id_tipo_Tipo == 146) {
+                            tp_prospecto_selected = (item.Id_TablaDetalle == 1158) ? selected = 'selected' : '';
+                        }
+                        $(id).append("<option value='" +item.Id_TablaDetalle + "' "+ tp_prospecto_selected+" >" +  item.Descripcion + "</option>");
+
+
+                    });
+
+                },
+                error: function (data) {
+                    alert("Error de conexion ejecutaAjaxDefault" + data);
+                }
+
+            });
+    }
+
+    </script>
+}

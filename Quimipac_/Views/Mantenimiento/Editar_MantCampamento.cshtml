@@ -1,0 +1,66 @@
+﻿@model Quimipac_.Models.MT_Campamento
+@{
+    Layout = null;
+
+   
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantCampamento");
+    attributes.Add("autocomplete", "off");
+}
+
+@*@using (Html.BeginForm("Editar_MantLugarMedicion", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_MantCampamento", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Campamento)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Nombre:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<!--Combox Filtrado-->
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$('.select2').select2();
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+</script>
+

@@ -1,0 +1,3 @@
+12/11/2019 12:43:38,En La orden 78719586 El tipo trabajo planeado y/o tipo trabajo ejecutado no se encuentran registrados. Favor revise y/o ingrese el tipo trabajo que deseee utilizar. 
+ 
+.

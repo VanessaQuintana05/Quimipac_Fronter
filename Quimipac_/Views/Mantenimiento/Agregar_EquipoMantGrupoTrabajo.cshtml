@@ -1,0 +1,108 @@
+﻿@model Quimipac_.Models.MT_GrupoTrabajoEquipo
+
+@{
+    Layout = null;
+
+    var listaEquipos = ViewBag.listaEquipos;
+    
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarEquipoMantGrupoTrabajo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+
+@*@using (Html.BeginForm("Agregar_EquipoMantGrupoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Agregar_EquipoMantGrupoTrabajo", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+
+{
+    @Html.AntiForgeryToken()
+
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Equipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_MT_Equipo, (SelectList)listaEquipos, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Id_MT_Equipo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Equipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Equipo, (SelectList)listaEquipos, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Equipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="btn btn-warning" />
+        </div>
+    </div>
+
+}
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<script src="~/Content/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="~/Content/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="~/Content/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script type="text/javascript">
+
+
+    //$(document).ready(function () {
+    //    $('#input').attr("autocomplete", "off");
+    //})
+
+    $(document).ready(function () {
+
+        //$("input[type='text']").attr("autocomplete", "off");
+        //$(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        //    $(".alert").slideUp(500);
+        //});
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+
+    })
+
+</script>
+
+
+
+

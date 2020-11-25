@@ -1,0 +1,194 @@
+﻿@model Quimipac_.Models.InsertNotificacion
+@{
+    /**/
+
+    Layout = null;
+
+
+    var listaTipo = ViewBag.listaTipo;
+    var listaPrioridad = ViewBag.listaPrioridad;
+    var listaEstado = ViewBag.listaEstado;
+    var listaTipos = ViewBag.listaTipos;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarNotificacionC");
+    attributes.Add("autocomplete", "off");
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+
+
+@*@using (Html.BeginForm(null, null, new { @id = string.Empty }, FormMethod.Post,new { @id = "signupform" }))*@
+@*@using (Html.BeginForm("Agregar_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("AgregarAlerta", "OrdenTrabajo_Automatizacion", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*COMBO FILTRABLE CLIENTE*@
+        @*Input validador*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Notificacion:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo_Notificacion, (SelectList)listaTipo, new { @class = "form-control", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Tipo_Notificacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo, (SelectList)listaTipos, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Correo:</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                    @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                    <span class="input-group-addon border-left-0">*</span>
+                    @*<span class="input-group-addon bg-gray border-left-0">*</span>*@
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Asunto:</label>
+            <div class="col-md-10">
+                <div class="input-group">
+                    @Html.EditorFor(model => model.Asunto, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                    @Html.ValidationMessageFor(model => model.Asunto, "", new { @class = "text-danger" })
+                    <span class="input-group-addon border-left-0">*</span>
+                    @*<span class="input-group-addon bg-gray border-left-0">*</span>*@
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Mensaje:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Mensaje, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Prioridad:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Prioridad, (SelectList)listaPrioridad, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Prioridad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, (SelectList)listaEstado, new { @class = "form-control ", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="Crear_MTPR btn btn-warning" />
+        </div>
+
+
+
+    </div>
+
+}
+
+
+@*COMBO FILTRABLE*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+
+<script type="text/javascript">
+    start = new Date(moment().subtract(6, 'days'));
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+    $(document).ready(function () {
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    });
+
+    $('#modal1').bootstrapValidator({
+        //    message:"Este valor no es valido",
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        }//,
+
+        //fields: {
+        //    txtObligatorio: {
+        //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+        //                 stringLength: {
+        //                     min: 3,
+        //                     max: 5,
+        //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+        //                 }
+        //             }
+        //    }
+        //}
+
+    });
+
+</script>
+
+
+

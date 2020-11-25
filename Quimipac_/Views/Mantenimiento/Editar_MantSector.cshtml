@@ -1,0 +1,123 @@
+﻿@model Quimipac_.Models.MT_Sector
+
+@{
+    Layout = null;
+
+    var listaSector = ViewBag.listaSector;
+
+    //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
+    //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantSector");
+    attributes.Add("autocomplete", "off");
+
+}
+
+
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+
+@*@using (Html.BeginForm("Editar_Actividades_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_MantSector", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Sector)
+       
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Actividad Padre:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_ActividadPadre, (SelectList)listaActividades, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Id_ActividadPadre, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Sector Padre:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Padre_Sector, (SelectList)listaSector, htmlAttributes: new { @class = "form-control select2" })
+                @Html.ValidationMessageFor(model => model.Id_Padre_Sector, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Nombre:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+<!--cmbFiltro-->
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+
+
+
+<script type="text/javascript">
+
+    $('#comboObligatorioEditar').change(function (e) {
+
+        if ($(this).val() == "S") {
+
+            $('#pesoEditar').prop("hidden", false);
+        }
+        else {
+            $('#pesoEditar').prop("hidden", true);
+        }
+
+    })
+
+    $(document).ready(function () {
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+
+
+
+
+</script>

@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @*<link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/iCheck/square/blue.css">*@
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    @Styles.Render("~/Css")
+    <style>
+        .body-content {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #div-separador {
+            height: 100px
+        }
+
+        #div-separador-pequenio {
+            height: 50px
+        }
+    </style>
+</head>
+<body class="hold-transition login-page">
+    @*<div style="background-image: url(@Url.Content("~/Images/cover-1.png")); background-size: 100%">
+            <div id="primer-bloque">
+                <div id="primer-bloque-imagenes">
+                    <label id="titulo-principal-interno">ADVANCED</label>
+                    <br>
+                    <label id="titulo-principal-interno"> - ECON </label>
+                    <label id="titulo-principal-com-interno"> .com </label>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="container body-content">
+        @RenderBody()
+        <div id="div-separador-pequenio">  </div>
+        <hr />
+        <footer>
+            <div id="div-separador-pequenio">  </div>
+            <p>&copy; @DateTime.Now.Year - Fronter</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/Js")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,1416 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+@model Quimipac_.Models.sp_Quimipac_ConsultaUsuarios_Permisos_Result
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+
+    var dbe = new DataBase_Externo();
+
+    var listaClientes = dbe.ObtenerClientes("");// as List<sp_LINK_ConsultaClientes_Result>;
+                                                /* var listaContratos = dbe.ObtenerContratos("");
+                                                    var listaProyectos = dbe.ObtenerProyectos("");
+                                                    var listaTipoTrabajo = dbe.ObtenerTipoTrabajo("");
+                                                    var listaLineas = dbe.ObtenerLinea("");*/
+
+
+
+
+    string cadenaUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+    string[] Separado = cadenaUrl.Split('/');
+    string IdUsuario = Separado[Separado.Length - 1];
+
+
+
+
+    //var listaUsuarios = ViewBag.listaUsuarios;
+    //var listaClientes = ViewBag.listaClientes;// as List<sp_LINK_ConsultaClientes_Result>;
+    //var listaContratos = ViewBag.listaContratos;
+    //var listaProyectos = ViewBag.listaProyectos;
+    //var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+    //var listaLineas = ViewBag.listaLineas;
+
+    //var attributes = new Dictionary<string, object>();
+    //attributes.Add("Id", "FormAgregarMantTipoTrabajo");
+    //attributes.Add("autocomplete", "off");
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+
+
+<!--Toggle-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.css" />
+
+
+<style>
+    button:hover {
+        background: #000000; /* rgba(0,0,0,0);*/
+        color: black;
+        box-shadow: inset 0 0 0 3px #3d80bb;
+    }
+</style>
+
+
+<title>Fronter | Asignar Permiso</title>
+
+
+<section class="content-header">
+
+    <h2 style="text-align:left">Permiso</h2>
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li><a href="@Url.Action("MantPermisos", "Mantenimiento")">Permisos</a></li>
+        <li class="active">Asignar permisos</li>
+    </ol>
+
+    <div class="row">
+        <div class="vFlotante">
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" class="" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert-alert-danger" id="DivDanger" style="display:none">
+                <strong><label id="CadenaDanger"></label> </strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" id="DivSucess" style="display:none">
+                <strong><label id="CadenaSucess"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <!--<div class="col-md-12">
+        if (TempData["mensaje_correcto"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>TempData["mensaje_correcto"]</strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>}
+        if (TempData["mensaje_error"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>TempData["mensaje_error"]</strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        if (TempData["mensaje_actualizado"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>TempData["mensaje_actualizado"]</strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+    </div>-->
+
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" id="BordeDiv">
+                <div class="box-header" style="display:none;">
+                </div>
+                <div class="box-body" id="CssDivBox" style="height:455px">
+
+                    <div class="col-md-12">
+
+
+                        @using (Html.BeginForm("Agregar_MantRol", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <label for="recipient-name" class="text-bold control-label col-md-12" style="text-align:left;background-color:#f19f1d;height:30px;">
+                                            <font size="1"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;&nbsp;
+                                            <font color="white"><span aria-hidden="true" class="glyphicon glyphicon-user" style="font-weight:normal"></span></font>
+                                            <font color="white" size="2">
+                                                Usuario,&nbsp;&nbsp;'<font color="black" size="2">@IdUsuario</font>'&nbsp;
+
+                                            </font>
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <hr style="margin-top:4px;margin-bottom:0;" />
+
+
+                                <!--Div Superior-->
+
+                                <div class="box-body" style="padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--<div class="col-md-12">-->
+                                    <!--1  Div-->
+                                    <div class="col-md-8" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-warning">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#f19403">
+                                                            <span aria-hidden="true" class="fa fa-building-o"></span>&nbsp;Clientes
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table id="">
+                                                            <tr>
+                                                                <!--000<td>
+                                                                     &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Editar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditar" data-id="@IdUsuario">
+                                                                         <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                                     </button>
+                                                                 </td>
+                                                                 <td></td>-->
+                                                                @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalAgregarCliente" data-id="@IdUsuario" onclick="contarClients();">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaCliente" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <th></th>
+                                                                            <th></th>
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th style="width:110px;"></th>
+                                                                            <th style="display:none;"></th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#f39c12"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbodyClientes"></tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Div Opciones -->
+                                    <div class="col-md-4">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading" style="background-color:#505050;height:30px;">
+                                                <h3 class="panel-title"> <font color="White" size="1"> <span aria-hidden="true" class="fa fa-user-secret" style="margin-left:8px"></span>&nbsp;</font><font color="White" size="2">&nbsp;Acciones</font></h3>
+                                            </div>
+                                            <div class="panel-body" style="height:180px;">
+
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+
+                                                        <div class="box-body">
+                                                            <div id="demo">
+
+                                                                <div id="content" class="col-md-6">
+
+                                                                    @*<div class="flat-toggle" title="Seleccionar" id="1">
+                                                                        <span>Invisibility</span> </div>*@
+                                                                    <table border="0">
+                                                                        <thead><tr><td></td><td></td></tr></thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td><input type="checkbox" name="" value="" id="checkConsultar" class="checkOpciones" /></td>
+                                                                                <td><span style="margin-left:15px"></span>Consultar</td>
+                                                                            </tr>
+                                                                            <tr style="height:10px"></tr>
+                                                                            <tr>
+                                                                                <td><input type="checkbox" name="" value="" id="checkModificar" class="checkOpciones" /></td>
+                                                                                <td><span style="margin-left:15px"></span>Modificar</td>
+                                                                            </tr>
+                                                                            <tr style="height:10px"></tr>
+                                                                            <tr>
+                                                                                <td><input type="checkbox" name="" value="" id="checkCrear" class="checkOpciones" /></td>
+                                                                                <td><span style="margin-left:15px"></span>Crear</td>
+                                                                            </tr>
+                                                                            <tr style="height:10px"></tr>
+                                                                            <tr>
+                                                                                <td><input type="checkbox" name="" value="" id="checkEliminar" class="checkOpciones" /></td>
+                                                                                <td><span style="margin-left:15px"></span>Eliminar</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>   @*<tr>
+                                                                        <td>Consultar<span style="margin-left:15px"></span></td>
+                                                                        <td><div class="flat-toggle"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr style="height:10px"></tr>
+                                                                    <tr>
+                                                                        <td>Modificar<span style="margin-left:15px"></span></td>
+                                                                        <td><div class="flat-toggle"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr style="height:10px"></tr>
+                                                                    <tr>
+                                                                        <td>Crear<span style="margin-left:15px"></span></td>
+                                                                        <td><div class="flat-toggle"></div></td>
+                                                                    </tr>
+                                                                    <tr style="height:10px"></tr>
+                                                                    <tr>
+                                                                        <td>Eliminar<span style="margin-left:15px"></span></td>
+                                                                        <td><div class="flat-toggle"></div></td>
+                                                                    </tr>*@
+                                                                @*<div style="height:28px;">
+                                                                        <div class="flat-toggle"> <span style="padding:0 0 0 0;">Consultar</span> </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="flat-toggle on"> <span>Modificar</span> </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="flat-toggle on"> <span>Crear</span> </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="flat-toggle on"><span>Eliminar</span> </div>
+                                                                    </div>
+                                                                *@
+
+
+                                                                <div class="col-md-6">
+                                                                    <button type="button" id="btnGuardarPermiso" class="form-control btn btn-sm" title="Guardar Registro" style="border-color:#4390bd;background:#ffffff;text-align:center;width:auto;" onclick="GuardarRegistro(this);">
+                                                                        <font color="black"><span aria-hidden="true" class="glyphicon glyphicon-floppy-disk"></span> </font><font color="black">&nbsp;Guardar&nbsp;</font>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+
+
+                                                @*
+
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label">Consultar:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Consultar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Consultar, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label">Modificar:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Modificar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Modificar, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label">Crear:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Crear, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Crear, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label">Eliminar:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Eliminar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Eliminar, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                *@
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <!--2  Div BORRAR-->
+                                    <div class="col-md-4" style="padding:0 10px 0 0;display:none;">
+                                        <div class="panel panel-warning">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-6 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#000000">
+                                                            <span aria-hidden="true" class="fa fa-building-o"></span>&nbsp;Clientes
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-6" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+                                                                <td></td>
+                                                                @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+
+                                                            </tr>
+                                                        </table>
+                                                        @*<button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                            </button>
+                                                            <span style="margin-left:12px;"> </span>
+                                                            <button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                            </button>*@
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaRolesUsuario" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <th></th>
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#f39c12"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @foreach (var item1 in listaClientes)
+                                                                        {
+                                                                            <tr>
+                                                                                <td nowrap>
+                                                                                    <a href="@Url.Action("Eliminar_MantRolUsuario", "Mantenimiento", new { id = item1.cod_cli })" target="_self" class="btn btn-xs" title="Quitar rol a usuario" style="text-align:center">
+                                                                                        <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                    </a>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(model => item1.nom_cli)
+
+                                                                                </td>
+                                                                            </tr>
+
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--3  Div BORRAR-->
+                                    <div class="col-md-4" style="padding:0 10px 0 0;display:none;">
+                                        <div class="panel panel-warning">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-6 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#000000">
+                                                            <span aria-hidden="true" class="fa fa-building-o"></span>&nbsp;Clientes
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-6" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+                                                                <td></td>
+                                                                @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+
+                                                            </tr>
+                                                        </table>
+                                                        @*<button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                            </button>
+                                                            <span style="margin-left:12px;"> </span>
+                                                            <button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                            </button>*@
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaRolesUsuario" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <th></th>
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#f39c12"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        @foreach (var item1 in listaClientes)
+                                                                        {
+                                                                            <tr>
+                                                                                <td nowrap>
+                                                                                    <a href="@Url.Action("Eliminar_MantRolUsuario", "Mantenimiento", new { id = item1.cod_cli })" target="_self" class="btn btn-xs" title="Quitar rol a usuario" style="text-align:center">
+                                                                                        <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                    </a>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    @Html.DisplayFor(model => item1.nom_cli)
+
+                                                                                </td>
+                                                                            </tr>
+
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Fin Div Superior-->
+                                </div>
+                                <!--</div>-->
+                                <!--Div inferior-->
+                                <div class="box-body" style="padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--4 Div Contratos-->
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#0d860d">
+                                                            <span aria-hidden="true" class="fa fa-book"></span>&nbsp;Contratos
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                           <table>
+                                                               <tr>
+                                                                   <td>
+                                                                       &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver contratos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" onclick='TodoContratos(this)'>
+                                                                           <font color="#198c19"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="#595956"></font>*@
+                                                                       </button>
+                                                                   </td>
+                                                                   <td><!--</td>
+                                                                   @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                   <td>
+                                                                       &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                           <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                       </button>
+                                                                   </td>-->
+
+                                                               </tr>
+                                                           </table>
+                                                        @*<button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                            </button>
+                                                            <span style="margin-left:12px;"> </span>
+                                                            <button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                            </button>*@
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaContratosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <th></th>
+                                                                            <th>Contrato</th>
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Contrato . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbodyContratosAdd">
+                                                                        <!--
+                                                                                                                    foreach (var item1 in listaClientes)
+                                                                                    {
+                                                                                                        <tr>
+                                                                                                            <td nowrap>
+                                                                                                                <a href="Url.Action("Eliminar_MantRolUsuario", "Mantenimiento", new { id = item1.cod_cli })" target="_self" class="btn btn-xs" title="Quitar rol a usuario" style="text-align:center">
+                                                                                                                    <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                                                </a>
+
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                Html.DisplayFor(model => item1.nom_cli)
+
+                                                                                                            </td>
+                                                                                                        </tr>
+
+                                                                        }-->
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--5 Div proyectos-->
+
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#3d8bba">
+                                                            <span aria-hidden="true" class="fa fa-briefcase"></span>&nbsp;Proyectos
+                                                        </font>
+                                                    </label>
+                                                     <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                             <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver proyectos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;"onclick='TodosProyectos(this)'>
+                                                                        <font color="#3d80bb"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="black">&nbsp;Editar&nbsp;</font>*@
+                                                                    </button>
+                                                                </td>
+                                                               <!--  <td></td>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>-->
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                    <table id="tablaProyectosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                        <thead>
+                                                            <tr style="display:none;">
+                                                                <th></th>
+                                                                <th>Proyecto</th>
+                                                                <th>Cliente</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Proyecto . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyProyectosAdd"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*
+                                        <div class="col-md-6" style="padding:0 10px 0 0;">
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading" style="height:30px;">
+                                                    <div class="form-group">
+                                                        <label class="col-md-6 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                            <font color="#000000">
+                                                                <span aria-hidden="true" class="fa fa-building-o"></span>&nbsp;proyectos
+                                                            </font>
+                                                        </label>
+                                                        <div class="col-md-6" style="padding:0 0 0 0;">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                            <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                        </button>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </table>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    @{
+                                                        if (listaClientes != null)
+                                                        {
+                                                            if (listaClientes.Count > 0)
+                                                            {
+                                                                <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                    <table id="tablaRolesUsuario" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                        <thead>
+                                                                            <tr style="display:none;">
+                                                                                <th></th>
+                                                                                <th>Cliente</th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th></th>
+                                                                                <th>
+                                                                                    <div>
+                                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                            <font color="#f39c12"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                        </div>
+                                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                            @foreach (var item1 in listaClientes)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td nowrap>
+                                                                                        <a href="@Url.Action("Eliminar_MantRolUsuario", "Mantenimiento", new { id = item1.cod_cli })" target="_self" class="btn btn-xs" title="Quitar rol a usuario" style="text-align:center">
+                                                                                            <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                        </a>
+
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @Html.DisplayFor(model => item1.nom_cli)
+
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        -------------------------------------------------------------------------------*@
+                                </div>
+
+                                <!--Combo Multiple-->
+                                @*<div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label text-success">Usuarios:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Usuario, (SelectList)listaUsuario, new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Usuario, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+
+                                @*<div class="form-group">
+                                        <label for="status" class="text-bold col-md-2 control-label">Clientes:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+
+                                @*<div class="form-group">
+                                        <label for="status" class="text-bold col-md-2 control-label">Contratos:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Contrato, (SelectList)listaContratos, new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Contrato, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">ProyectosCCli:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Proyecto, (SelectList)listaProyectos, new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Proyecto, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">Tipos:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Tipo_Trabajo, (SelectList)listaTipoTrabajo, htmlAttributes: new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Tipo_Trabajo, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="status" class="text-bold col-md-2 control-label">Lineas:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Id_Linea, (SelectList)listaLineas, new { @class = "cmbMultiple", @style = "width: 100%", @multiple = "multiple", @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Id_Linea, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">Consultar:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Consultar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Consultar, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">Modificar:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Modificar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Modificar, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">Crear:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Crear, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Crear, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-md-2 control-label">Eliminar:</label>
+                                        <div class="col-md-10">
+                                            @Html.DropDownListFor(model => model.Eliminar, new SelectList(new List<string>() { "No", "Si" }), new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Eliminar, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                                        <input type="submit" value="Crear" class="btn btn-warning" title="Crear Rol" />
+                                    </div>
+                                *@
+
+                            </div>
+                        }
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- **************** MODALES **************** -->
+<!--Agregar Cliente-->
+<div id="modalAgregarCliente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Clientes &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de clientes, Favor elegir cliente a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                @using (Html.BeginForm("Agregar_ManPermiso_UsuarioClientes", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+                    @Html.HiddenFor(model => model.Id_Usuario)
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        @{
+                            // int count = 0;
+                            <div class="table-responsive">
+                                <table id="tabla" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                                    <thead>
+                                        <tr>
+                                            @* <th></th>*@
+                                            <th>CLIENTES</th>
+                                        </tr>
+                                        <!--<tr>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Cliente.." style="width:100px;border:none;"></th>
+                                        </tr>-->
+
+                                    </thead>
+                                    <tbody id="tbodyCliente">
+                                        @{var LkClientes = dbe.ObtenerClientes("");}
+                                        @foreach (var item in LkClientes)
+                                        {
+                                            <tr>
+                                                <td nowrap><input type='checkbox' name='SelectedTriggers' value="@item.nom_cli" id="@item.cod_cli" class="checkClientes" />&nbsp;&nbsp;@item.nom_cli</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+
+                        <div class="modal-footer">
+
+
+                            <button id="btnSalir" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                            @* <input type="submit" value="Agregar" class="btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*@
+                            <button id="btnGuardarTabla" type="button" value="Agregar" class="btn btn-warning" onclick="resultado('@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })','@IdUsuario','@Url.Action("Eliminar_MantRolUsuario","Mantenimiento", new {id = "param-id"})')">Crear</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Agregar Contratos Clientes-->
+<div id="modalAgregarContratos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Contratos &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de contratos, Favor elegir contratos a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                @using (Html.BeginForm("AddContratosClientes_Modal", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*Html.HiddenFor(model => model.Id_Usuario)*@
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label id="NombreCliente" style="color:#3d80bb;"></label>
+                                <br />
+                            </div>
+                            <div class="col-md-12" style="display:none;">
+                                <label id="IdCliente"></label>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control pull-right" style="width:20%" id="searchTxt" placeholder="Empresa..." />@*  onkeyup="Buscar();">*@
+                            </div>
+                        </div>
+
+                        @{
+                            // int count = 0;
+                            <div class="table-responsive" style="height:250px;">
+                                <table id="tablaContratos" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                                    <thead>
+                                        <tr>
+                                            <th>CONTRATOS</th>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <div>
+                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                        <font color="#f5b024"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                    </div>
+                                                    <div class="col-md-10" style="padding:1px 0 0 0;">
+                                                        <input class="js-filter form-control" type="text" value="" placeholder="Contrato ..." style="height:14px;text-align:left;padding:0 0 0 0;">
+                                                    </div>
+
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyContratos"></tbody>
+                                </table>
+                            </div>
+                        }
+
+
+                        <div class="modal-footer">
+
+
+                            <button id="btnSalirContrato" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                            @* <input type="submit" value="Agregar" class="btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*@
+                            <button id="btnGuardarTablaContrato" type="button" value="Agregar" title="Agregar Contrato" class="btn btn-warning" onclick="AgregarTablacontrato(this)">Agregar</button>
+
+
+
+                            @* ////////////////AgregarTablacontrato
+                                <button id="btnSalir" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                                                        @* <input type="submit" value="Agregar" class="btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*
+                                                <button id="btnGuardarTabla" type="button" value="Agregar" class="btn btn-warning" onclick="resultado('@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })','@IdUsuario','@Url.Action("Eliminar_MantRolUsuario","Mantenimiento", new {id = "param-id"})')">Crear</button>
+
+                                                <button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalAgregarCliente" data-id="@IdUsuario">
+                                                    <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                </button>
+                            *@
+
+
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Agregar Proyectos Clientes MODAL-->
+<div id="modalAgregarProyectos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Proyectos &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de proyectos, Favor elegir proyectos a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                @using (Html.BeginForm("AddProyectosClientes_Modal", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label id="NombreClienteProyecto" style="color:#3d80bb;"></label>
+                                <!--Html.ValidationSummary(true, "", new { class = "text-danger" })-->
+                            </div>
+                            <div class="col-md-12" style="display:none;">
+                                <label id="IdClienteProyecto"></label>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control pull-right" style="width:20%" id="searchTxtProyecto" placeholder="Proyecto..." />@* onkeyup="doSearch()" *@
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="height:250px">
+                            <table id="tablaProyectos" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                                <thead>
+                                    <tr>
+                                        <th>PROYECTOS</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div>
+                                                <div class="col-md-1" style="padding:0 0 0 0;">
+                                                    <font color="#f5b024"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                </div>
+                                                <div class="col-md-10" style="padding:1px 0 0 0;">
+                                                    <input class="js-filter form-control" type="text" value="" placeholder="Proyecto ..." style="height:14px;text-align:left;padding:0 0 0 0;">
+                                                </div>
+
+                                            </div>
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="tbodyProyectos"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button id="btnSalirProyecto" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                            <button id="btnGuardarTablaProyecto" type="button" value="Agregar" title="Agregar Proyecto" class="btn btn-warning" onclick="AgregarTablaProyecto(this)">Agregar</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-10">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Tablas&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de los Tablas</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+    @*<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>*@
+    <script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+
+
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+    @*<script src="~/Scripts/Modales.js"></script>*@
+
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+
+    <!--Filtro de Permisos-->
+    <script src="~/Scripts/MantPermisos/jsPermisos.js"></script>
+
+    <!--Paginador-->
+    <script src="~/Scripts/MantPermisos/Paginador.js"></script>
+
+
+    <!-- TogglePermiso -->
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/js/jquery.js"></script>
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.js"></script>
+
+
+
+
+    <!--Alert Sweet2-->
+    <script src="~/Scripts/sweetalert2-7.32.2/package/dist/sweetalert2.all.min.js"></script>
+
+
+    <!--
+
+
+
+           <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+    a* <script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>*    a
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+
+    Filtro de tabla
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+    Filtro de Permisos
+    <script src="~/Scripts/MantPermisos/jsPermisos.js"></script>
+
+    <script src="~/Scripts/Modales.js"></script>
+    -->
+
+
+    <script type="text/javascript">
+
+
+        var urlAddContrato = '@Url.Action("AddContratosClientes_Modal","Mantenimiento", new { id ="param-id"})';/*Url.Action("AddContratosClientes_Modal","Mantenimiento", new { id ="param-name"});*/
+
+        var urlAddContratoTabla = '@Url.Action("AddTablaContratosClientes", "Mantenimiento")';//, new { id = "param-id" })';
+
+        //Proyectos
+        var urlAddProyectos = '@Url.Action("AddProyectosClientes_Modal", "Mantenimiento", new { id ="param-id"})';
+        var urlAddProyectoTabla = '@Url.Action("AddTablaProyectosClientes", "Mantenimiento")';
+
+        var urlGuardar = '@Url.Action("GuardarPermisos", "Mantenimiento")';
+
+
+
+
+        var urlPrincipal = '@Url.Action("MantPermisos", "Mantenimiento")';
+        //window.location.href = url;
+
+        //$('.select2').select2({
+        //    dropdownParent: $('#modal1')
+        //});
+                                                //$(document).ready(function () {
+                                            //    //$('.select2').select2();
+
+
+
+                                            //    $('.cmbMultiple').select2();
+
+                                            //    $('.cmbMultiple').on('change', function (event) {
+                                            //        $('.select2-selection__choice').css('background', '#f39c12');
+                                            //        $('.select2-selection__choice__remove').css('color', '#ffffff');
+                                            //    });
+
+                                            //});
+
+
+    </script>
+
+
+
+}

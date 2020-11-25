@@ -1,0 +1,469 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_Notificaciones
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaNotificaciones = ViewBag.listaNotificaciones as List<sp_Quimipac_Consulta_Notificaciones_General_Result>;
+    var ordenTrabajo = ViewBag.ordenTrabajo;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+<title>Fronter |  Alerta de Orden Trabajo</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+@*<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .vFlotante {
+        position: absolute;
+        left: 97%;
+        top: 15%;
+        width: 4500px;
+        height: 400px;
+        transition: all .4s ease-in;
+        -webkit-transition: all .4s ease-in;
+        -moz-transition: all .4s ease-in;
+        -o-transition: all .4s ease-in;
+    }
+
+        .vFlotante:hover {
+            left: 73%;
+        }
+
+    #imgnotificacion {
+        width: 40px;
+        height: 40px;
+    }
+
+    /*.titulo {
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+    }*/
+</style>*@
+
+
+<section class="content-header">
+
+    @{
+
+        int cadena = 0;
+        <h2 style="text-align:left">
+
+
+            @*@foreach (var itemTipoTrabajo2 in listaNotificaciones)
+    {
+        if (cadena >= 0)
+        {*@
+
+                    <font id="itemTitulo">   @Html.DisplayFor(model => ordenTrabajo)</font>
+                    @*break;
+                }
+
+                else
+                {
+                    @cadena;
+                }
+
+            }*@
+            / Alerta Orden Trabajo
+
+        </h2>
+    }
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a><i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("OrdenTrabajo", "OrdenTrabajo")">Orden Trabajo</a>
+            <i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Alerta de Orden Trabajo</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        <div class="col-md-2">
+            @if (oPermiso.Crear == true)
+            {
+                <button id="btnAgregarAlerta" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarAlerta">
+                    Agregar Alerta de  Orden Trabajo
+                </button>
+            }
+            </div>
+        @*<div class="vFlotante">
+            <table class="table-responsive">
+                <tr>
+                    <td>
+                        <br />
+                        <br />
+                        <hgroup style="display:inline-block;">
+                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">
+                        </hgroup>&nbsp;&nbsp;
+                    </td>
+
+                    <td>
+                        <br />
+                        <br />
+                        <div class="box box-default">
+                            @**<div class="box-header"><h3 class="box-title">Tipo de vista</h3></div>**/@
+                            <div class="box-header">
+                                <p>En esta Pagina se detallara  la alerta</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>*@
+
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                @*<div class="box-header">
+                        <h3 class="box-title">Formulario Orden Trabajo</h3>
+                    </div>*@
+
+                <div class="box-body">
+
+                    @{
+                        if (listaNotificaciones != null)
+                        {
+                            if (listaNotificaciones.Count != 0)
+                            {
+
+                <div class="table-responsive">
+                    <table id="tablaNotificacion" class="js-dynamitable table table-bordered  ">
+                        @*          table table-bordered table-hover  ">*@
+                        <thead>
+                            <tr>
+                                @* <th>
+                    Cliente
+                    @*<span class="js-sorter-desc lyphicon glyphicon-chevron-down pull-right"></span><span class="js-sorter-asc glyphicon glyphicon-chevron-up pull-right"></span>
+                                                        </th>*@
+                                <th>Criterio</th>
+                                <th>Tipo Notificaci&oacute;n</th>
+                                <th>Tipo </th>
+                                <th>Correo </th>
+                                <th>Asunto </th>
+                                <th>Mensaje</th>
+                                <th>Prioridad</th>
+                                <th>Estado </th>
+                                <th>Fecha Creacion</th>
+                                <th>Fecha Lectura</th>
+
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <select class="js-filter  form-control">
+                                        <option value=""> </option>
+                                        <option value="Entrada">Entrada</option>
+                                        <option value="Salida">Salida</option>
+                                    </select>
+                                </th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Notificacion"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Correo"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Asunto"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Mensaje"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Prioridad"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha"></th>
+                                <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Lectura"></th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--actualizar esta parte -->
+
+                            @{int cntFila = 0; string estilo = string.Empty; }
+                            @foreach (var Notificacion in listaNotificaciones)
+                            {
+                                if ((cntFila % 2) == 0)
+                                {
+                                    estilo = "background-color:#f9f9f9";
+                                }
+                                else
+                                {
+                                    estilo = "";
+                                }
+
+                <tr style="@estilo">
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Criterios)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Notificacion)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Tipos)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Correo)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Asunto)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Mensaje)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.prioridades)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Estados)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Fecha)</td>
+                    <td nowrap>@Html.DisplayFor(model => Notificacion.Fecha_Hora)</td>
+
+
+                </tr>
+
+                                cntFila++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                                    }
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAgregarAlerta" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <h4 class="text-bold"> Agregar Alerta de  Orden Trabajo &nbsp;&nbsp; </h4>
+                            </td>
+
+                            <td>
+                                <h6>
+                                    <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                        <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                    </a>
+                                </h6>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaAlerta">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion Entrada - Salida&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute;n las Notificaciones de Entrada y Salida</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+@*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+<!--Filtro de tabla-->
+<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+<script src="~/Scripts/Modales.js"></script>
+
+@*<script type="text/javascript">
+
+
+    function Redirigir() {
+					location.href = "@Url.Action("Default1", "Main")";
+                    location.href = "@Url.Action("Orden Trabajo", "Orden Trabajo")";
+                    location.href = "@Url.Action("Alerta_Orden Trabajo", "Orden Trabajo")";
+				}
+</script>*@
+
+    <script type="text/javascript">
+
+            modalAdd('#btnAgregarAlerta', 'modal-agregaAlerta', '@Url.Action("AgregarAlerta", "OrdenTrabajo")');
+            @*modalEdit('.class_editar_FormularioOrden Trabajo', 'modal-editaFormularioOrden Trabajo', '@Url.Action("Editar_FormularioOrden Trabajo", "Orden Trabajo", new { id = "param-id" })');*@
+
+                $(document).ready(function () {
+
+
+                    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                        $(".alert").slideUp(500);
+                    });
+
+                    $.noConflict();
+                    $('#tablaNotificacion').DataTable({
+
+                        "language": {
+                            "lengthMenu": "Display _MENU_ records per page",
+                            "zeroRecords": "No Contiene registros",
+                            "infoEmpty": "No hay registros disponibles",
+                            "decimal": "",
+                            "emptyTable": "No hay datos",
+                            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                            "infoFiltered": "(Filtro de _MAX_ total registros)",
+                            "infoPostFix": "",
+                            "thousands": ",",
+                            "lengthMenu": "  Mostrar _MENU_ registros",
+                            "loadingRecords": "Cargando...",
+                            "processing": "Procesando...",
+                            "search": "Buscar:",
+                            "zeroRecords": "No se encontraron coincidencias",
+                            "paginate": {
+                                "first": "Primero",
+                                "last": "Ultimo",
+                                "next": "Siguiente",
+                                "previous": "Atras"
+                            },
+                            "aria": {
+                                "sortAscending": ": Activar orden de columna ascendente",
+                                "sortDescending": ": Activar orden de columna desendente"
+                            },
+                        },
+
+
+                        'paging': true,
+                        'lengthChange': true,
+                        'searching': true,
+                        'ordering': false,
+                        'info': true,
+                        'autoWidth': true
+                    })
+
+                    //$('#tablaTiposTrabajo').DataTable({
+                    //    'paging': true,
+                    //    'lengthChange': true,
+                    //    'searching': true,
+                    //    'ordering': false,
+                    //    'info': true,
+                    //    'autoWidth': false
+                    //})
+                })
+
+                // Mostrar informacion de pagina
+                var i = 2;
+                function insertHtml() {
+                    if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento de trabajo</span><br>") }
+                    else {
+                        $("#htmlins").html("")//remove();
+                    }//.html("<span>este codigo html fue insertado</span>") }
+
+                    i++;
+                };
+    </script>
+}
+

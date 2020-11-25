@@ -1,0 +1,509 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+@model Quimipac_.Models.sp_Quimipac_ConsultaUsuarios_Permisos_Result
+@{
+//Permisos_Rol   
+
+    //Roles/*MT_Permisos*/Permisos_Rol
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    DataBase_Externo dbe = new DataBase_Externo();
+    var lkUsuarios = dbe.ObtenerUsuariosPermisos();
+
+    // var lkUsuarios = ViewBag.lkUsuarios as List<sp_Quimipac_ConsultaUsuarios_Permisos_Result>;
+
+}
+
+<title>Fronter | Permisos</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<!-- TogglePermiso -->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.css" />
+
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .vFlotante {
+        position: absolute;
+        left: 97%;
+        top: 15%;
+        width: 4500px;
+        height: 400px;
+        transition: all .4s ease-in;
+        -webkit-transition: all .4s ease-in;
+        -moz-transition: all .4s ease-in;
+        -o-transition: all .4s ease-in;
+    }
+
+        .vFlotante:hover {
+            left: 73%;
+        }
+
+    #imgnotificacion {
+        width: 40px;
+        height: 40px;
+    }
+
+    /*.titulo {
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+    }*/
+
+
+    tablaPermisoUsuario:nth-child(odd) {
+        background: #7cedea;
+    }
+</style>
+
+
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Permisos
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li class="breadcrumb-item active">Permisos</li>
+    </ol>
+
+
+
+    @*  <br><div class="row" style="display:none">
+        <div class="col-md-12">
+            <div class="form-group col">
+                <table>
+                    <tr>
+                        <td>
+                            <button id="btnAgregarRol" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarRol">
+                                <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Agregar Rol
+                            </button>
+                        </td>
+                        <td><span style="margin-left:6px;"></span></td>
+
+                    </tr>
+
+                </table>
+             </div>
+        </div>
+    *@
+
+
+
+    <div class="vFlotante">
+        <table class="table-responsive">
+            <tr>
+                <td>
+                    <br />
+                    <br />
+                    <hgroup style="display:inline-block;">
+                        <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">
+                    </hgroup>&nbsp;&nbsp;
+                </td>
+
+                <td>
+                    <br />
+                    <br />
+                    <div class="box box-default">
+                        @*<div class="box-header"><h3 class="box-title">Tipo de vista</h3></div>*@
+                        <div class="box-header">
+                            <p>En esta Pagina se detallara Los permisos y roles de usuarios.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    @*</div>*@
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                <div class="box-body" id="CssDivBox">
+                    <br />
+
+                    <!--Div Usuarios-->
+                    @*<h3 class="panel-title">Roles</h3>*@
+
+                    @*<label for="recipient-name" class="col-md-12 control-label" style="text-align:left">
+                            <font color="white" size="2">Roles de Usuario</font>
+                        </label>*@
+
+
+
+                    @{
+                        if (lkUsuarios != null)
+                        {
+                            if (lkUsuarios.Count > 0)
+                            {
+                                <div class="table-responsive">
+                                    <table id="tablaPermisoUsuario" class="js-dynamitable table table-bordered">
+                                        @*table table-bordered table-hover">style="text-align:center"*@
+                                        <thead>
+                                            <tr>
+                                                <th>Acciones</th>
+                                                @*<th class="hidden">IdPersona</th>*@
+                                                <th>Usuario</th>
+                                                <th>Nombres</th>
+                                                @*<th>Rol</th>*@
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                @* <th class="hidden"></th>*@
+                                                <th><input class="js-filter form-control" type="text" value="" placeholder="Usuario"></th>
+                                                <th><input class="js-filter form-control" type="text" value="" placeholder="Nombres"></th>
+                                                @*<th><input class="js-filter form-control" type="text" value="" placeholder="Rol"></th>*@
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item1 in lkUsuarios)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @if (item1.Id_Usuario != null && item1.Estado.Equals("A"))// || (item1.Descripcion).Trim() != "")
+                                                        {
+                                                            <button type="button" class="btn btn-xs class_Editar_MantRolUsuario" title="Editar Permiso" style="text-align:center" data-toggle="modal" data-target="#modalEditarRolUsuario" data-id="@item1.Id_Permiso">
+                                                                <font color="white" size="1"><span aria-hidden="true" class="glyphicon glyphicon-edit"></span></font>
+                                                            </button>
+
+                                                            <a href="@Url.Action("Eliminar_MantRolUsuario", "Mantenimiento", new { id = item1.Id_Usuario })" target="_self" class="btn btn-xs" title="Quitar Permiso a usuario" style="text-align:center">
+                                                                <font color="white" size="1"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></font>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" class="btn btn-xs class_Agregar_MantRolUsuario" title="Asignar Permiso" style="background:#43a72d;text-align:center" data-toggle="modal" data-target="#modalAgregarRolUsuario" data-id="@item1.user_id">
+                                                                <font color="white" size="2"><span aria-hidden="true" class="fa fa-plus-circle"></span></font>
+                                                            </button>
+                                                        }
+                                                    </td>
+                                                    @*<td class="hidden">@Html.DisplayFor(model => item1)</td>*@
+                                                    <td>@Html.DisplayFor(model => item1.user_id)</td>
+                                                    <td>@item1.primer_nombre&nbsp;@item1.segundo_nombre&nbsp;@item1.primer_apellido&nbsp;@item1.segundo_apellido</td>
+                                                    @*<td>
+                                                            @if (item1.Estado_UsuarioRol.Equals("A"))
+                                                            {
+                                                                @Html.DisplayFor(model => item1.Descripcion)
+                                                            }
+                                                            else
+                                                            {//No muestra Descripcion No Quitar
+                                                            }
+                                                        </td>*@
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+@*<div class="row">
+        <div class="col-md-12">
+
+            <div class="box-body">
+                <div id="demo">
+
+                    <div id="content">
+                        <div class="flat-toggle">
+                            <span>Invisibility</span>
+                        </div>
+
+                        <div class="flat-toggle on">
+                            <span>Control time passing</span>
+                        </div>
+
+                        <div class="flat-toggle on">
+                            <span>Fly</span>----
+                        </div>
+
+                        <div class="flat-toggle on">
+                            <span>Uber force</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+
+<div id="modalAgregarRol" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;  Agregar Rol &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-agregaRol">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Div Edita Rol Permiso-->
+<div id="modalEditarRolPermiso" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> <font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Rol Permiso &nbsp;&nbsp; </h4>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitirá Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="modal-editaRolPermiso">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Div Agregar Rol a Usuario (Con Modal Edit)-->
+<div id="modalAgregarRolUsuario" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> <font size="3"><span class="fa fa-plus-square"></span></font>&nbsp;Asignar Rol a Usuario &nbsp;&nbsp; </h4>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Asignar un rol al usuario seleccionado." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="modal-agregaRolUsuario">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Div Edita Rol a Usuario-->
+<div id="modalEditarRolUsuario" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> <font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Rol Usuario &nbsp;&nbsp; </h4>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="modal-editaRolUsuario">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+
+    <!-- TogglePermiso -->
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/js/jquery.js"></script>
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.js"></script>
+
+    <script type="text/javascript">
+        //Agrega en MT Permiso y Rol con Database_Externo
+        modalAdd('#btnAgregarRol', 'modal-agregaRol', '@Url.Action("Agregar_MantRol", "Mantenimiento")');
+        modalEdit('.class_Editar_MantRolPermiso', 'modal-editaRolPermiso', '@Url.Action("Editar_MantRol", "Mantenimiento", new { id = "param-id" })');
+
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------
+        //Div Agregar Rol a Usuario con modalEdit
+        modalEdit('.class_Agregar_MantRolUsuario', 'modal-agregaRolUsuario', '@Url.Action("Agregar_MantRolUsuario", "Mantenimiento", new { id = "param-id" })');
+        //Div Editar Rol a Usuario
+        modalEdit('.class_Editar_MantRolUsuario', 'modal-editaRolUsuario', '@Url.Action("Editar_MantRolUsuario", "Mantenimiento", new { id = "param-id" })');
+
+
+      //  $(document).ready(function () {
+            $.noConflict();
+            $('#tablaPermisoUsuario').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+       // });
+
+    </script>
+}

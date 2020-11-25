@@ -1,0 +1,82 @@
+﻿@using Quimipac_.Models;
+@model Quimipac_.Models.Sp_Quimipac_ConsultaUsuarios_Rol
+@{
+    Layout = null;
+    //Roles_Usuario
+    var LkRol = ViewBag.LkRol;// as List<Roles>;
+                              // as List<Roles>();
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarMantRolUsuario");
+    attributes.Add("autocomplete", "off");
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Agregar_MantRolUsuario", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    @Html.HiddenFor(model => model.User_id)
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-3 control-label text-success">Seleccione Rol:</label>
+            <div class="col-md-9">
+                @Html.DropDownListFor(model => model.Id_Rol, (SelectList)LkRol, new { @class = "form-control select2", @style = "width: 100%", @required = "required" })
+                @Html.ValidationMessageFor(model => model.Id_Rol, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+            <input type="submit" value="Asignar Rol" class="Crear_MTPR btn btn-warning" title="Asignar Rol" />
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+
+@*<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>*@
+<script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+        //$('.cmbMultiple').select2();
+
+        //$('.cmbMultiple').on('change', function (event) {
+        //    $('.select2-selection__choice').css('background', '#f39c12');
+        //    $('.select2-selection__choice__remove').css('color', '#ffffff');
+        //});
+
+    });
+
+</script>
+
+
+

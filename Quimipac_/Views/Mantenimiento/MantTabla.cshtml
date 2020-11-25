@@ -1,0 +1,448 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_Tablas
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaTabla = ViewBag.listaTabla as List<sp_Quimipac_ConsultaMT_Tabla_Result>;
+    var numeroPag = (System.Web.HttpContext.Current.Session["PaginacionID"] != null) ? (System.Web.HttpContext.Current.Session["PaginacionID"].ToString()) : "0";
+}
+
+<title>Fronter | Mantenimiento de Tablas</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Mantenimiento de Tablas
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Mantenimiento de Tablas</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        <div class="col-md-2">
+            <button id="btnAgregarTablas" type="button" class="Crear_MTPR btn btn-warning " data-toggle="modal" data-target="#modalAgregarTablas">
+                <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Tablas
+            </button>
+        </div>
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id ="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Tablas</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+
+                    @{
+
+                        if (listaTabla.Count != 0)
+                        {
+
+                            <div class="table-responsive">
+                                <table id="tablaTablas" class="js-dynamitable table table-bordered  ">
+                                    @*<table table-bordered table-hover  ">*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acciones</th>
+
+                                            <th>Tabla</th>
+                                            <th>Descripci&oacute;n</th>
+                                            <th>Estado</th>
+                                        </tr>
+
+                                        <tr>
+                                            <th>
+                                            </th>
+
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tabla" ></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Descripcion" ></th>
+
+                                            <th>
+                                                <select class="js-filter  form-control">
+                                                    <option value=""></option>
+                                                    <option value="A">A</option>
+                                                    <option value="I">I</option>
+                                                </select>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var Tablas in listaTabla)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    <button type="button" class="Modificar_MTPR btn btnEditarBoton class_editar_Tablas" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarTablas" data-id="@Tablas.Id_Tabla" onclick="PaginacionNOW();">
+                                                        @* <span aria-hidden="true" class="glyphicon glyphicon-edit"> </span>*@
+                                                    </button>
+
+                                                    @*<a href="@Url.Action("EliminarMantTabla", "Mantenimiento", new { id = Tablas.Id_Tabla })" target="_self" class="btn btn-primary" title="Eliminar" style="text-align:center">
+                                                          <span aria-hidden="true" class="glyphicon glyphicon-remove"> </span>
+                                                        </a>*@
+
+                                                    <a href="@Url.Action("Detalle_MantTabla", "Mantenimiento", new { id = Tablas.Id_Tabla })" target="_self" class="Consultar_MTPR btn btnDetalleBoton" title="Detalle" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt"> </span>*@
+                                                    </a>
+
+                                                    @*<a href="@Url.Action("Items_MantTablas", "Mantenimiento", new { id = Tablas.Id_Tabla })" target="_self" class="btn btn-primary" title="Items" style="text-align:center">
+                                                           @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>
+                                                        </a>
+
+                                                        <a href="@Url.Action("Medidas_MantTablas", "Mantenimiento", new { id = Tablas.Id_Tabla })" target="_self" class="btn btn-primary" title="Medidas" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-adjust"> </span>
+                                                        </a>*@
+                                                </td>
+
+                                                <td nowrap> @Tablas.Tabla.ToUpper()</td>
+                                                <td nowrap>@Html.DisplayFor(model => Tablas.Descripcion)</td>
+                                                <td nowrap>@Html.DisplayFor(model => Tablas.Estado)</td>
+
+                                            </tr>
+
+
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAgregarTablas" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Tablas &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaTablas">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalEditarTablas" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp; Editar Tablas &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-editaTablas">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Tablas&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de los Tablas</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTablas/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+
+    <script type="text/javascript">
+
+            modalAdd('#btnAgregarTablas', 'modal-agregaTablas', '@Url.Action("Agregar_MantTabla", "Mantenimiento")');
+            modalEdit('.class_editar_Tablas', 'modal-editaTablas', '@Url.Action("Editar_MantTabla", "Mantenimiento", new { id = "param-id" })');
+
+            $(document).ready(function () {
+
+
+                $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                    $(".alert").slideUp(500);
+                });
+
+                $.noConflict();
+                $('#tablaTablas').DataTable({
+
+                    "language": {
+                        "lengthMenu": "Display _MENU_ records per page",
+                        "zeroRecords": "No Contiene registros",
+                        "infoEmpty": "No hay registros disponibles",
+                        "decimal": "",
+                        "emptyTable": "No hay datos",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                        "infoFiltered": "(Filtro de _MAX_ total registros)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "  Mostrar _MENU_ registros",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "No se encontraron coincidencias",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Atras"
+                        },
+                        "aria": {
+                            "sortAscending": ": Activar orden de columna ascendente",
+                            "sortDescending": ": Activar orden de columna desendente"
+                        },
+                    },
+
+
+                    'paging': true,
+                    'lengthChange': true,
+                    'searching': true,
+                    'ordering': false,
+                    'info': true,
+                    'autoWidth': false,
+                    //para la cabecera fija
+                    "scrollY": "290px",
+                    "scrollCollapse": true
+                });
+
+                var nroPagina = '@numeroPag';
+                // nroPagina = (parseInt(nroPagina) > 0) ? parseInt(nroPagina-1):0;
+                $('#tablaTablas').DataTable().page(parseInt(nroPagina - 1)).draw('page');
+
+                //$('#tablaTablas').DataTable({
+                //    'paging': true,
+                //    'lengthChange': true,
+                //    'searching': true,
+                //    'ordering': false,
+                //    'info': true,
+                //    'autoWidth': false
+                //})
+            });
+
+                // Mostrar informacion de pagina
+                var i = 2;
+                function insertHtml() {
+                    if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento de trabajo</span><br>") }
+                    else {
+                        $("#htmlins").html("")//remove();
+                    }//.html("<span>este codigo html fue insertado</span>") }
+
+                    i++;
+                };
+
+                
+                function PaginacionNOW() {
+                    $(".paginate_button").each(function () {
+                        if ($(this).hasClass('active')) {
+                            var id = $(this).text();
+                            console.log('id=' + id);
+                            enviarNroPaginaASesion(id);
+                        }
+                    });
+                }
+
+
+                function enviarNroPaginaASesion(id) {
+                    var urlg = '@Url.Action("PaginacionSession", "Home",new { id = "param-id" })';
+                    urlg = urlg.replace("param-id", id);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: urlg,
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        // data: JSON.stringify(jsonObjectPer),
+
+                        success: function (data) {
+                            console.log(data); //alert(mensaje);
+                        },
+                        error: function () {
+                        }
+                    });
+                }        
+
+    </script>
+}
+
+

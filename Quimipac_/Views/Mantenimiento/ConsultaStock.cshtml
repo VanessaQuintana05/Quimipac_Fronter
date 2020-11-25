@@ -1,0 +1,146 @@
+﻿@using Quimipac_.Models
+@using Quimipac_.Repositorio
+@model Quimipac_.Models.sp_LINK_ConsultaStock_Result
+@{//.sp_LINK_ConsultaStock_Result
+    /**/
+
+    Layout = null;
+
+    //var listaStock = ViewBag.listaStock; //as List<sp_LINK_ConsultaStock_Result>;
+    DataBase_Externo nuevo = new DataBase_Externo();
+    var empresa_id = System.Web.HttpContext.Current.Session["empresa"].ToString();
+    var stock = nuevo.ObtenerStock(empresa_id);
+
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormConsultaStock");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@using (Html.BeginForm("ConsultaStock", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+    <div class="form-horizontal">
+        
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @{
+           // int count = 0;
+            <div class="table-responsive">
+                <table id="tablaStock" class="js-dynamitable table table-bordered  ">
+                    <thead>
+                        <tr>
+                            <th>Items</th>
+                            <th>Bodega</th>
+                            <th>Saldo</th>
+                        </tr>
+
+                        <tr>
+                           
+                            <th><input class="js-filter form-control" type="text" value="" placeholder="Items" style="width:180px;border:none;"></th>
+                            <th><input class="js-filter form-control" type="text" value="" placeholder="         Bodega" style="width:100px;border:none;"></th>
+                            <th><input class="js-filter form-control" type="text" value="" placeholder="          Saldo" style="width:100px;border:none;"></th>
+                            
+                        </tr>
+
+                    </thead>
+                 
+                    @foreach (var item in stock)
+                    {
+                        <tr>
+                            <td nowrap>@Html.DisplayFor(model => item.cod_item)</td>
+                            <td nowrap style="text-align:center;">@Html.DisplayFor(model => item.cod_bod)</td>
+                            <td nowrap style="text-align:center;">@Html.DisplayFor(model => item.saldo)</td>
+
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+
+        @*<div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Orden Trabajo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_OrdenTrabajo, (SelectList)listaOrden, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_OrdenTrabajo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+       
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            @*<input type="submit" value="Crear" class="Crear_MTPR btn btn-warning" />*@
+        </div>
+    </div>
+
+}
+
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+<script type="text/javascript">
+    
+    //$(document).ready(function () {
+
+
+      
+        //$.noConflict();
+    $('#tablaStock').DataTable({
+
+        "language": {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "No Contiene registros",
+            "infoEmpty": "No hay registros disponibles",
+            "decimal": "",
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+            "infoFiltered": "(Filtro de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "  Mostrar _MENU_ registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "No se encontraron coincidencias",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Atras"
+            },
+            "aria": {
+                "sortAscending": ": Activar orden de columna ascendente",
+                "sortDescending": ": Activar orden de columna desendente"
+            },
+        },
+
+
+        'paging': true,
+        'lengthChange': true,
+        'searching': true,
+        'ordering': false,
+        'info': true,
+        'autoWidth': false
+    });
+
+
+    //});
+    
+</script>
+
+
+

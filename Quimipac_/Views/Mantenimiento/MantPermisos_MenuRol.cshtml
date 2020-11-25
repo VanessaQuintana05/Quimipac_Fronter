@@ -1,0 +1,587 @@
+﻿@*@using Quimipac_.Models;
+    @using Quimipac_.Repositorio;//.Roles*@
+
+@using Quimipac_.Models
+@model Quimipac_.Models.Roles
+@{
+
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+        // var listaContrato = ViewBag.listaContrato as List<sp_Quimipac_ConsultaMT_ContratoGeneral_Result>;
+
+        //var listaProyecto = ViewBag.listaProyecto as List<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result>;
+
+        //var LkRol = ViewBag.LkRol as List<sp_>
+        // var LkRol = TempData["LkRoles"] as List<RolesQuimipac>;
+        //var DataRol = ViewBag.DataRol as List<Sp_LINK_ConsultaUsuarios_Rol>;
+        var lkMenu = ViewBag.lkMenu as List<sp_Quimipac_ConsultaMenu_Result>;
+
+
+        //var lkMenu = ViewBag.lkMenu as List<>;
+
+    }
+
+    <title>Fronter | Menu Rol</title>
+
+
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+    @*@*BotonInf*@
+    <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+    <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+    <!-- EstiloGeneral-->
+    <link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+    <!-- TogglePermiso -->
+    <link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.css" />
+
+
+    <style>
+            body {
+                overflow-x: hidden;
+            }
+
+            .vFlotante {
+                position: absolute;
+                left: 97%;
+                top: 15%;
+                width: 4500px;
+                height: 400px;
+                transition: all .4s ease-in;
+                -webkit-transition: all .4s ease-in;
+                -moz-transition: all .4s ease-in;
+                -o-transition: all .4s ease-in;
+            }
+
+                .vFlotante:hover {
+                    left: 73%;
+                }
+
+            #imgnotificacion {
+                width: 40px;
+                height: 40px;
+            }
+
+            /*.titulo {
+            transform: rotate(270deg);
+            -webkit-transform: rotate(270deg);
+            -moz-transform: rotate(270deg);
+            -o-transform: rotate(270deg);
+        }*/
+    </style>
+
+
+    <section class="content-header">
+
+        <h2 style="text-align:left">
+            Menú Rol
+        </h2>
+
+        <ol class="breadcrumb">
+            <li>
+                <a href="@Url.Action("Default", "Main")">
+                    <i class="fa fa-link">
+                    </i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="@Url.Action("MantPermisos", "Mantenimiento")">
+                    Mant Permisos
+                </a>
+            </li>
+            <li class="breadcrumb-item active">Menú Rol</li>
+        </ol>
+        <br>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col">
+                    <table>
+                        <tr>
+                            <td>
+                                <button id="btnAgregarRol" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarProyectos">
+                                    <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;   Crear Rol
+                                </button>
+                            </td>
+                            <td><span style="margin-left:6px;"></span></td>
+                            <td>
+                                <button id="vvv" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarProyectos">
+                                    <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;  Agregar Rol-Usuario
+                                </button>
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+
+                    @*</div><div class="form-group col">*@
+
+                </div>
+            </div>
+
+
+
+
+            <div class="vFlotante">
+                <table class="table-responsive">
+                    <tr>
+                        <td>
+                            <br />
+                            <br />
+                            <hgroup style="display:inline-block;">
+                                <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">
+                            </hgroup>&nbsp;&nbsp;
+                        </td>
+
+                        <td>
+                            <br />
+                            <br />
+                            <div class="box box-default">
+                                @*<div class="box-header"><h3 class="box-title">Tipo de vista</h3></div>*@
+                                <div class="box-header">
+                                    <p>En esta Pagina se detallara Los permisos y roles de usuarios.</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @if (TempData["mensaje_error"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>@TempData["mensaje_error"]</strong>
+                        <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["mensaje_correcto"] != null)
+                {
+                    <div class="alert alert-success">
+                        <strong>@TempData["mensaje_correcto"]</strong>
+                        <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["mensaje_actualizado"] != null)
+                {
+                    <div class="alert alert-warning">
+                        <strong>@TempData["mensaje_actualizado"]</strong>
+                        <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default" id="BordeDiv">
+                    @*<div class="box-header">
+            <h3 class="box-title">Proyectos</h3>
+        </div>*@
+
+                    <div class="box-body" id="CssDivBox">
+                        <br />
+
+
+                        <!-- Nombre Rol -->
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">*&nbsp;&nbsp;Nombre de Rol:</label>
+                            <div class="col-md-2">
+                                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control is-valid", @id = "txtDescripcion", @type = "text", @required = "required", @style = "height:28px" } })
+                                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+                        <!--Div TablaMenu-->
+                        @{
+            if (lkMenu != null)
+            {
+                if (lkMenu.Count > 0)
+                {
+                    <div class="table-responsive col-md-5">
+
+                        <table id="tablaRolesUsuario" class="js-dynamitable table table-bordered" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="hidden">IdMenu</th>
+                                    <th>Descripcion</th>
+                                    <th>Asignaci&oacute;n</th>
+                                <tr>
+                                    <th class="hidden"></th>
+                                    <th><input class="js-filter form-control" type="text" value="" placeholder="Descripcion"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--for (int i = 0; i < length; i++) -->
+                                @foreach (var itemMenu in lkMenu)
+                {
+                    <tr nowrap>
+                        @*@if (itemMenu.Nivel_Profundidad == 1)
+            {*@
+                        <td nowrap class="hidden">@Html.DisplayFor(model => itemMenu.Id_Menu)</td>
+                        <td nowrap>@Html.DisplayFor(model => itemMenu.Menu)</td>
+                        <td nowrap>
+                            @*<div id="content">*@
+                            @if (itemMenu.Action == "")
+    {
+
+
+                        @*<button id="btnSubMenu" type="button" style="border:0;outline:0 none;background:none;padding:0 0 0 0" onclick="mostrarSubMenu()">*@
+                        <div class="flat-toggle" id="@itemMenu.Menu" onclick="mostrarSubMenu()">
+                            @*<span>Seleccionar</span>*@
+                        </div>
+                        @*</button>*@
+
+                        BD_QUIMIPACEntities db = new BD_QUIMIPACEntities();
+                        var lkSubMenu = db.sp_Quimipac_ConsultaMenu(itemMenu.Id_Menu).ToList();
+                        if (lkSubMenu.Count != 0)
+                        {
+
+                               // if (item.Menu)          {
+
+
+                        <div id="DivSubMenu" style="display:none">
+                            <!-- Div Submenu-->
+                            <table>
+                                <tr>
+                                    <td class="hidden"></td>
+                                    <td style="padding:5px 0 0 0"><label style="font-weight:bold;">Mant. Men&uacute;</label><span style="margin-left:80px"></span></td>
+                                    <td style="padding:5px 0 0 0"><label style="font-weight:bold;">Estado</label></td>
+
+                                </tr>
+                                <tr><td colspan="3" style="background-color:#f39c12"></td></tr>
+
+
+                                @foreach (var item in lkSubMenu)
+                                {
+                                   
+
+
+                                        //}
+                        <tr>
+                            <td nowrap class="hidden">@Html.DisplayFor(model => item.Id_Menu)</td>
+                            <td>@Html.DisplayFor(model => item.Menu)</td>
+                            <td align="center">
+                                <div class="flat-toggle" title="Seleccionar" id="@item.Menu">
+                                    @*<span>Invisibility</span>*@
+                                </div>
+                            </td>
+
+                        </tr>
+                                }
+                            </table>
+
+                        </div><!--Fin Div Submenu-->
+
+
+                                    //}
+
+
+                                }
+
+
+
+                            }
+                            else
+                            {
+
+                        <div class="flat-toggle">
+                            @*<span>Invisibility</span>*@
+                        </div>
+}
+                        </td>
+                        @*  }*@
+
+                    </tr>
+}
+                            </tbody>
+                        </table>
+
+                    </div>
+}
+}
+                        }
+
+
+                    </div>
+                </div>
+                </div>
+            </div>
+            @*Demo*@
+
+
+            @*<div class="flat-toggle">
+            <span>Invisibility</span>
+        </div>
+
+        <div class="flat-toggle on">
+            <span>Control time passing</span>
+        </div>*@
+
+
+</section>
+
+
+    <div id="modalAgregarProyectos" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> Agregar Proyectos &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="modal-agregaProyectos">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalEditarProyectos" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    @*<h5 class="modal-title">Editar Tipo Trabajo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>  *@
+
+                    <div class="modal-title">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold">Editar Proyecto&nbsp;&nbsp;</h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-editaProyectos">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts {
+
+
+        <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+        @*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+        <!--Filtro de tabla-->
+        <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+        <script src="~/Scripts/Modales.js"></script>
+
+
+        <!-- TogglePermiso -->
+        <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/js/jquery.js"></script>
+        <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.js"></script>
+
+        <script type="text/javascript">
+
+        modalAdd('#btnAgregarProyectos', 'modal-agregaProyectos', '@Url.Action("Agregar_Proyectos", "Proyectos")');
+        modalEdit('.class_editar_Proyectos', 'modal-editaProyectos', '@Url.Action("Editar_Proyectos", "Proyectos", new { id = "param-id" })');
+
+        $(document).ready(function () {
+
+
+            //$(".alert").fadeTo(2000, 500).slideUp(500, function () {
+            //    $(".alert").slideUp(500);
+            //});
+
+
+            ////$('#tablaProyectos').DataTable({
+
+            ////    "language": {
+            ////        "lengthMenu": "Display _MENU_ records per page",
+            ////        "zeroRecords": "No Contiene registros",
+            ////        "infoEmpty": "No hay registros disponibles",
+            ////        "decimal": "",
+            ////        "emptyTable": "No hay datos",
+            ////        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            ////        "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+            ////        "infoFiltered": "(Filtro de _MAX_ total registros)",
+            ////        "infoPostFix": "",
+            ////        "thousands": ",",
+            ////        "lengthMenu": "  Mostrar _MENU_ registros",
+            ////        "loadingRecords": "Cargando...",
+            ////        "processing": "Procesando...",
+            ////        "search": "Buscar:",
+            ////        "zeroRecords": "No se encontraron coincidencias",
+            ////        "paginate": {
+            ////            "first": "Primero",
+            ////            "last": "Ultimo",
+            ////            "next": "Siguiente",
+            ////            "previous": "Atras"
+            ////        },
+            ////        "aria": {
+            ////            "sortAscending": ": Activar orden de columna ascendente",
+            ////            "sortDescending": ": Activar orden de columna desendente"
+            ////        },
+            ////    },
+
+
+            ////    'paging': true,
+            ////    'lengthChange': true,
+            ////    'searching': true,
+            ////    'ordering': false,
+            ////    'info': true,
+            ////    'autoWidth': true
+
+            ////    //"scrollX": true
+            ////});
+
+            //$('#tablaTiposTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+            //$('#DivSubMenu').click(function (e) {
+            //    var id = e.target.id;
+            //    alert(id); // Mostrar ID solo para verificar que sea correcto
+            //});
+            
+            //$('.flat-toggle').click(function () {
+            //    //console.log();
+            //    //if (this.attr('id') == 'DivSubMenu') {
+            //    mostrarSubMenu();
+            //  //  }
+            //});
+
+            //$(document).on(function () {
+            //    $("div[id=idcapa]").click(function () {
+            //        //$("#idcapa").click(function () {
+            //        //$("div[class=clasecapa]").click(function () {
+            //        //$(".clasecapa").click(function () {
+            //        alert("has hecho click en la capa div");
+            //    });
+            //});
+
+
+            //$(".flat-toggle").on("click", function () {
+            //    mostrarSubMenu();
+            //});
+
+           
+           //$("#Mantenimiento").click(function () {
+            //    alert('1203466799');
+            //    mostrarSubMenu();
+            //});
+            
+           
+            //$("elementocualquiera").addEvent('click', function (event) {
+            //    alert("Posición del ratón\nx: " + event.page.x + "\ny: " + event.page.y);
+            //});
+            //$("#Mantenimiento").addEvent('click', function (event) {
+            //alert("Posición del ratón\nx: " + event.page.x + "\ny: " + event.page.y);
+            //});
+
+        });
+            //$(document).ready(function () {
+            //    $("div").dblclick(function () {
+            //        alert("Se ha hecho doble click sobre el Div.");
+            //    });
+            //});
+            //$('flat-toggle').click(function () {
+            //    alert('Click Div');
+            //});
+            //var cntSubMenu = 0;
+            //function mostrarSubMenu() {
+                
+            //    if (cntSubMenu%2 == 0) {
+            //        document.getElementById('DivSubMenu').style.display = 'block';
+                    
+            //        $('Tipos de Trabajo').hasClass('on');
+            //        $('Precios Referenciales').hasClass('on');
+            //        $('Lugares Medición').hasClass('on');
+            //        $('Grupo Trabajo').hasClass('on');
+            //        $('Sector').hasClass('on');
+            //        $('Servicios').hasClass('on');
+            //        $('Tablas Referenciales').hasClass('on');
+            //        $('Permisos').hasClass('on');
+            //        $('Campamentos').hasClass('on');
+            //    } else {
+            //        document.getElementById('DivSubMenu').style.display = 'none';
+            //        $('Tipos de Trabajo').removeClass('on');
+            //        $('Precios Referenciales').removeClass('on');
+            //        $('Lugares Medición').removeClass('on');
+            //        $('Grupo Trabajo').removeClass('on');
+            //        $('Sector').removeClass('on');
+            //        $('Servicios').removeClass('on');
+            //        $('Tablas Referenciales').removeClass('on');
+            //        $('Permisos').removeClass('on');
+            //        $('Campamentos').removeClass('on');
+
+            //    }
+
+            //    cntSubMenu++;
+            //}
+
+         
+
+
+
+
+
+        </script>
+    }

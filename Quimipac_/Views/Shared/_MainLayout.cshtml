@@ -1,0 +1,874 @@
+﻿@using Quimipac_.Models;
+@using Quimipac_.Repositorio;
+@* model Quimipac_.Models.ClsNotificacion   *@
+
+@{
+    var ImgSizeUsuario = "110px";
+    string CadUrl = (HttpContext.Current.Request.Url.AbsoluteUri).ToString();
+    // string[] Separado = CadUrl.Split('/');
+    CadUrl = CadUrl.Replace(":", "");
+
+    if (System.Web.HttpContext.Current.Session["usuario"] == null && System.Web.HttpContext.Current.Session["clave"] == null)
+    {
+        Response.Redirect(Url.Action("IniciarSesion", "Home"));
+    }
+    else
+    {
+        string nombreUsuario = System.Web.HttpContext.Current.Session["nombres"] as string;
+        string usuario = System.Web.HttpContext.Current.Session["usuario"] as string;
+        var clave = System.Web.HttpContext.Current.Session["clave"] as string;
+
+        var EmpresaID = System.Web.HttpContext.Current.Session["empresa"] as string;
+
+        ////PERMISO BOTONES
+        //var XPermisosBTN = System.Web.HttpContext.Current.Session["Permiso_Btn"];
+        //var XContrato_LI = System.Web.HttpContext.Current.Session["ContratosxUsuaroLI"];
+        //var xProyecto_LI = System.Web.HttpContext.Current.Session["ProyectosxUsuarioLI"];
+
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta http-equiv="Expires" content="0" />
+            <meta http-equiv="Pragma" content="no-cache" />
+            <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+            @*<link rel="stylesheet" href="https ://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+        <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">*@
+            <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+            <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css">
+            <link rel="shortcut icon" href="~/Content/bower_components/ImagenVQ/FTIsotipo.png" />
+
+            @*BotonInf*@
+            <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+            <link href="~/Content/bower_components/EstiloExterno/EstiloGral.css" rel="stylesheet" />
+
+            <!--Scrooll Aside Menu
+                    <link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/Scroll_Aside/jquery.phancy.css" />
+        <link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/ScrollMenu/perfect-scrollbar.css" />
+    -->
+
+
+
+            <style>
+                /*.slimScrollBar {
+                                background: none repeat scroll 0 0 #ffffff !important;
+                                border-radius: 0;
+                                display: none;
+                                height: 702.936px;
+                                position: absolute;
+                                right: 1px;
+                                top: 145px;
+                                width: 10px !important;
+                                z-index: 99;
+                                opacity: 1 !important;
+                            }*/
+                html, body {
+                    height: 100%;
+                }
+
+                body {
+                    padding-right: 0px !important;
+                }
+
+
+
+                #divFondo {
+                    /*margin: 0;*/
+                    padding: 28px 0 0 0;
+                    /*background: rgb(230, 236, 236);*/
+                    /*overflow: hidden;*/
+                    /*background-image: url("../Imagen/FondoFT.jpg");*/
+                    background-image: url('/Content/bower_components/ImagenVQ/FondoFT.jpg');
+                    background-size: cover;
+                    /*width: 100%;
+                                height: 100%;*/
+                }
+
+                div::-webkit-scrollbar {
+                    width: 10px !important;/*ancho barra celeste*/
+                    height: 10px !important; /*=> altura del scroll
+                background-color: #ffffff;=> Color del fondo principal */
+                }
+
+                div::-webkit-scrollbar-thumb {
+                    background-color: #48acbd; /*#263238;=> color del indicador del scroll */
+                    border-radius: 1px; /*10=> bordes redondeados */
+                }
+
+                .divContenedor::-webkit-scrollbar-track {
+                    background-color: #ffebc9; /* =>rgba(38, 50, 56, 0.19); color de fondo del trayecto del scroll */
+                }
+
+                .loader {
+                    position: fixed;
+                    left: 0px;
+                    top: 0px;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 9999;
+                    background: url('/Imagen/geLoader.gif')50% 50% no-repeat rgb(249,249,249);
+                    /*background: url('images/pageLoader.gif') 50% 50% no-repeat rgb(249,249,249);*/
+                    opacity: .8;
+                }
+            </style>
+            @Styles.Render("~/Css")
+        </head>
+        @* <body class="hold-transition skin-purple sidebar-mini">*@
+
+
+        @*   <body class="hold-transition skin-black sidebar-mini fixed" background="../Content/bower_components/ImagenVQ/FondoFT.png"> *@
+        <body class="hold-transition skin-black sidebar-mini fixed">
+            <div class="loader"></div>
+            <div class="wrapper" style="bottom:0;width:100%;">
+                <header class="main-header" id="main-header" style="position:fixed;width:100%;">
+                    <a href="@Url.Action("Default", "Main")" class="logo">
+                        <span class="logo-mini"><b>F</b>T</span>
+                        <span class="logo-lg">
+                            <img src="~/Content/bower_components/ImagenVQ/FTIsotipo.png" style="height: 12%; width: 12%;"/><b>&nbsp;Fronter</b></span>
+                    </a>
+                    <nav class="navbar navbar-static-top ">
+
+                        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" id="btnToggle">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+
+
+                        <div class="navbar-custom-menu ">
+                            <ul class="nav navbar-nav">
+
+
+                                @{var dbe = new DataBase_Externo();
+
+                                    var lista = dbe.LkObtenerNotificacion(0, usuario);
+                                    var colorCampana = "";
+                                }
+
+
+                                <li class="dropdown messages-menu">
+
+
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onmousedown="detectarBoton(event);">
+                                        @*<i class="fa fa-bell-o" id="quitaLi"></i>*@
+                                        @if (@lista.Count() > 0)
+                                        {
+                                            colorCampana = "#f4cf05";
+                                            <span class="label label-danger" style="border-radius: 50%;">@lista.Count()</span>
+
+                                        }
+
+
+
+                                        <font color="@colorCampana" size="3"><i class="fa fa-bell-o" id="quitaLi"></i></font>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="header">Usted tiene @lista.Count() notificaciones nuevas</li>
+                                        <li>
+
+                                            @*recorre la lista*@
+                                            <ul class="menu" id="clickItem">
+                                                @foreach (var item in lista)
+                                                {
+                                                    if (item.Prioridad == 85)
+                                                    {
+                                                        <li id="@item.Id_Notificacion">
+
+
+                                                            <a href="@Url.Action("LeerNotificacion","Main", new { id = item.Id_Notificacion })" target="_self" class="" title="" )">
+
+                                                                <h6><i class="fa fa-circle-o fa-2x fa-lg text-green"></i>&nbsp;&nbsp;&nbsp; @item.Asunto &nbsp;&nbsp;<small><i class="fa fa-clock-o"></i>&nbsp;@item.Fecha</small></h6>
+                                                                <p>@item.Mensaje</p>
+                                                            </a>
+
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.Prioridad == 84)
+                                                        {
+                                                            <li id="@item.Id_Notificacion">
+
+
+                                                                <a href="@Url.Action("LeerNotificacion","Main", new { id = item.Id_Notificacion })" target="_self" class="" title="" )">
+
+                                                                    <h6><i class="fa fa-circle-o fa-2x fa-lg text-yellow"></i>&nbsp;&nbsp;&nbsp; @item.Asunto &nbsp;&nbsp;<small><i class="fa fa-clock-o"></i>&nbsp;@item.Fecha</small></h6>
+                                                                    <p>@item.Mensaje</p>
+                                                                </a>
+
+                                                            </li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li id="@item.Id_Notificacion">
+
+
+                                                                <a href="@Url.Action("LeerNotificacion","Main", new { id = item.Id_Notificacion })" target="_self" class="" title="" )">
+
+                                                                    <h6><i class="fa fa-circle-o fa-2x fa-lg text-red"></i>&nbsp;&nbsp;&nbsp; @item.Asunto &nbsp;&nbsp;<small><i class="fa fa-clock-o"></i>&nbsp;;@item.Fecha</small></h6>
+                                                                    <p>@item.Mensaje</p>
+                                                                </a>
+
+                                                            </li>
+                                                        }
+                                                    }
+
+
+
+
+                                                }
+
+                                                @*<a href="@Url.Action("EliminarTipoTrabajo", "Mantenimiento", new { id = tipoTrabajo.Id_TipoTrabajo })" target="_self" class="btn btn-primary" title="Eliminar" style="text-align:center">
+                                                       <span aria-hidden="true" class="glyphicon glyphicon-remove"> </span>
+                                                    </a>*@
+
+                                            </ul>
+
+                                        </li>
+                                        @*<li class="footer"><a href="#">Ver todas las Notificaciones</a></li>*@
+                                    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <!-- <ul class="dropdown-menu"> -->
+                                    <!-- <li class="header">Titulo Pagina</li> -->
+                                    <!-- <li> -->
+                                    <!-- inner menu: contains the messages -->
+                                    <!-- <ul class="menu"> -->
+                                    <!--arrob foreach (var item in d.LkObtenerTitulos()) -->
+                                    <!-- { -->
+                                    <!-- <li> -->
+                                    <!-- start message -->
+                                    <!-- <a href="#"> -->
+                                    <!-- @*<div class="pull-left table-responsive">*@ -->                                    <!-- <div class="fa-pull-left"> -->
+                                    <!-- <!-- User Image -->
+                                    <!-- <i class="fa fa-info-circle"></i> -->
+                                    <!-- @*<img src="https: //almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">*@ -->                                    <!-- </div> -->
+                                    <!-- <h4>Estimado, <small><i class="fa fa-clock-o"></i>Fronter</small></h4>                                                    -->
+                                    <!-- <div class="">   <p >arrob  item.Descripcion</p></div> -->
+                                    <!-- </a> -->
+                                    <!-- </li> -->
+                                    <!-- n++; -->
+                                    <!-- } -->
+                                    <!-- </ul> -->
+                                    <!-- </li> -->
+                                    <!-- <li class="footer"><a href="#">See All Messages</a></li> -->
+                                    <!-- </ul> -->
+
+
+                                </li>
+
+
+
+
+
+                                <!--Datos Personales-->
+                                @*  <li class="dropdown user user-menu">*@
+                                @*<a href="@Url.Action("DatosPersonales", "Mantenimiento")" class="dropdown-toggle" aria-expanded="false" data-toggle="dropdown">
+                                        <i class="fa  fa-user"></i>
+                                        <span class="hidden-xs"> @nombreUsuario </span>
+                                    </a>*@
+
+                                @*<a href="@Url.Action("DatosPersonales", "Mantenimiento")">
+                                        <i class="fa  fa-user"></i>  @nombreUsuario
+                                    </a>*@
+                                @*<ul class="dropdown-menu">
+                                        <!-- User image -->
+                                        <li class="user-header">
+                                            <img src="~/Content/bower_components/ImagenVQ/imgGrupo.png" class="img-circle" alt="User Image" />
+                                            <p><small>@nombreUsuario</small></p>
+                                        </li>
+
+                                        <!-- Menu Footer-->
+                                        <li class="user-footer">
+                                            <div class="pull-left">
+                                                @*<a href="Cuenta.aspx" class="btn btn-default btn-flat">Datos Personales</a>* @
+                                                <a href="@Url.Action("DatosPersonales", "Mantenimiento")">
+                                                    Datos Personales
+                                                </a>
+                                            </div>
+                                            <div class="pull-right">
+                                                @*  <a href="CerrarSesion.aspx" class="btn btn-default btn-flat">Cerrar Sesión</a>* @
+                                                <a href="@Url.Action("CierraSesion", "Home")"><i class="fa fa-power-off"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                                              </li>
+                                *@
+                                <!-- Control Sidebar Toggle Button -->
+                                @*<%--
+                                    <li>
+                                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                                    </li>--%>*@
+                                <!--Fin Datos personales-->
+                                <li>
+                                    <a href="@Url.Action("CierraSesion", "Home")"><i class="fa fa-power-off"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+
+
+                <aside class="main-sidebar" style="position:fixed;">
+                    <section class="sidebar">
+
+
+                        <div class="user-panel" style="background-color:#556267;position:absolute;">
+                            <div class="btnDatosFotoU" style="display:none;position: absolute;text-align: right;right: 5px; top: 5px;background: #ffffff; padding: 4px 5px;font-size: 12px;color: #556267;">
+                                <a href="/Mantenimiento/DatosPersonales/">
+                                    <button id="btnModalFoto" type="button" class="">
+                                        @* onclick="updFotoModal()"   data-toggle="modal" data-target="#ModalFoto">*@
+                                        @*<span class="fa fa-plus-circle"></span>*@&nbsp;Editar Foto&nbsp;
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="">
+
+                                <br />
+                                <img id="imgUsuario" src="~/Content/bower_components/ImagenVQ/iconoUsr.png" class="img-circle center-block" alt="User Image" style="height:@ImgSizeUsuario;width:@ImgSizeUsuario;border-radius:360px;border:3px solid #ffffff;" />
+
+                            </div>
+                            @*<div class="">
+            <br />
+            <img id="imgUsuario" src="~/Content/bower_components/ImagenVQ/iconoUsr.png" class="img-circle center-block" alt="User Image" style="height:@ImgSizeUsuario;width:@ImgSizeUsuario;border-radius:360px;border:3px solid #ffffff;" />
+        </div>*@
+                            <div class="divUsuario" style="font-size:smaller;">
+                                <br />
+                                @*<div class="divUsuarioGral" style="font-size:smaller">48acbd*@
+                                <center>
+                                    <font size="2" color="white">
+                                        <a href="@Url.Action("DatosPersonales", "Mantenimiento")" title="Ver Datos Personales" style="color:#FFFFFF;">
+                                            <small><span class="fa fa-user text-white"></span>&nbsp;@nombreUsuario</small>
+                                        </a>
+                                    </font>
+                                    <br />
+                                    @* <i class="fa fa-info-circle"></i><font size="2" color="black">Ver datos personales</font>*@
+                                    @* <a href="#"><i class="fa fa-circle text-success"></i> <font size="2" color="black">Online</font></a>*@
+                                </center>
+                                @*</div>*@
+                            </div>
+                        </div>
+                        <!--
+
+                            <p><small>  nombreUsuario</small></p>
+                            border-radius:150px;
+                            border:10px solid #1a2226;
+                        -->
+                        @*<div class="user-panel">
+                                <div class="pull-left image">
+                                    <i class="fa fa-user fa-3x text-white"></i>
+
+                                </div>
+                                <div class="pull-left info" style="font-size:smaller">
+
+                                    <p>@nombreUsuario</p>
+                                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                                </div><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            </div>*@
+                        @*<div class="contnedorMenu" >
+                        *@
+
+                        <div class="MenuContenedor" style="width:100%;overflow-y: auto;overflow-x:hidden;top:184px;bottom:0;position:absolute;background:#000000;">
+                            <div class="img-responsive">
+
+                                <ul class="sidebar-menu" data-widget="tree">
+                                    @*<i class="header">MENU @opciones_padre.Count()</li>*@
+
+                                    @using Quimipac_.Models
+                                    @{
+                                        BD_QUIMIPACEntities db = new BD_QUIMIPACEntities();
+                                        var opciones_padre = System.Web.HttpContext.Current.Session["opciones_padres"] as List<sp_Quimipac_ConsultaOpcionesSistema_Result>;
+                                        var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
+                                        var nombre_empresa = System.Web.HttpContext.Current.Session["empresa_Nombre"];
+
+                                        //string itemMantenimiento = "Mantenimiento";
+                                        string itemMantenimiento = "Configuración";
+
+                                        foreach (var item in opciones_padre)
+                                        {
+                                            if (item.Action == "")
+                                            {
+                                                var auxIDMenu = item.Menu.Replace(" ", "");
+                                                <li class="treeview" id="itemDiv">
+                                                    <a href="#" id="@auxIDMenu">
+                                                        @*<i class="fa fa-gears"></i> <span>@item.Menu</span>*@
+                                                        <i class="@item.Icono"></i> <span>@item.Menu</span>
+                                                        <span class="pull-right-container">
+                                                            @*<i class="fa fa-angle-left pull-right"></i>*@
+                                                            <i class="fa fa-angle-left pull-right"></i>
+                                                        </span>
+                                                    </a>
+                                                    <ul class="treeview-menu" style="background:#000000;">
+                                                        @{
+                                                            try
+                                                            {
+                                                                var opciones_nivel2 = db.sp_Quimipac_ConsultaOpcionesSistema(usuario, item.Id_Menu,empresa_id.ToString()).ToList();
+
+                                                                if (opciones_nivel2.Count() != 0)
+                                                                {
+                                                                    foreach (var item2 in opciones_nivel2)
+                                                                    {
+                                                                        var opciones_nivel3 = db.sp_Quimipac_ConsultaOpcionesSistema(usuario, item2.Id_Menu, empresa_id.ToString()).ToList();
+
+                                                                        if (opciones_nivel3.Count() != 0)
+                                                                        {
+                                                                            <li class="treeview" id="itemDiv">
+                                                                                @*   <div id="divMenu">*@
+                                                                                <a href="#" id="@item2.Action">
+                                                                                    <i class="fa fa-archive"></i>
+                                                                                    @item2.Menu
+                                                                                    <span class="pull-right-container">
+                                                                                        <i class="fa fa-angle-left pull-right"></i>
+                                                                                    </span>
+                                                                                </a>
+                                                                                @*<ul class="treeview-menu">
+                                                                    @{
+                                                                        foreach (var item3 in opciones_nivel3)
+                                                                        {
+                                                                            <li>@Html.ActionLink(item3.Menu, "AdministrarHoras", "Configuracion")</li>
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                                @*</div>  *@
+                                                                            </li>
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <li id="itemDiv">
+                                                                                <a href="@Url.Action(item2.Action, item2.controlador)" id="@item2.Action"><i class="@item2.Icono"></i> <span>@item2.Menu</span></a>
+
+                                                                            </li>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception)
+                                                            {
+                                                                Response.Redirect(Url.Action("Error", "Errores"));
+
+                                                            }
+
+                                                        }
+                                                    </ul>
+                                                </li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li id="itemDiv">
+                                                                    <a href="@Url.Action(item.Action, item.controlador)" id="@item.Action"> <i class="@item.Icono"></i> <span id="color">@item.Menu</span></a>
+                                                                </li>
+                                                                }
+                                                            }
+                                    }
+                                </ul>
+                                @*</div>
+                                *@
+                            </div>
+                        </div>
+                   </section>
+                </aside>
+                @*style="width:100%;overflow-y: auto;overflow-x:hidden;top:184px;bottom:0;position:absolute;"*@
+                <div class="content-wrapper" id="divFondo">
+                    @*style="overflow-y: auto;overflow-x:hidden;bottom:0;">*@
+                    <br />
+                    @RenderBody()
+
+                </div>
+
+
+                <footer class="main-footer" style="">
+                    <div class="pull-right hidden-xs">
+                        <b> @nombre_empresa.ToString() - </b>
+                        <b>Versi&oacute;n</b> 0.1.0
+</div>
+                    <strong>Copyright &copy; @DateTime.Now.Year <a href="#">Grupo Quimipac S.A.</a>.</strong> All rights
+                    reserved.
+                </footer>
+                <div class="control-sidebar-bg">
+                </div>
+
+
+
+            </div>
+
+
+            @* Scripts.Render ("~ / bundles / jqgrid ") *@
+            @Scripts.Render("~/Js")
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+            @RenderSection("scripts", required: false)
+
+            <!--Scroll Aside Menu-->
+            @*<script src="~/Content/bower_components/EstiloExterno/Scroll_Aside/jquery.phancy.js"></script>*@
+            @*<script src="~/Content/bower_components/EstiloExterno/ScrollMenu/jquery-2.2.0.js"></script>
+
+                <script src="~/Content/bower_components/EstiloExterno/ScrollMenu/perfect-scrollbar.jquery.js"></script>*@
+            @*jquery Notificacion*@
+            @*<script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.1.1/jquery.min.js"></script>*@
+
+
+            <script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.3.7/bootstrap.min.js"></script>
+            @*....<script src="~/Scripts/bootstrap.min.js"></script>*@
+            <script src="~/Imagen/jquery.min.js"></script>
+
+
+            <script type="text/javascript">
+
+                if ("@System.Web.HttpContext.Current.Session["usuario"]" == "") {
+                    location.href = '@Url.Action("IniciarSesion", "Home")';
+                }
+
+            //$(document).ready(function () {
+            //    $("#liNoti").mousedown(function (ev) {
+            //        //1 - izquierdo; 2 - medio; 3 - derecho
+            //        if (ev.which == 3) {
+            //            $('#mensaje1').text("se oprimió el botón derecho");
+            //        }
+            //    });
+            //});
+
+
+
+//                document.getElementsByTagName("html")[0].style.overflow = "hidden";
+
+
+
+                function detectarBoton(event) {
+
+
+                    if (event.button == 2) {
+                     document.getElementById("quitaLi").value = "0"  // return 0;
+                    }
+
+                @*if (event.button == 2)
+                    alert("El botón del ratón pulsado fue el derecho"+@n);
+                else if (event.button == 1)
+                    alert("El botón del ratón pulsado fue el medio"+@n);
+                else
+                    alert("El botón del ratón pulsado fue el izquierdo"+@n);*@
+
+                    }
+
+
+                    //div de imagen Usuario
+                    var contToggle = 0;
+                    $(document).ready(function () {
+                        $('#btnToggle').on('click', function (e) {
+                            if (contToggle % 2 == 0) {
+                               // e.preventDefault();
+                                //alert("Hola");
+                                //estiloDiv="display:none"; $("#divUsuario").remove();
+                                //html("style='display:none'");
+
+                              //  $(".divUsuario").html("<center><br/> <font size='2' color='white' style='text-bold'>@usuario.Substring(0,2)</p></center>");
+                                 $(".divUsuario").html("<center><br/> <font size='2' color='white' style='text-bold'><a href=" +'@Url.Action("DatosPersonales", "Mantenimiento")'+" title='Ver Datos Personales'>"+'@usuario.Substring(0,2)'+"</a></font></center>");
+                                $("#imgUsuario").width(25);
+                                $("#imgUsuario").height(25);
+                                //var logo = document.getElementById("imgUsuario");
+                                //logo.width = 10;
+                                //logo.height = 10;
+								$(".MenuContenedor").css("top", 115);
+
+
+                            } else {
+                                //document.getElementById('imgUsuario'). = ImgUsuario";
+                                $("#imgUsuario").width(110);
+                                $("#imgUsuario").height(110);
+                                $(".divUsuario").html(""+
+                                    "<div class='divUsuario' style='font-size:smaller'>"+
+                                    "<br />" +
+                                    //"   <div class='divUsuarioGral' style='font-size:smaller'>" +
+                                    "      <center>" +
+                                    "          <font size='2' color='white'>" +
+                                    "              <small><span class='fa fa-user text-white'></span>&nbsp;<a href=" +'@Url.Action("DatosPersonales", "Mantenimiento")'+" title='Ver Datos Personales'>"+'@nombreUsuario'+"</a></span></small>" +
+                                    "          </font>" +
+                                    "          <br />" +
+                                    //"          <a href='#'><i class='fa fa-circle text-success'></i> <font size='2' color='black'>Online</font></a>" +
+                                    "      </center>" +
+                                    //"  </div>" +
+                                    "</div>");
+								$(".MenuContenedor").css("top", 184);
+                            }
+
+
+                            contToggle++;
+                        });
+                    });
+
+
+
+                    //jQuery(document).ready(function () {
+                    //    jQuery("#cambiar").click(function () {
+
+                    //        var a = jQuery("#color");
+                    //        a.css("color", "blue");
+                    //        $("#color").html("<label style='color:white;background-color:#5bc0de; text-align: center;height:24px;padding:2px 0 0 0' >"+
+                    //            "<font size='2'>Estado de Orden de Trabajo</font>"+
+                    //            "</label>");
+                    //    });
+                    //});
+
+
+                    //Item Activo
+                    //$('li').on('click', function () {
+                    ////$('li a.activo').removeClass('activo');
+                    ////    $(this).addClass('activo');
+
+                    //
+                    //
+                    //});
+
+                    //$(document).ready(function () {
+                    //    $('.item2').on('click', function (e) {
+                    //        e.preventDefault(); alert("Hola");
+                    //    });
+                    //});
+
+
+
+                    //$(function () {
+                    //    $("li > span").click(function () {
+                    //        //Busca todos los elementos del nav que tengan la clase active y los elimina
+                    //        $(this).closest('.nav').find('li').removeClass('active');
+                    //        //Al elemento seleccionado agrega la clase active
+                    //        $(this).addClass('active');
+                    //    });
+                    //});
+
+                    //addLoadEvent(function () {
+                    //    showLightbox(document.getElementById('btnToggle'));
+                    //});
+
+                    //Mision Fallida
+                    //$(function () {
+                    //    $("#DivMenu").customScroll();
+                    //});
+                    //$('.contendorMenu').perfectScrollbar();
+
+
+
+                    //var height = $(window).height();
+                    //$('.sidebar').css('height', (height));
+
+                    //$(window).resize(function () {
+                    //    var height = $(window).height();
+                    //    $('.sidebar').css('height', (height));
+                    //});
+
+				// funcion click
+					//$('#clickItem').click(function (e) {
+					//	var li = e.target.parentNode;
+					//	alert(li.id);
+					//});
+					var UrlM = location.href;//CadUrl+"";
+					var datearray1 = UrlM.split("/");
+                    var ActionM = datearray1[4];
+
+                    //subMenu visible por defecto
+                    if ((UrlM.indexOf('Mantenimiento') != -1) && (!(UrlM.indexOf('Solicitud') != -1))) {
+                        $('.treeview-menu').css('display', 'block');
+                    } else { $('.treeview-menu').css('display', 'none'); }
+
+
+
+                    //alert(ActionM);
+                 				//var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+					//if ('CadUrl'.indexOf(datearray1[3]) != -1) {
+					if (ActionM.indexOf('Default') != -1) { //Default    Dashboard#30baca
+
+                       
+                        $('#' + ActionM).css("color", "#30baca"); $('#' + ActionM).css("border-left", "3px solid #30baca");// $('#' + ActionM).css("font-weight", "Bold");
+					}
+
+
+					if (ActionM.indexOf('Mant') != -1) { //Default    Dashboard#30baca
+						var ActionMantenimiento = ActionM.replace('Mant', '');
+						
+					    //$('#Mantenimiento').css("color", "#30baca"); $('#' + ActionM).css("border-left", "3px solid #30baca"); //$('#Mantenimiento').css("font-weight", "Bold");
+                        //?$('#Configuración').css("color", "#30baca");
+                        $('#' + ActionM).css("border-left", "3px solid #30baca"); //$('#Mantenimiento').css("font-weight", "Bold");
+                                               
+                        $('#' + ActionMantenimiento).css("color", "#30baca"); $('#' + ActionM).css("border-left", "3px solid #30baca");// $('#' + ActionMantenimiento).css("font-weight", "Bold");
+                        //*************************
+                        //PARA MENU ROL
+
+                        if (ActionM.indexOf('Rol') != -1 || ActionM.indexOf('Permiso') != -1 || ActionM.indexOf('Personales') != -1) {
+                            $('#Seguridad').css("color", "#30baca");
+                            if (ActionM.indexOf('Rol') != -1) {
+                                //
+                                //alert(ActionM + " " + ActionMantenimiento);
+                                $('#MantMenuDRol').css("color", "#30baca");
+                                $('#MantMenuDRol').css("border-left", "3px solid #30baca");
+                                //$('#Configuración').css("color", "#b8c7ce !important");
+                            }
+                        }
+                        else {
+                            $('#Configuración').css("color", "#30baca");
+                        }
+                    }
+
+
+                    if (ActionM.indexOf('Solicitud_Detalle') != -1) { //Default    Dashboard#30baca
+                        $('#Solicitud').css("color", "#30baca"); $('#Solicitud').css("border-left", "3px solid #30baca");// $('#' + ActionMantenimiento).css("font-weight", "Bold");
+
+                    }// console.log(UrlM + ' ActionMantenimiento:' + ActionMantenimiento);
+
+
+
+                   //****** $('#' + ActionM).css("background", "#383d46");
+                    //$('#' + ActionM).css("color", "#30baca"); $('#' + ActionM).css("border-left", "3px solid #30baca");// $('#' + ActionM).css("font-weight", "Bold");
+
+                    if (ActionM.indexOf('Detalle_MantTabla') != -1) { //Default    Dashboard#30baca
+                        $('#MantTabla').css("color", "#30baca"); $('#MantTabla').css("border-left", "3px solid #30baca");// $('#' + ActionMantenimiento).css("font-weight", "Bold");
+
+                    } 
+
+					$(window).load(function () {
+						$(".loader").fadeOut("slow");
+                    });
+
+
+                //2501202020 prueba Modal ESC
+                $(document).bind('keydown',function(e){
+                    if ( e.which == 27 ) {
+                        //alert("Has pulsado la tecla ESC");
+                        //$("").remove();
+                        $('div.fade').remove();
+                        $('body').removeClass('modal-open');
+                        $('div.modal-backdrop').remove();
+                        //modal-backdrop  in
+                    };
+                });
+
+
+
+
+
+
+            //PERMISOS SOBRE ACCIONES
+            //PermisosBotones("");
+            @*
+            function PermisosBotones(CriterioPermiso)
+            {
+                var jsonObject = { PersonaID: "@usuario", EmpresaID: "@EmpresaID",Criterio:CriterioPermiso};
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Mantenimiento/Item_OpcPermiso/',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(jsonObject),
+
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var _XPermisosBTN = []; 
+                            var _XPermisosBTN = data;//Html.Raw(Json.Encode(XPermisosBTN))
+                            //(System.Web.HttpContext.Current.Session["usuario"] == data)
+                console.log('XPermisosBTN');console.log(_XPermisosBTN);
+                        if (_XPermisosBTN != null)
+                        {
+                            if (_XPermisosBTN.length > 0)
+                            {
+                                var opConsultar = _XPermisosBTN.find(vq => vq.Consultar == "N");
+                                var opModificar = _XPermisosBTN.find(vq => vq.Modificar == "N");
+                                var opEliminar  = _XPermisosBTN.find(vq => vq.Eliminar == "N");
+                                var opAprobar = _XPermisosBTN.find(vq => vq.Aprobar == "N");
+                                var opCrear = _XPermisosBTN.find(vq => vq.Crear == "N");
+
+                                  //  if (!$('.btnConsultar').is(':visible')) $('.btnConsultar').show();
+                                    /*
+                                     * NO BORRAR ESTE COMENTARIO
+                                     * 
+                                     * if (!($('a.btnActividadesBoton').is(':visible'))) $('a.btnActividadesBoton').show();
+                                    if (!$('a.btnMedidassBoton').is(':visible')) $('a.btnMedidassBoton').show();
+                                    if (!$('a.btnItemsBoton').is(':visible')) $('a.btnItemsBoton').show();
+                                    if (!$('a.btnDetalleBoton').is(':visible')) $('a.btnDetalleBoton').show();
+
+                                    if (!($('button.btnActividadesBoton').is(':visible')))  $('button.btnActividadesBoton').show();
+                                    if (!$('button.btnMedidassBoton').is(':visible')) $('button.btnMedidassBoton').show();
+                                    if (!$('button.btnItemsBoton').is(':visible')) $('button.btnItemsBoton').show();
+                                    if (!$('button.btnDetalleBoton').is(':visible')) $('button.btnDetalleBoton').show();
+                                    btnFiscalizadorBoton
+                                    btnProrrogaBoton
+                                    btnParametroBoton
+                                    btnAlertaBoton
+                                    btnFormularioBoton
+                                    */ /*if (!$('a.Consultar_MTPR').is(':visible')) {
+                                        $('a.Consultar_MTPR').show(); $('a.Consultar_MTPR').css("display", "inline-flex");
+                                    }
+                                    if (!($('button.Consultar_MTPR').is(':visible'))) {
+                                        $('button.Consultar_MTPR').show(); $('button.Consultar_MTPR').css("display", "inline-flex");
+                                    }*/
+                                if (opConsultar != null || opConsultar != undefined) {
+                                    $("button.Consultar_MTPR").remove();
+                                    $("a.Consultar_MTPR").remove();
+                                }
+                                if (opModificar != null || opModificar != undefined) {
+                                    $("button.Modificar_MTPR").remove();
+                                    $("a.Modificar_MTPR").remove();
+                                }
+                                if (opEliminar != null || opEliminar != undefined) {
+                                    $("button.Eliminar_MTPR").remove();
+                                    $("a.Eliminar_MTPR").remove();
+                                }
+                                if (opAprobar != null || opAprobar != undefined) {
+                                    /*$("button.Aprobar_MTPR").remove();
+                                    $("a.Aprobar_MTPR").remove();*/
+                                }
+                                if (opCrear != null || opCrear != undefined) {
+                                    $("button.Crear_MTPR").remove();
+                                    $("a.Crear_MTPR").remove();
+                                }
+                            }
+                        }
+                  
+                        } else {
+                                //location.reload();
+                        }
+                    },
+                    error: function () {
+                        //swal('', 'Error durante el proceso, favor verificar datos de ingreso', 'error');
+                        console.log('Error durante el proceso, favor verificar datos de ingreso', 'error');
+                    }
+                });
+
+
+                
+                }
+
+                *@
+            //});
+                $(".user-panel").hover(function(){
+                    //$(this).css("background-color", "yellow");
+                    $(".btnDatosFotoU").css('display', 'block');
+                    }, function(){
+                    //$(this).css("background-color", "pink");
+                        $(".btnDatosFotoU").css('display', 'none');
+                });
+
+            </script>
+
+        </body>
+    </html>
+
+    }
+}

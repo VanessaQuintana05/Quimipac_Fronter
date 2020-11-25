@@ -1,0 +1,319 @@
+﻿@using Quimipac_.Models
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var CharDemo = ViewBag.chartDataPie;// as List<Quimipac_.Controllers.MainController>;
+
+
+    System.Web.Script.Serialization.JavaScriptSerializer oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    string StudentJson = oSerializer.Serialize(CharDemo);
+    int borrar = 0;}
+
+
+<style>
+    .content {
+        min-height: 0px;
+        padding: 0 !important;
+    }
+
+    #divFondo,
+    .box-body {
+        background: #f5f5f9 !important;
+    }
+
+    .box-title {
+        padding: 16px 15px 0 !important;
+    }
+    .borderpri {
+        border: 1px solid #dadada;
+    }
+    .borderShadow {
+        box-shadow: -2px 2px 6px 0px black;
+    }
+</style>
+
+<title>Fronter | Home</title>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv" style="height:auto;">
+                <div class="box-header" style="background-color:#f5f5f9;align-content:center">
+                    <h3 class="box-title">Dashboard</h3>
+                </div>
+
+                <div class="box-body">
+
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-cube" style="border-radius: 4px; margin: 4px; background: #252525; color: #fff; padding: 20px; font-size: 15px; "></span>
+                                        <div style="display: grid; padding: 10px;">
+                                            <span class="Bold">Total de Ordenes</span>
+                                            <span>@ViewBag.N_OT</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-refresh" style=" border-radius: 4px;margin: 4px;background: #099000; color: #5ee555; padding: 20px; font-size: 15px;"></span>
+                                        <div style="display: grid; padding: 10px;">
+                                            <span class="Bold">En Proceso:</span>
+                                            <span>@ViewBag.Nlista_Proceso</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-warning" style="border-radius: 4px; margin: 4px; background: #fcff22; color: #989926; padding: 20px; font-size: 15px; "></span>
+                                        <div style="display: grid; padding: 10px;">
+                                            <span class="Bold">En Alerta:</span>
+                                            <span>@ViewBag.Nlista_Alerta</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-minus-square" style="border-radius: 4px; margin: 4px; background: #f50101; color: #fcc4c4; padding: 20px; font-size: 15px;"></span>
+                                        <div style="display: grid; padding: 10px;">
+                                            <span class="Bold">Caidas:</span>
+                                            <span>@ViewBag.Nlista_Caida</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--TEST-->
+                            @*<div class="form-group borderpri" style="background: #fff; margin-left: 0; margin-right: 0;">
+                                <div class="col-md-12">
+                                    <div style=" background: #fff;">
+                                        <div id='barchart_CliOT_OT' style='width: auto; height: 350px;'></div>
+                                    </div>
+                                </div>
+                            </div>*@
+                            <!--    -->
+                            <div class="form-group borderpri" style="background: #fff; margin-left: 0; margin-right: 0;">
+                                <div class="col-md-12">
+                                    <div style=" background: #fff;">
+                                        @*<div id='polynomial2_div' style='width: 900px; height: 500px;'></div>*@
+                                        <div id='polynomial2_div' style='width: auto; height: 350px;'></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="barchart_values" style="width: 500px; height: 250px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="barchart_CliOT" style="width: 500px; height:250px; margin-left:auto; margin-right:auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+@*<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>*@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        console.log('JS INIT');
+
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        var chart;
+
+        function drawChart() {
+            //Etapas();
+            OTxdd();
+
+            OtxGrupoTrab();
+            OtxClte();
+            //EstadoOrden();
+        }
+        @*function Etapas() {
+        var optionsnn = {
+            title: 'Etapas Ordenes',
+            colors: ['#00d800', '#feff25', '#fe0000'],
+            is3D: true
+        };
+        @ *var nnn = @Html.Raw(StudentJson);* @
+        console.log(nnn);//CharDemo
+                var datann = google.visualization.arrayToDataTable(@Html.Raw(StudentJson));
+                chartnn = new google.visualization.PieChart(document.getElementById('barchart_CliOT_OT'));
+                chartnn.draw(datann, optionsnn);
+            
+        }*@
+
+        @*function EstadoOrden() {
+
+        $.ajax({
+            url: "@Url.Action("GetChartPieData_Estado", "Main")",
+            data: "",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; chartset=utf-8",
+            success: function (data) { },
+            error: function () { }
+        }).done(function (data) {
+            console.log('data', data);
+
+            var options_ = {
+                title: 'Estados Ordenes',
+                pieHole: 0.4
+            };
+
+            var dataEstado = google.visualization.arrayToDataTable(data);
+            chart_ = new google.visualization.PieChart(document.getElementById('barchart_CliOT'));
+            chart_.draw(dataEstado, options_);
+        });
+    }*@
+        // after complete loading data
+        function OTxdd() {
+            /*var dataOTxdd = google.visualization.arrayToDataTable([
+                ['Age', 'Weight'],
+                [8, 12],
+                [4, 5.5],
+                [11, 14],
+                [4, 5],
+                [3, 3.5],
+                [6.5, 7]
+            ]);
+
+            var optionsOTxdd = {
+                title: 'Age vs. Weight comparison',
+                legend: 'none',
+                crosshair: { trigger: 'both', orientation: 'both' },
+                trendlines: {
+                    0: {
+                        type: 'polynomial',
+                        degree: 3,
+                        visibleInLegend: true,
+                    }
+                }
+            };
+
+            var chart = new google.visualization.ScatterChart(document.getElementById('polynomial2_div'));
+            chart.draw(dataOTxdd, optionsOTxdd);*/
+            var dataxdd = google.visualization.arrayToDataTable([
+                ['Year', 'Ordenes de Trabajo'],
+                ['2020-2-31', 1000],
+                ['2020-8-5', 1170],
+                ['2020-10-30', 660],
+                ['2020-11-5', 103]
+                ]);
+            var optionsxdd = {
+                title: 'Company Performance',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                curveType: 'function',
+                //legend: { position: 'bottom' }
+            };
+
+            var chartxdd = new google.visualization.LineChart(document.getElementById('polynomial2_div'));
+            chartxdd.draw(dataxdd, optionsxdd);
+
+        }
+
+        function OtxGrupoTrab() {
+            $.ajax({
+                url: "@Url.Action("GetChartxGrupo", "Main")",
+                data: "",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; chartset=utf-8",
+                success: function (data) { },
+                error: function () { }
+            }).done(function (data) {
+                console.log('dataGrupoOT', data);
+                var dataGrupoOT = google.visualization.arrayToDataTable(data);
+                var optionsGrupoOT = {
+                    title: 'Grupo de Trabajo',
+                    legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 8, bold: true } },
+                    colors: ['#00d800', '#feff25', '#fe0000'],
+                    isStacked: true
+                };
+                var chartGrupoOT = new google.visualization.BarChart(document.getElementById('barchart_values'));
+                chartGrupoOT.draw(dataGrupoOT, optionsGrupoOT);
+            });
+            //var dataEstadoOT = google.visualization.arrayToDataTable([
+            //    ['Grupo', 'Proceso', 'Alerta','Caida'],
+            //    ['G1', 100, 20,0],
+            //    ['G2', 1, 4,80],
+            //    ['G3', 5, 0,85]
+            //]);
+            //prop
+            //var chart__EstadoOT = new google.visualization.BarChart(document.getElementById('barchart_values'));
+            //chart__EstadoOT.draw(dataEstadoOT, options_EstadoOT);
+
+
+            //--google.charts.setOnLoadCallback(drawChart);
+
+        }
+
+        function OtxClte() {
+            $.ajax({
+                url: "@Url.Action("getchartxclte", "main")",
+                data: "",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; chartset=utf-8",
+                success: function (data) { },
+                error: function () { }
+            }).done(function (data) {
+                console.log('dataClteOT', data);
+                var dataClteOT = google.visualization.arrayToDataTable(data);
+                var optionsClteOT = {
+                    title: 'Clientes',
+                    legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 8, bold: true } },
+                    colors: ['#00d800', '#feff25', '#fe0000'],
+                    isStacked: true
+                };
+                var chartClteOT = new google.visualization.BarChart(document.getElementById('barchart_CliOT'));
+                chartClteOT.draw(dataClteOT, optionsClteOT);
+            });
+            /*var dataCliOT = google.visualization.arrayToDataTable([
+                ["Cliente", "Proceso", "Alerta", "Caida"],
+                ["Cli1", 10, 20, 0],
+                ["Cli2", 0, 40, 80],
+                ["Cli3", 5, 0,1]
+            ]);
+            var optionsCliOT = {
+                title: 'Cliente',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 8, bold: true } },
+                colors: ['#00d800', '#feff25', '#fe0000'],
+                isStacked: true
+            };
+            var chartCliOT = new google.visualization.BarChart(document.getElementById('barchart_CliOT'));
+            chartCliOT.draw(dataCliOT, optionsCliOT);*/
+        }
+
+    });
+
+    //
+</script>
+
+
+
+
+

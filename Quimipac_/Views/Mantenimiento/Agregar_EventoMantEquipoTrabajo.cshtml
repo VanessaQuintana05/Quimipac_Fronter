@@ -1,0 +1,203 @@
+﻿@model Quimipac_.Models.MT_Equipo_Evento
+
+@{
+    Layout = null;
+
+    var listaTipoEventosEquipo = ViewBag.listaTipoEventosEquipo;
+    var listaPersonasdestino = ViewBag.listaPersonasdestino;
+    var listaPersonasorigen = ViewBag.listaPersonasorigen;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarEventoEquipo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@*@using (Html.BeginForm("Agregar_ItemMantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Agregar_EventoMantEquipoTrabajo", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+        <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">*@
+
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo Evento:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo_Evento, (SelectList)listaTipoEventosEquipo, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Tipo_Evento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Ini, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Ini, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Valor:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @step = "0.001", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Proveedor:</label>
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.Proveedor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Proveedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Comentario:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Persona Destino:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Persona_Destino, (SelectList)listaPersonasdestino, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Persona_Destino, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Persona Origen:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Persona_Origen, (SelectList)listaPersonasdestino, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Persona_Origen, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="btn btn-warning" />
+        </div>
+    </div>
+
+}
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+@*<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.extensions.js"></script>*@
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<script type="text/javascript">
+
+
+    start = new Date(moment().subtract(0, 'days'));
+    end = new Date(moment());
+
+
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+
+
+    $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $('#datepickerCloseA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+
+    $(document).ready(function () {
+
+        //$("input[type='text']").attr("autocomplete", "off");
+        //$(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        //    $(".alert").slideUp(500);
+        //});
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+
+    });
+
+    $('#modal1').bootstrapValidator({
+        message: "Este valor no es valido",
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        }//,
+
+        ////"text": {
+        //    ".txtObligatorio": {
+        //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+        //                 stringLength: {
+        //                     min: 3,
+        //                     max: 5,
+        //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+        //                 }
+        //             }
+        //    }
+        ////}
+
+    });
+
+</script>
+
+
+

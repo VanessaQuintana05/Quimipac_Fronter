@@ -1,0 +1,177 @@
+﻿
+@model Quimipac_.Models.MT_OrdenTrabajo_Actividad
+@{
+    Layout = null;
+
+    var listaOperadores = ViewBag.listaOperadores;
+    var id_orden = ViewBag.id_orden;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormOperadoresActividadOrdenTrabajo");
+    attributes.Add("autocomplete", "off");
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@*@using (Html.BeginForm("Operadores_ActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { @id = string.Empty}, FormMethod.Post, new { @id = "modal1" }))*@
+@using (Html.BeginForm("Operadores_ActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", FormMethod.Post, new { @id = "modal1" }))    
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal" id="Div_OperadoresLI">
+        @Html.HiddenFor(model => model.Id_OrdenTrabajo_Actividad)
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Operador:</label>
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.Responsable, (SelectList)listaOperadores, new { @class = "form-control select2", @style = "width: 100%", @name = "Id_Operador", @id = "cmb_operador" })
+                @Html.ValidationMessageFor(model => model.Responsable, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2"><button type="button" id="btnAdd_Operador" onclick="function_agregar(this)">Agregar</button></div>
+        </div>
+
+        <div  class="table-responsive">
+            <table class="">
+                <tbody id="operadores_id"></tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="Crear_MTPR btn btn-warning" onclick="Actualizar_TotalOP(this)">Guardar</button>
+         @*       <input type="submit" id="btnsubmitOperador" hidden="hidden" />*@
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+@*<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$.noConflict();
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+    });
+
+    var countOpe = 0;
+    function function_agregar(x) {
+        $("#operadores_id").append("<tr>" +
+            "<td nowrap style = 'display:none' > " + $("#cmb_operador").val() + "</td > " +
+            "<td nowrap style='width:80%' > " + $("#cmb_operador option:selected").text() + "</td >" +
+            "<td style='width:80%'><button onclick='$(this).parent().parent().remove()' type='button'>x</button></td></tr > ");
+    }
+
+    function Actualizar_TotalOP(x1) {
+        var operadoresLI = [];
+         
+        var f = $("#operadores_id").find("tr");
+
+        for (i = 0; i < f.length; i++) {
+            var celdas = $(f[i]).find("td");
+            var ValorCelda = $(celdas[1]).text();
+            operadoresLI.push(ValorCelda);
+        }
+        GuardarOperador(operadoresLI, $("#Id_OrdenTrabajo_Actividad").val());
+
+    }
+
+    function GuardarOperador(operadoresLI,actividad_Id)
+    {
+        var jsonObject = { Id_OrdenTrabajo_Actividad: actividad_Id, Operadores_LI: operadoresLI};
+        $.ajax({
+                type: 'POST',
+                url: '/OrdenTrabajo_Automatizacion/Operadores_ActividadOrdenTrabajo/',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+
+            success: function (mensaje) {
+                if (mensaje == 'Ok') {
+
+                    //IniciaActividad_Operdor(actividad_Id);
+
+                    
+                    var url = "@Url.Action("Actividades_OrdenTrabajo","OrdenTrabajo_Automatizacion", new { id =id_orden})";//'OrdenTrabajo_Automatizacion/Actividades_OrdenTrabajo/'+ id_orden;
+                    window.location.href = url;
+                } else { alert("Error al ingresar datos");}
+                     },
+                error: function () { }
+            });
+    }
+
+
+
+    function IniciaActividad_Operdor(actividad_Id) {
+        //var jsonObject = { id: actividad_Id};
+        $.ajax({
+                type: 'GET',
+                url: '/OrdenTrabajo_Automatizacion/IniciarActividadOrdenTrabajo/'+actividad_Id,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                //data: JSON.stringify(jsonObject),
+
+            success: function (mensaje) {
+                //if (mensaje == 'Ok') {
+                    var url = "@Url.Action("Actividades_OrdenTrabajo","OrdenTrabajo_Automatizacion", new { id =id_orden})";//'OrdenTrabajo_Automatizacion/Actividades_OrdenTrabajo/'+ id_orden;
+                    window.location.href = url;
+                //}// else { alert("Error al ingresar datos Actividades_OrdenTrabajo");}
+                     },
+                error: function () {alert("Error al ingresar datos"); }
+            });
+    }
+    //"Url.Action("IniciarActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = actividad.Id_OrdenTrabajo_Actividad })"
+    /* function getContratos(btn)
+        {
+            var IdClienteBoton = btn.id;
+            var nameBotonClick =$('#NombreCliente').text(btn.name);
+            var LiTablaContrato = [];
+            var f = $("#tbodyContratosAdd").find("tr");
+
+            for (i = 0; i < f.length; i++) {
+                var celdas = $(f[i]).find("td");
+                var ValorCelda = $(celdas[1]).text();
+                LiTablaContrato.push(ValorCelda);
+            }
+
+            var jsonObject = { IdClienteBoton: IdClienteBoton, LiTablaContrato: LiTablaContrato};
+            $.ajax({
+                type: 'POST',//GET',
+                url: urlAddContrato,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),//var dataJson = JSON.parse(data),
+                success: function (data) {
+                    $("#tbodyContratos").empty();
+                    $.each(data, function (i, item) {
+                        $("#tbodyContratos").append("<tr><td nowrap> <input type='checkbox' name='" + IdClienteBoton + "' value='" + data[i].Nombre + "' id='" + data[i].Id_Contrato + "' class='checkcontratos'/>&nbsp;" + data[i].Nombre + "</td></tr>");
+                    });
+                },
+                error: function () { }
+            });
+        }
+*/
+</script>

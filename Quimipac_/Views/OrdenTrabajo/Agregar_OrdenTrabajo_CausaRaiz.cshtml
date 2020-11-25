@@ -1,0 +1,188 @@
+﻿
+@model Quimipac_.Models.MT_OrdenTrabajo_CausaRaiz
+
+@{
+    Layout = null;
+
+
+    
+    var listaTipo_CausaRaiz = ViewBag.listaTipo_CausaRaiz;
+    var lista_Hizo = ViewBag.lista_Hizo;
+    var lista_Encontro = ViewBag.lista_Encontro;
+
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarCausaRaizOrdenTrabajo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@*@using (Html.BeginForm("Agregar_ValorMantGrupoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Agregar_OrdenTrabajo_CausaRaiz", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+
+{
+    @Html.AntiForgeryToken()
+
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo Causa Raiz:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Causa_Raiz, (SelectList)listaTipo_CausaRaiz, new { @class = "form-control select2", @style = "width: 100%", @id = "causa_raiz" })
+                @Html.ValidationMessageFor(model => model.Id_Causa_Raiz, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="div_causa" style="display:none">
+            <label for="recipient-name" class="col-md-2 control-label">Motivo Causa:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Motivo_Causa, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @id = "motivo_causa" } })
+                @Html.ValidationMessageFor(model => model.Motivo_Causa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Encontro:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Encontro, (SelectList)lista_Encontro, new { @class = "form-control select2", @style = "width: 100%", @id = "encontro" })
+                @Html.ValidationMessageFor(model => model.Encontro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="div_encontro" style="display:none">
+            <label for="recipient-name" class="col-md-2 control-label" >Motivo Encontro:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Motivo_E, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @id = "motivo_encontro"} })
+                @Html.ValidationMessageFor(model => model.Motivo_E, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label" id="label_hizo">Hizo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Hizo, (SelectList)lista_Hizo, new { @class = "form-control select2", @style = "width: 100%", @id = "hizo" })
+                @Html.ValidationMessageFor(model => model.Hizo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="div_hizo" style="display:none">
+            <label for="recipient-name" class="col-md-2 control-label">Motivo Hizo:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Motivo_H, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @id = "motivo_hizo" } })
+                @Html.ValidationMessageFor(model => model.Motivo_H, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="Crear_MTPR btn btn-warning" />
+        </div>
+    </div>
+
+}
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script type="text/javascript">
+
+
+ 
+    $(document).ready(function () {
+
+        //$("input[type='text']").attr("autocomplete", "off");
+        //$(".alert").fadeTo(2000, 500).slideUp(500, function () {
+        //    $(".alert").slideUp(500);
+        //});
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+
+    })
+
+    $('#causa_raiz').change(function () {
+
+        var idCmb =$("#causa_raiz option:selected").text();
+
+        if (idCmb == "NINGUNO") {
+            $('#div_causa').css("display", "block");
+           
+        }
+        else {
+            $('#div_causa').css("display", "none");
+            
+        }
+  
+    });
+
+    $('#encontro').change(function () {
+
+        var idCmb2 = $("#encontro option:selected").text();
+
+        if (idCmb2 == "NINGUNO") {
+            $('#div_encontro').css("display", "block");
+            
+
+        }
+        else {
+            $('#div_encontro').css("display", "none");
+            
+        }
+
+    });
+
+    $('#hizo').change(function () {
+
+        var idCmb4 = $("#hizo option:selected").text();
+
+        if (idCmb4 == "NINGUNO") {
+            $('#div_hizo').css("display", "block");
+            
+
+        }
+        else {
+            $('#div_hizo').css("display", "none");
+            
+        }
+
+    });
+
+
+
+
+</script>
+
+
+
+

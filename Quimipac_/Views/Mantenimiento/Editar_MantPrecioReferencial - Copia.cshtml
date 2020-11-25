@@ -1,0 +1,365 @@
+﻿@model Quimipac_.Models.MT_PrecioReferencial
+
+@{
+            Layout = null;
+
+            var listaContratos = ViewBag.listaContratos;
+            var listaProyectos = ViewBag.listaProyectos;
+            var listaItems = ViewBag.listaItems;
+            var listaMoneda = ViewBag.listaMoneda;
+            var listaTipos = ViewBag.listaTipos;
+            var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+            string FechaRegistro = Convert.ToDateTime(Model.Fecha_Registro).ToString("MM/dd/yyyy");
+            string[] Separador = FechaRegistro.Split('/');
+            FechaRegistro = Separador[1] + '/' + Separador[0]+'/'+Separador[2];
+
+
+        string fecha_a = Convert.ToDateTime(Model.Fecha_Inicio).ToString("MM/dd/yyyy");
+        string fecha_c = Convert.ToDateTime(Model.Fecha_Fin).ToString("MM/dd/yyyy");
+
+        var attributes = new Dictionary<string, object>();
+        attributes.Add("Id", "FormEditarMantPrecioReferencial");
+    attributes.Add("autocomplete", "off");
+
+    }
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+@*@using (Html.BeginForm("Editar_MantPrecioReferencial", "Mantenimiento", FormMethod.Post, attributes))*@
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@using (Html.BeginForm("Editar_MantPrecioReferencial", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_PrecioReferencial)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Tipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_TipoTablaDetalle", (SelectList)listaTipos, new { @class = "form-control", @id = "comboTipos" })
+            </div>
+        </div>
+
+        <div class="form-group" id="formContrato">
+            <label for="recipient-name" class="col-md-2 control-label">Contratos:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Proyecto_Contrato", (SelectList)listaContratos, new { @class = "form-control", @id = "comboContratos" })
+            </div>
+        </div>
+
+        <div class="form-group" id="formProyecto">
+            <label for="recipient-name" class="col-md-2 control-label">Proyectos:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Proyecto_Contrato", (SelectList)listaProyectos, new { @class = "form-control", @id = "comboProyectos" })
+            </div>
+        </div>
+        @*COMBO NORMAL TIPO TRABAJO*@
+        @*<div class="form-group" id="formTipoTrabajo">
+                <label for="recipient-name" class="col-md-2 control-label">Tipo de Trabajo:</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("Id_TipoTrabajo", (SelectList)listaTipoTrabajo, new { @class = "form-control", @id = "comboTipoTrabajo" })
+                </div>
+            </div>*@
+
+
+        @*COMBO filtro TIPO TRABAJO*@
+        <div class="form-group" id="formTipoTrabajo">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_TipoTrabajo", (SelectList)listaTipoTrabajo, new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
+            </div>
+        </div>
+
+        @*COMBO NORMAL Items*@
+        @*<div class="form-group">
+                    <label for="recipient-name" class="col-md-2 control-label">Items:</label>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Id_Item, (SelectList)listaItems, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Id_Item, "", new { @class = "text-danger" })
+                    </div>
+            </div>*@
+
+        @*COMBO FILTRABLE Items*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Items:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Item, (SelectList)listaItems, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Item, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenE", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseE", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Monedas:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Moneda, (SelectList)listaMoneda, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Moneda, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Precio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Costo:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Costo, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-warning">Crear</button>@*onclick="GuardarPrecioReferencial(this)"*@
+                <input type="submit" id="btnSubmitAgregarPrecioReferencial" hidden="hidden" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<!--COMBOX EDITABLE-->
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+@*<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>*@
+
+
+<script type="text/javascript">
+
+
+
+        //$('#datepickerOpenE').datepicker(
+        //    {
+        //        format: "dd/mm/yyyy",
+        //        autoclose: true
+        //    });
+
+        //$('#datepickerCloseE').datepicker(
+        //    {
+        //        format: "dd/mm/yyyy",
+        //        autoclose: true
+        //    });
+
+
+        if ($("#comboTipos option:selected").val() == 1)
+        {
+
+            $('#formContrato').prop("hidden", true);
+        }
+        else
+        {
+
+            $('#formProyecto').prop("hidden", true);
+        }
+
+        $('#comboTipos').change(function (e)
+        {
+            if ($("#comboTipos option:selected").val() == 1)
+            {
+
+                $('#formProyecto').prop("hidden", false);
+                $('#formContrato').prop("hidden", true);
+            }
+            else {
+
+                $('#formProyecto').prop("hidden", true);
+                $('#formContrato').prop("hidden", false);
+            }
+        });
+
+        @*$('#comboTipos').on('change', function (event)
+        {
+                var url = '@Url.Action("GetTiposTrabajo", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+                ejecutaAjax('comboTipoTrabajo', url);
+        });*@
+
+
+
+
+
+
+
+        @*start = new Date('@fecha_a');
+        end = new Date('@fecha_c');*@
+        //start = new Date(moment()).formatsubtract(6, 'days'));
+        $('#datepickerOpenE').val(moment('@fecha_a').format('DD/MM/YYYY'));
+        $('#datepickerOpenE').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+        $('#datepickerCloseE').val(moment('@fecha_c').format('DD/MM/YYYY'));
+        $('#datepickerCloseE').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+        function GuardarPrecioReferencial(form) {
+           // var fRegistro = ate.parse(moment('..FechaRegistro').format('dd/mm/yyyy'));
+            var fecha_ap = $('#datepickerOpenE').val();
+            var fecha_ci = $('#datepickerCloseE').val();
+
+            var datearray1 = fecha_ap.split("/");
+            var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+
+            var datearray2 = fecha_ci.split("/");
+            var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+            var FechaReg = Date.parse('@FechaRegistro');
+            var primera = Date.parse(newdate_ap);
+            var segunda = Date.parse(newdate_ci);
+            alert(dater + '.....' + primera + '  P' + segunda + '  S' + ' R' + FechaReg);
+            if (FechaReg >= primera) {
+                   if (segunda < primera) {
+                    swal('', 'Fecha cierre debe ser mayor que fecha apertura', 'error');
+                }
+                else {
+                    var obj = document.getElementById("btnSubmitAgregarPrecioReferencial");
+
+                    if (obj) {
+                        obj.click();
+                    }
+                    //var formulario = document.getElementById("FormAgregarCurso");
+                    //formulario.submit();
+                }
+            }
+            else {
+            swal('', 'Fecha de apertura debe ser mayor que fecha de registro', 'error');
+                }
+        }
+
+
+      //  $('#datepickerOpenE').val(moment(start))/*.format('DD/MM/YYYY'))*/
+       // $('#datepickerCloseE').val(moment(end))/*.format('DD/MM/YYYY'))*/
+
+
+     $('#comboTipos').on('change', function (event)
+        {
+                var url = '@Url.Action("GetTiposTrabajo", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+                ejecutaAjax('comboTipoTrabajo', url);
+        });
+
+         function ejecutaAjax(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+
+                        var seleccion = '';
+                        if (i == 0)
+                        {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                            //$("#" + id).append("<option value='" + data[i].Value + "' selected='" + seleccion + "'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+        }
+
+
+         //INICIO COMBOX FILTRO
+         $(document).ready(function () {        //$('.select2').select2();
+             $('.select2').select2({
+                 dropdownParent: $('#modal1')
+             });
+         });//FIN COMBOX FILTRO
+
+
+         $('#modal1').bootstrapValidator({
+             //    message:"Este valor no es valido",
+             feedbackIcons: {
+                 valid: 'glyphicon glyphicon-ok',
+                 invalid: 'glyphicon glyphicon-remove',
+                 validating: 'glyphicon glyphicon-refresh'
+             }//,
+
+             //fields: {
+             //    txtObligatorio: {
+             //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+             //                 stringLength: {
+             //                     min: 3,
+             //                     max: 5,
+             //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+             //                 }
+             //             }
+             //    }
+             //}
+
+         });
+
+</script>
+
+

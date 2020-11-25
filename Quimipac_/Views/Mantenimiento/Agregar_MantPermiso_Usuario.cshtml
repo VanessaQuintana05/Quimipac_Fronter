@@ -1,0 +1,1365 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+@model Quimipac_.Models.sp_Quimipac_ConsultaUsuarios_Permisos_Result
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var dbe = new DataBase_Externo();
+    var empresa_id = System.Web.HttpContext.Current.Session["empresa"].ToString();
+    //var listaClientes = dbe.ObtenerClientes("", empresa_id);
+    string cadenaUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+    string[] Separado = cadenaUrl.Split('/');
+    string IdUsuario = Separado[Separado.Length - 1];
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<!-- Pinta contorno txt Obligatorio -->
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<!--Toggle-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.css" />
+
+<style>
+    button:hover {
+        background: #000000; /* rgba(0,0,0,0);*/
+        color: black;
+        box-shadow: inset 0 0 0 3px #3d80bb;
+    }
+
+    /*td:hover {
+        background-color: #f0f0f0;
+    }*/
+</style>
+
+<title>Fronter | Asignar Permiso</title>
+
+<section class="content-header">
+    <h2 style="text-align:left">Permiso</h2>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li><a href="@Url.Action("MantPermisos", "Mantenimiento")">Permisos</a></li>
+        <li class="active">Asignar permisos</li>
+    </ol>
+
+    @*<div class="row">
+            <div class="vFlotante">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="button" class="" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>*@
+    <div class="vFlotante">
+        @*hgroup style="display:inline-block;">*@
+        <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+        <table>
+            <tr>
+                <td>
+                    <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                </td>
+            </tr>
+        </table>
+
+        @*</hgroup>*@
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert-alert-danger" id="DivDanger" style="display:none">
+                <strong><label id="CadenaDanger"></label> </strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" id="DivSucess" style="display:none">
+                <strong><label id="CadenaSucess"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" id="BordeDiv">
+                <div class="box-header" style="display:none;">
+                </div>
+                <div class="box-body" id="CssDivBox" style="height:455px">
+
+                    <div class="col-md-12">
+                        @using (Html.BeginForm("Agregar_MantRol", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="recipient-name" class="text-bold control-label col-md-12" style="text-align:left;background-color:#f19f1d;height:30px;">
+                                            <font size="1"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;&nbsp;
+                                            <font color="white"><span aria-hidden="true" class="glyphicon glyphicon-user" style="font-weight:normal"></span></font>
+                                            <font color="white" size="2">
+                                                Usuario,&nbsp;&nbsp;'<font color="black" size="2">@IdUsuario</font>'&nbsp;
+                                            </font>
+                                        </label>
+                                    </div>
+                                </div>
+                                <hr style="margin-top:4px;margin-bottom:0;" />
+
+                                <!--Div Superior-->
+                                <div class="box-body" style="padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--<div class="col-md-12">-->
+                                    <!--1  Div-->
+                                    <div class="col-md-12" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-warning" style="border-color: #b0b1b1;">
+                                            <div class="panel-heading" style="height:30px;background-color: #d9dada;border-color: #b0b1b1;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="Black">
+                                                            <span aria-hidden="true" class="fa fa-building-o" style="font-weight: bold;"></span>&nbsp;Clientes
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table id="">
+                                                            <tr>
+                                                                <!--000<td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Editar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditar" data-id="@IdUsuario">
+                                                                        <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+                                                                <td></td>-->
+                                                                @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                <td style="padding-left: 7px;">
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;display: inline-flex;" data-toggle="modal" data-target="#modalAgregarCliente" data-id="@IdUsuario" onclick="getClientes();">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                    <button type="button" class="form-control btn btn-xs " title="Guardar registro" style="border-color:#000000;background: #ffffff;text-align:center;height:21px;width:auto;display: inline-flex;" data-id="@IdUsuario" onclick="GuardarRegistro(this);">
+                                                                        <font color="black"><span aria-hidden="true" class="glyphicon glyphicon-floppy-disk"></span></font><font color="black">&nbsp;Guardar</font>
+                                                                    </button>
+                                                                </td>
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @*{
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {
+                                                *@
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive " style="height:150px;overflow-y:auto;">
+
+                                                        <table id="tablaCliente" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                            <thead>
+                                                                <tr style="display:none;">
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Cliente</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="width:110px;"></th>
+                                                                    <th style="display:none;"></th>
+                                                                    <th>
+                                                                        <div>
+                                                                            <div class="col-md-1" style="padding:0 0 0 0;width: 21px;">
+                                                                                <font color="black"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                            </div>
+                                                                            <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:20px;text-align:left;padding:0 0 0 0;margin-top: -6px;">
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>ACCIONES</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyClientes"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                @*}
+                                                        }
+                                                    }*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- <tr style="height:10px"></tr>Div Opciones -->
+                                    <!--Fin Div Superior-->
+                                </div>
+                                <!--</div>-->
+                                <!--Div inferior-->
+                                <div class="box-body" style="padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--4 Div Contratos-->
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#0d860d">
+                                                            <span aria-hidden="true" class="fa fa-book"></span>&nbsp;Contratos
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver contratos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" onclick='TotalContProy(this, "#tbodyContratosAdd")'>
+                                                                        <font color="#198c19"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="#595956"></font>*@
+                                                                    </button>
+                                                                </td>
+                                                                <td>
+                                                                    <!--</td>
+                                                                    @* <td><span style="margin-left:12px;"> </span></td>*@
+                                                                    <td>
+                                                                        &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                            <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                        </button>
+                                                                    </td>-->
+
+                                                            </tr>
+                                                        </table>
+                                                        @*<button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="#3d8bba"><span aria-hidden="true" class="fa fa-edit"></span> </font><font color="black">&nbsp;Editar&nbsp;</font>
+                                                            </button>
+                                                            <span style="margin-left:12px;"> </span>
+                                                            <button type="button" class="form-control btn btn-xs class_editar_Tablas col-md-3" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                            </button>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @*  {
+                                                    if (listaClientes != null)
+                                                    {
+                                                        if (listaClientes.Count > 0)
+                                                        {*@
+                                                <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                    <table id="tablaContratosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                        <thead>
+                                                            <tr style="display:none;">
+                                                                <th></th>
+                                                                <th>Contrato</th>
+                                                                <th>Cliente</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Contrato . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyContratosAdd"></tbody>
+                                                    </table>
+
+                                                </div>
+                                                @*    }
+                                                        }
+                                                    }*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--5 Div proyectos-->
+
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#3d8bba">
+                                                            <span aria-hidden="true" class="fa fa-briefcase"></span>&nbsp;Proyectos
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver proyectos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" onclick='TotalContProy(this, "#tbodyProyectosAdd")'>
+                                                                        <font color="#3d80bb"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="black">&nbsp;Editar&nbsp;</font>*@
+                                                                    </button>
+                                                                </td>
+                                                                <!--  <td></td>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>-->
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                    <table id="tablaProyectosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                        <thead>
+                                                            <tr style="display:none;">
+                                                                <th></th>
+                                                                <th>Proyecto</th>
+                                                                <th>Cliente</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Proyecto . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyProyectosAdd"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- **************** MODALES **************** -->
+<!--Agregar Cliente-->
+@*<div id="modalAgregarCliente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">*@
+
+
+<div id="modalAgregarCliente" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Clientes &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de clientes, Favor elegir cliente a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                @*@using (Html.BeginForm("Agregar_ManPermiso_UsuarioClientes", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+                        @Html.HiddenFor(model => model.Id_Usuario)*@
+                <div class="form-horizontal">
+
+                    @*<div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>*@
+
+                    <div class="table-responsive" style="height:500px;overflow-y:auto;">
+                        <table id="tabla" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                            <thead>
+                                <tr>
+                                    <!--check TODOS-->
+                                   <th style="display:flex">
+                                       <div>CLIENTES</div>
+                                    <div>
+                                        <label class="" style="font-weight:normal;background: #ffffff;padding: 1px 6px;">
+                                            <input type="checkbox" value="" name="" id="checkClientes_Full" class="checkClientes_Full"><span style="padding-left:6px;">Seleccionar Todos</span>
+                                        </label>
+                                    </div>
+                                       </th>
+                                </tr>
+                                <tr>
+                                    <th><input class="js-filter form-control" type="text" value="" placeholder="Cliente.." style="border:none;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyCliente_Modal"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="btnSalir" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                        @* <input type="submit" value="Agregar" class="Crear_MTPR btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*@
+                        @*<button id="btnGuardarTabla" type="button" value="Agregar" class="Crear_MTPR btn btn-warning" onclick="resultado('@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })','@IdUsuario','@Url.Action("Eliminar_MantRolUsuario","Mantenimiento", new {id = "param-id"})')">Crear</button>*@
+
+                        <button id="btnGuardarTabla" type="button" value="Agregar" class="Crear_MTPR btn btn-warning" onclick="Contenedor_Clientes('@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })','@IdUsuario')">Crear</button>
+                    </div>
+                </div>
+
+                @*}*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Agregar Contratos Clientes-->
+<div id="modalAgregarContratos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Contratos &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de contratos, Favor elegir contratos a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                @*..................@using (Html.BeginForm("AddContratosClientes_Modal", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                        {
+                    @Html.AntiForgeryToken()*@
+                @*Html.HiddenFor(model => model.Id_Usuario)*@
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label id="NombreCliente" style="color:#3d80bb;"></label>
+                            <br />
+                        </div>
+                        <div class="col-md-12" style="display:none;">
+                            <label id="IdCliente"></label>
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:none;">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control pull-right" style="width:20%" id="searchTxt" placeholder="Empresa..." />@*  onkeyup="Buscar();">*@
+                        </div>
+                    </div>
+
+                    @{
+// int count = 0;
+                        <div class="table-responsive" style="height:250px;">
+                            <table id="tablaContratos" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                                <thead>
+                                                        <tr>
+                                                            <!--check TODOS-->
+                                                            <th style="display:flex">
+                                                                <div>CONTRATOS</div>
+                                                                <div>
+                                                                    <label class="" style="font-weight:normal;background: #ffffff;padding: 1px 6px;">
+                                                                        <input type="checkbox" value="" name="" id="checkContratos_Full" class="checkContratos_Full"><span style="padding-left:6px;">Seleccionar Todos</span>
+                                                                    </label>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                    <tr>
+                                        <th>
+                                            <div>
+                                                <div class="col-md-1" style="padding:0 0 0 0;">
+                                                    <font color="#f5b024"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                </div>
+                                                <div class="col-md-10" style="padding:1px 0 0 0;">
+                                                    <input class="js-filter form-control" type="text" value="" placeholder="Contrato ..." style="height:14px;text-align:left;padding:0 0 0 0;">
+                                                </div>
+
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyContratos"></tbody>
+                            </table>
+                        </div>
+                    }
+
+
+                    <div class="modal-footer">
+
+
+                        <button id="btnSalirContrato" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                        @* <input type="submit" value="Agregar" class="Crear_MTPR btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*@
+                        <button id="btnGuardarTablaContrato" type="button" value="Agregar" title="Agregar Contrato" class="Crear_MTPR btn btn-warning" onclick="Contenedor_Contratos(this)">Agregar</button>
+
+
+
+                        @* ////////////////AgregarTablacontrato
+                            <button id="btnSalir" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                                                    @* <input type="submit" value="Agregar" class="Crear_MTPR btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*
+                                            <button id="btnGuardarTabla" type="button" value="Agregar" class="Crear_MTPR btn btn-warning" onclick="resultado('@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })','@IdUsuario','@Url.Action("Eliminar_MantRolUsuario","Mantenimiento", new {id = "param-id"})')">Crear</button>
+
+                                            <button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalAgregarCliente" data-id="@IdUsuario">
+                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                            </button>
+                        *@
+
+
+
+                    </div>
+                </div>
+
+                @*...............}*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Agregar Proyectos Clientes MODAL-->
+<div id="modalAgregarProyectos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Agregar Proyectos &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Consulta de proyectos, Favor elegir proyectos a agregar" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                @using (Html.BeginForm("AddProyectosClientes_Modal", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label id="NombreClienteProyecto" style="color:#3d80bb;"></label>
+                                <!--Html.ValidationSummary(true, "", new { class = "text-danger" })-->
+                            </div>
+                            <div class="col-md-12" style="display:none;">
+                                <label id="IdClienteProyecto"></label>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="row" style="display:none;">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control pull-right" style="width:20%" id="searchTxtProyecto" placeholder="Proyecto..." />@* onkeyup="doSearch()" *@
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="height:250px">
+                            <table id="tablaProyectos" class="js-dynamitable table table-bordered" style="font-size:8pt;">
+                                <thead>
+                                    <tr>
+                                        <!--check TODOS-->
+                                        <th style="display:flex">
+                                            <div>CONTRATOS</div>
+                                            <div>
+                                                <label class="" style="font-weight:normal;background: #ffffff;padding: 1px 6px;">
+                                                    <input type="checkbox" value="" name="" id="checkProyectos_Full" class="checkProyectos_Full"><span style="padding-left:6px;">Seleccionar Todos</span>
+                                                </label>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div>
+                                                <div class="col-md-1" style="padding:0 0 0 0;">
+                                                    <font color="#f5b024"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                </div>
+                                                <div class="col-md-10" style="padding:1px 0 0 0;">
+                                                    <input class="js-filter form-control" type="text" value="" placeholder="Proyecto ..." style="height:14px;text-align:left;padding:0 0 0 0;">
+                                                </div>
+
+                                            </div>
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="tbodyProyectos"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button id="btnSalirProyecto" type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+                            <button id="btnGuardarTablaProyecto" type="button" value="Agregar" title="Agregar Proyecto" class="Crear_MTPR btn btn-warning" onclick="Contenedor_Proyectos(this)">Agregar</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Permisos&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de Permisos a los usuarios</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+    @*<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>*@
+    <script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+    @*<script src="~/Scripts/Modales.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <!--Filtro de Permisos-->
+    <!--
+    <script src="~/Scripts/MantPermisos/jsPermisos.js"></script>
+    Paginador-- >
+    <script src="~/Scripts/MantPermisos/Paginador.js"></script>
+
+    < !-- TogglePermiso -- >
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/js/jquery.js"></script>
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.js"></script>
+
+    <!--Alert Sweet2-->
+    <script src="~/Scripts/sweetalert2-7.32.2/package/dist/sweetalert2.all.min.js"></script>
+
+
+
+    @*<script src="~/Scripts/MantPermisos/PaginacionTabla.js"></script>*@
+    <script type="text/javascript">
+
+//Contratos
+var urlAddContrato = '@Url.Action("AddContratosClientes_Modal","Mantenimiento")';//, new { id ="param-id"})';
+var urlAddContratoTabla = '@Url.Action("AddTablaContratosClientes", "Mantenimiento")';//, new { id = "param-id" })';
+
+//Proyectos
+var urlAddProyectos = '@Url.Action("AddProyectosClientes_Modal", "Mantenimiento")';//***, new { id ="param-id"})';
+var urlAddProyectoTabla = '@Url.Action("AddTablaProyectosClientes", "Mantenimiento")';
+
+var urlGuardar = '@Url.Action("GuardarPermisos", "Mantenimiento")';
+
+var urlPrincipal = '@Url.Action("MantPermisos", "Mantenimiento")';
+//$('.select2').select2({
+//    dropdownParent: $('#modal1')
+//});
+        var IdUser = "@IdUsuario";
+        //var contOpcion = 0;
+        var contTabla = 0;
+
+        //FUNCIONES GENERALES
+        function EliminarFila(x) {
+            $('tr.TR' +  String(x.id)).remove();
+        }
+
+        function TotalContProy(btnC, _TablaID) {
+            var filasCont = $(_TablaID).find("tr");
+
+            CadenaContProy = '<div><center><table class="" style="font-size=12px;" >';
+            for (var e = 0; e < filasCont.length; e++) {
+                var celdasCont = $(filasCont[e]).find("td");
+                IdContratosProy = $(celdasCont[3]).text();
+                CadenaContProy = CadenaContProy + '<tr><td>' + IdContratosProy + '</td></tr>' + '<tr style="height:10px"></tr>';
+            }
+            CadenaContProy = CadenaContProy + '</table></center></div>';
+            swal({
+                title: '<h5><strong><label style="color:#3085d6">Contratos</label></strong></h5>',
+                // type: 'info',
+                html: CadenaContProy,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+                confirmButtonAriaLabel: 'Thumbs',
+            });
+        }
+
+
+        function EliminarFilasContProy(xb) {
+
+            swal({
+                    title: "",
+                    text: "Al eliminar un clientes se eliminaran todos los contratos y/o proyectos asignados!",
+                    //html: '<br><br><div><font size=2><b>Fecha Inicio:&nbsp;</b>' + fi + '</font></div><br><div><font size=2><b>Fecha Fin:&nbsp;</b> ' + ff + '</font></div><br>',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f39c12',// '#3085d6',
+                    cancelButtonColor: '#8d92b4',
+                    confirmButtonText: 'Eliminar'
+                }).then((result) => {
+                    if (result.value) {
+                        //<tr id="10" class="TRCLIENTE_10">
+                        $('tr.TR' + String(xb.id)).remove();
+                        $('tr#TR_' + String(xb.id)).remove();
+                        //$('tr#TR_' + String(xb.id)).remove();
+                    }
+                });
+        }
+
+        function VerificaCheck(Tabla_ID, ClienteResultado) {
+            var filaTR = $(Tabla_ID).find("tr");
+            var resultadoProyectos = [];// = "";
+            var band_Check = 0;
+            for (vq = 0; vq < filaTR.length; vq++) {
+
+                var celdasTD = $(filaTR[vq]).find("td");
+                Emp_Cont_Proy = $(celdasTD[0]).text(); //Celda Cliente
+                Emp_Cont_Proy = Emp_Cont_Proy.replace(" ", "");
+
+                var RegistoProyCLTE = ClienteResultado.find(vq => vq.IdEmpresa == Emp_Cont_Proy);// && vq.AprobarGRAL == 'N' && vq.ConsultarGRAL == 'N' && vq.CrearGRAL == 'N' && vq.EliminarGRAL == 'N' && vq.ModificarGRAL == 'N');//contains(findIndex(IdEmpresaContT);
+
+                if (RegistoProyCLTE.ConsultarGRAL == "N" && RegistoProyCLTE.ModificarGRAL == "N" && RegistoProyCLTE.CrearGRAL == "N" && RegistoProyCLTE.EliminarGRAL == "N" && RegistoProyCLTE.AprobarGRAL == "N") {
+                    band_Check = 1;
+                   break;
+                }
+            }
+            return band_Check;
+        }
+        //CLIENTES
+        function getClientes() {
+
+            //RECORRER CLTES SELECCIONADOS
+            var fClte = $("#tbodyClientes").find("tr");
+            var liSeleccionadoCLTE = [];
+            for (i = 0; i < fClte.length; i++) {
+                var celdas = $(fClte[i]).find("td");
+                var ValorCelda = $(celdas[0]).text();
+                liSeleccionadoCLTE.push(String(ValorCelda));
+            }
+
+            var jsonParam = { liSeleccionadoCLTE: liSeleccionadoCLTE };
+            $.ajax({
+                type: 'POST',
+                url: '/Mantenimiento/AgregarClientes_Modal',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonParam),
+
+                success: function (data) {
+                    $("#tbodyCliente_Modal").empty();
+                    $.each(data, function (i, item) {
+                        $("#tbodyCliente_Modal").append("<tr><td nowrap> "
+                            + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'><input type= 'checkbox' value= '" + item.nom_cli + "' name= '' id= '" + item.cod_cli + "' class='checkClientes' /><span style='padding-left:4px;'>" + item.nom_cli + "</span></label>"
+                                                        + "</td></tr>");
+                    });
+                },
+                error: function () { }
+            });
+        }
+
+        function Contenedor_Clientes(Clientes_URL,UsuarioID) {
+
+            var n = 0;
+            var ListaClientes = [];
+            $('.checkClientes:checked').each(function () { //('input[type=checkbox]:checked').ach(function () {
+                var Id_Cliente = $(this).prop("id");
+                var Nombre_Cliente = $(this).val();//$(this).prop("value");
+                var fila = { Id_Cliente: Id_Cliente, Nombre_Cliente: Nombre_Cliente };
+
+                ListaClientes.push(fila);
+                n++;
+            });
+            if (n > 0) {
+                var url = Clientes_URL;
+                url = url.replace("param-id", UsuarioID);
+                Add_Contenedor_Clientes("tbodyClientes", UsuarioID, ListaClientes, Clientes_URL);
+            } else {
+                swal('', 'Para agregar un Cliente debe seleccionar un checkbok', 'error');
+            }
+        }
+
+        function Add_Contenedor_Clientes(TablaID, Usuario, resultado, Clientes_URL)
+        {
+            var jsonObject = { lkItems: resultado, Usuario: Usuario};
+            var iClte = 0;
+            $.ajax({
+            type: 'POST',
+            url: Clientes_URL,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(jsonObject),
+            success: function (data) {
+                    $.each(data, function (i, item) {
+                        //onclick='ResaltaFila(this)'
+                        $("#" + TablaID).append("<tr  id='" + item.Id_Cliente + "' class='TRCLIENTE_" + item.Id_Cliente + "' >" +
+                                                "<td style='display:none;'>"+item.Id_Cliente+"</td>"+
+                                                "<td nowrap style='padding:0;'>"+
+                                                "<button id='CLIENTE_" + item.Id_Cliente + "' type='button' class='btn btn-sm' value='' onclick='EliminarFilasContProy(this)' style='background:none;'>" +
+                                                            "<font color='#d31519' size='2'><span aria-hidden='true' class='fa fa-trash-o'></span></font>" +
+                                                     "</button>" +// &nbsp;"+
+
+                                                    "<button type='button' id='" + item.Id_Cliente + "' name='" + item.Nombre_Cliente + "' class='btn btn-sm class_Agregar_ManPermiso_Contratos' title='Agregar Contratos' style='background:none;' data-toggle='modal' data-target='#modalAgregarContratos' data-id='" + item.Id_Cliente + "' onclick= 'getContratos(this)'  >" +//data-url='UrlAction("ClearData", "Home", new { id ="param-name" })'>"+
+                                                        "<font color='#0d860d' size='2'><span aria-hidden='true' class='fa fa-book'></span></font>" +
+                                                    "</button>"+
+
+                                                    "<button type='button' id='" + item.Id_Cliente + "' name='" + item.Nombre_Cliente + "' class='btn btn-sm class_Agregar_ManPermiso_Proyectos' title='Agregar Proyectos' style='background:none;' data-toggle='modal' data-target='#modalAgregarProyectos' data-id='" + item.Id_Cliente + "' onclick= 'getProyectos(this)'  >" +
+                                                        "<font color='#3d8bba' size='2'><span aria-hidden='true' class='fa fa-briefcase'></span></font>" +
+                                                    "</button>"+
+                                                "</td>" +
+                                                "<td id='" + item.Id_Cliente + "TD' class='" + item.Id_Cliente + "'>" + item.Nombre_Cliente + "</td>"
+
+                                                //Checkbox
+                                                + "<td id='" + item.Id_Cliente + "TDN' class='" + item.Id_Cliente + "'  style='padding:0;'>"
+                                                + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;padding-left:10px;'>"
+                                                        +"<input type= 'checkbox'  value= 'si' name= 'chkCLTE' id= 'chkConsultar' class='chk_"+iClte+"' > Consultar <span class='' ></span>"
+                                                + "</label>"
+                                                + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>"
+                                                        + "<input type= 'checkbox' value= 'si' name= 'chkCLTE' id= 'chkModificar'  class='chk_" + iClte +"' > Modificar <span class='' ></span>"
+                                                    + "</label>"
+                                                + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>"
+                                                        + "<input type= 'checkbox' value= 'si' name= 'chkCLTE' id= 'chkCrear' class='chk_" + iClte +"'> Crear <span class='' ></span>"
+                                                    + "</label>"
+                                                + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>"
+                                                        + "<input type= 'checkbox' value= 'si' name= 'chkCLTE' id= 'chkEliminar' class='chk_" + iClte +"' > Eliminar <span class='' ></span>"
+                                                + "</label>"
+                                                + "<label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>"
+                                                        + "<input type= 'checkbox' value= 'si' name= 'chkCLTE' id= 'chkAprobar' class='chk_" + iClte +"' > Aprobar <span class='' ></span>"
+                                                + "</label>"
+                            + "</td></tr>");
+                        iClte++;
+                        });
+                    document.getElementById('btnSalir').click();
+            },
+            error: function () { }
+        });
+        }
+
+        //CONTRATOS
+        function getContratos(btn)
+        {
+            var IdClienteBoton = btn.id;
+            var nameBotonClick =$('#NombreCliente').text(btn.name);
+            var LiTablaContrato = [];
+            var f = $("#tbodyContratosAdd").find("tr");
+
+            for (i = 0; i < f.length; i++) {
+                var celdas = $(f[i]).find("td");
+                var ValorCelda = $(celdas[1]).text();
+                LiTablaContrato.push(ValorCelda);
+            }
+
+            var jsonObject = { IdClienteBoton: IdClienteBoton, LiTablaContrato: LiTablaContrato};
+            $.ajax({
+                type: 'POST',//GET',
+                url: urlAddContrato,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),//var dataJson = JSON.parse(data),
+                success: function (data) {
+                    $("#tbodyContratos").empty();
+                    $.each(data, function (i, item) {
+                        $("#tbodyContratos").append("<tr><td nowrap> <input type='checkbox' name='" + IdClienteBoton + "' value='" + data[i].Nombre + "' id='" + data[i].Id_Contrato + "' class='checkcontratos'/>&nbsp;" + data[i].Nombre + "</td></tr>");
+                    });
+                },
+                error: function () { }
+            });
+        }
+
+        function Contenedor_Contratos(btn)
+        {
+            var NombreCliente = $('#NombreCliente').text();
+            var n = 0;
+            var resultadoContrato = [];
+
+            var idClienteCheck;
+            $('.checkcontratos:checked').each(function () {   //$('input[type=checkbox]:checked').each(function () {
+                var Id_Contrato = $(this).prop("id");
+                var Nombre = $(this).val();//$(this).prop("value");
+                idClienteCheck = $(this).prop("name");
+
+                var fila = {
+                    Id_Contrato: Id_Contrato,
+                    Nombre: Nombre
+                };
+                resultadoContrato.push(fila);
+                n++;
+            });
+
+            if (n > 0) {
+                Add_Contenedor_Contratos("tbodyContratosAdd", NombreCliente, resultadoContrato, urlAddContratoTabla, idClienteCheck);//id
+            } else {
+                swal('', 'Para agregar un contrato debe seleccionar un checkbok', 'error');
+            }
+        }
+
+        function Add_Contenedor_Contratos(id, NombreCliente, resultadoContrato, urlAddContratoTabla, idClienteCheck) {
+
+            var jsonObject = { lkItems: resultadoContrato }// Usuario: Usuario }
+
+            $.ajax({
+                type: 'POST',
+                url: urlAddContratoTabla,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        $("#" + id).append("<tr id='TR_CLIENTE_" + idClienteCheck + "' class='TRCONTRATO_" + item.Id_Contrato + "' name='" + idClienteCheck + "'>" +
+                                            //<tr  id='" + item.Id_Contrato + "' class='TRCONTRATO_" + item.Id_Contrato + "' name='" + idClienteCheck + "'>" +
+                                            "<td style='display:none;'>"+idClienteCheck+"</td>"+
+                                            "<td style='display:none;'>"+item.Id_Contrato+"</td>"+
+                                            "<td nowrap>" +
+                                                "<button id='CONTRATO_" + item.Id_Contrato + "' type='button' class='btn btn-sm' value='' onclick='EliminarFila(this)' style='background:none'>" +
+                                                "<font color='#d31519' size='2'><span aria-hidden='true' class='fa fa-trash-o'></span></font>" +
+                                                "</button>" +// &nbsp;"+
+                                             "</td>"+
+                                            "<td id='" + item.Id_Contrato + "TD'>" + item.Nombre + "</td>" +
+                                            "<td>" + NombreCliente+"</td></tr>");
+                    });
+                    document.getElementById('btnSalirContrato').click();
+                },
+                error: function () { }
+            });
+        }
+
+        //PROYECTOS
+        function getProyectos(btnproy)
+        {
+            var IdClienteBoton = btnproy.id;
+            var nameBotonClick = $('#NombreClienteProyecto').text(btnproy.name);
+
+            var fP = $("#tbodyProyectosAdd").find("tr");
+            var LiTablaProyecto = [];
+            for (i = 0; i < fP.length; i++) {
+                var celdasP = $(fP[i]).find("td");
+                var ValorCeldaP = $(celdasP[1]).text();
+                LiTablaProyecto.push(ValorCeldaP);
+            }
+
+            var jsonObject = { IdClienteBoton: IdClienteBoton, LiTablaProyecto: LiTablaProyecto };
+            $.ajax({
+                type: 'POST',//'GET',
+                url: urlAddProyectos,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+                success: function (data) {
+                    $("#tbodyProyectos").empty();
+                    $.each(data, function (i, item) {
+                        $("#tbodyProyectos").append("<tr><td nowrap> <input type='checkbox' name='" + IdClienteBoton + "' value='" + data[i].Codigo_Cliente + "' id='" + data[i].Id_Proyecto + "' class='checkproyectos'/>" + data[i].Codigo_Cliente + "</td></tr>");
+                    });
+                },
+                error: function () { }
+            });
+        }
+
+        function Contenedor_Proyectos(btnProye) {
+
+            var NombreClienteProy = $('#NombreClienteProyecto').text();
+            var n = 0;
+            var resultadoProyecto = [];
+            var idClienteCheckProy;
+
+            $('.checkproyectos:checked').each(function () {
+                var Id_Proyecto = $(this).prop("id");
+                var Codigo_Cliente = $(this).val();//$(this).prop("value");
+                idClienteCheckProy = $(this).prop("name");
+
+                var fila = {
+                    Id_Proyecto: Id_Proyecto,
+                    Codigo_Cliente: Codigo_Cliente
+                };
+                resultadoProyecto.push(fila); n++;
+            });
+            if (n > 0) {
+                Add_Contenedor_Proyectos("tbodyProyectosAdd", NombreClienteProy, resultadoProyecto, urlAddProyectoTabla, idClienteCheckProy);
+            } else {
+                swal('', 'Para agregar un Proyecto debe seleccionar un checkbok', 'error');
+            }
+        }
+
+        function Add_Contenedor_Proyectos(id, NombreClienteProy, resultadoProyecto, urlp, idClienteCheckProy) {
+
+            var jsonObject = { lkItems: resultadoProyecto };// Usuario: Usuario }
+
+            $.ajax({
+                type: 'POST',
+                url: urlp,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+                success: function (data) {
+
+                    $.each(data, function (i, item) {
+
+                        $("#" + id).append("<tr  id= 'TR_CLIENTE_" + idClienteCheckProy + "' class='TRPROYECTO_" + item.Id_Proyecto + "' name= '" + idClienteCheckProy + "' > " +
+                            //<tr  id= '" + item.Id_Proyecto + "' class='TRPROYECTO_" + item.Id_Proyecto + "' name= '" + idClienteCheckProy + "' > " +
+                            "<td style='display:none;'>" + idClienteCheckProy + "</td>" +
+                            "<td style='display:none;'>" + item.Id_Proyecto + "</td>" +
+                            "<td nowrap>" +
+                            "<button id='PROYECTO_" + item.Id_Proyecto + "' type='button' class='btn btn-sm' value='' onclick='EliminarFila(this)' style='background:none'>" +
+                            "<font color='#d31519' size='2'><span aria-hidden='true' class='fa fa-trash-o'></span></font>" +
+                            "</button>" +// &nbsp;"+
+                            "</td>" +
+                            "<td id='" + item.Id_Proyecto + "TD'>" + item.Codigo_Cliente + "</td>" +
+                            "<td>" + NombreClienteProy + "</td></tr>");
+                    });
+                    document.getElementById('btnSalirProyecto').click();
+                },
+                error: function () { }
+            });
+        }
+
+
+        //GUARDAR
+        function GuardarRegistro(btnGuardar)
+        {
+
+            var bandContProy = 0;
+            var ArrayMTPermiso = [];
+
+            //TABLA-CLIENTES
+            var contCheckCLTE = 0;
+            var ClienteResultado = [];
+
+            var filas = $("#tbodyClientes").find("tr");
+            for (i = 0; i < filas.length; i++)
+            {
+                var celdas = $(filas[i]).find("td");
+                IdEmpresa = $(celdas[0]).text();
+                IdEmpresa = IdEmpresa.replace(" ", "");
+
+                var resultadoCheck = [];
+                $('.chk_' + i + ':checked').each(function () {
+                    var IdCheck = $(this).prop("id");
+                    resultadoCheck.push(IdCheck);
+                   // contOpcion++;
+                });
+
+                var ConsultarGRAL = (resultadoCheck.includes("chkConsultar")) ? 'S' : 'N';
+                var ModificarGRAL = (resultadoCheck.includes("chkModificar")) ? 'S' : 'N';
+                var CrearGRAL = (resultadoCheck.includes("chkCrear")) ? 'S' : 'N';
+                var EliminarGRAL = (resultadoCheck.includes("chkEliminar")) ? 'S' : 'N';
+                var AprobarGRAL = (resultadoCheck.includes("chkAprobar")) ? 'S' : 'N';
+
+                
+                //***
+
+
+                if (ConsultarGRAL == "N" && ModificarGRAL == "N" && CrearGRAL == "N" && EliminarGRAL == "N" && AprobarGRAL == "N") {
+                    contTabla = 1;
+                } else {
+                    var PermisoClte = {
+                        IdEmpresa: IdEmpresa,//idCliente
+                        ConsultarGRAL: ConsultarGRAL,
+                        ModificarGRAL: ModificarGRAL,
+                        CrearGRAL: CrearGRAL,
+                        EliminarGRAL: EliminarGRAL,
+                        AprobarGRAL: AprobarGRAL
+                    }
+                    //ADD 
+                    var MTPermisoProy_ = {
+
+                        //Id_Permiso,
+                        Id_Usuario: IdUser,
+                        Id_Cliente: IdEmpresa,
+                        Id_Contrato: null,
+                        Id_Proyecto: null,
+                        Crear: CrearGRAL,
+                        Aprobar: AprobarGRAL,
+                        Eliminar: EliminarGRAL,
+                        Modificar: ModificarGRAL,
+                        Consultar: ConsultarGRAL,
+                        Usuario: null,
+                        Fecha_Registro: null,
+                        Estado: null
+                    }
+
+                    ArrayMTPermiso.push(MTPermisoProy_);
+                    ClienteResultado.push(PermisoClte);
+                    contTabla = 0;
+                }
+
+
+            }
+
+            bandContProy = contTabla;
+            bandContProy += VerificaCheck("#tbodyContratosAdd", ClienteResultado);
+            bandContProy += VerificaCheck("#tbodyProyectosAdd", ClienteResultado);
+            if (bandContProy > 0) {
+                swal('', 'Favor seleccione un check al cliente a agregar', 'error');
+            }
+            else
+            {
+                //CONTRATOS
+                var filasContratos = $("#tbodyContratosAdd").find("tr");
+
+                for (i = 0; i < filasContratos.length; i++)
+                {
+                    var celdas = $(filasContratos[i]).find("td");
+                    IdEmpresaContT = $(celdas[0]).text();IdEmpresaContT = IdEmpresaContT.replace(" ", "");
+                    IdContratoT = $(celdas[1]).text();IdContratoT = IdContratoT.replace(" ", "");
+
+                    var RegistoCLTE = ClienteResultado.find(vq => vq.IdEmpresa == IdEmpresaContT);//contains(findIndex(IdEmpresaContT);
+
+                    var MTPermiso = {
+
+                        //Id_Permiso,
+                        Id_Usuario: IdUser,
+                        Id_Cliente: IdEmpresaContT,
+                        Id_Contrato: IdContratoT,
+                        Id_Proyecto: null,
+                        Crear: RegistoCLTE.CrearGRAL,
+                        Aprobar: RegistoCLTE.AprobarGRAL,
+                        Eliminar: RegistoCLTE.EliminarGRAL,
+                        Consultar: RegistoCLTE.ConsultarGRAL,
+                        Modificar: RegistoCLTE.ModificarGRAL,
+                        Fecha_Registro: null,
+                        Usuario: null,
+                        Estado: null
+                    }
+                    ArrayMTPermiso.push(MTPermiso);
+                    contTabla++;
+                }
+
+                //PROYECTOS
+                var filasProyectos = $("#tbodyProyectosAdd").find("tr");
+                for (vs = 0; vs < filasProyectos.length; vs++)
+                {
+                    var celdasProy = $(filasProyectos[vs]).find("td");
+                    IdEmpresaProyT = $(celdasProy[0]).text();IdEmpresaProyT = IdEmpresaProyT.replace(" ", "");
+                    IdProyectoT = $(celdasProy[1]).text();IdProyectoT = IdProyectoT.replace(" ", "");
+                    var RegistoProyCLTE = ClienteResultado.find(vq => vq.IdEmpresa == IdEmpresaProyT);
+
+                    var MTPermisoProy = {
+
+                        //Id_Permiso,
+                        Id_Usuario: IdUser,
+                        Id_Cliente: IdEmpresaProyT,
+                        Id_Contrato: null,
+                        Id_Proyecto: IdProyectoT,
+                        Crear: RegistoProyCLTE.CrearGRAL,
+                        Aprobar: RegistoProyCLTE.AprobarGRAL,
+                        Eliminar: RegistoProyCLTE.EliminarGRAL,
+                        Modificar: RegistoProyCLTE.ModificarGRAL,
+                        Consultar: RegistoProyCLTE.ConsultarGRAL,
+                        Usuario: null,
+                        Fecha_Registro: null,
+                        Estado: null
+                    }
+                    ArrayMTPermiso.push(MTPermisoProy);
+                    contTabla++;
+                }
+
+            }
+            //console.log('Registro BD'); console.log(ArrayMTPermiso);
+            //?
+            AjaxGuardarMT_Permisos(urlGuardar, ArrayMTPermiso);
+        }
+
+
+        function AjaxGuardarMT_Permisos(urlG, ArrayMTPermiso) {
+            var jsonObjectPer = { lkItemsPermisos: ArrayMTPermiso };
+            if (contTabla > 0) {
+                //if (contOpcion > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: urlG,
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(jsonObjectPer),
+
+                        success: function (mensaje) {
+                            if (mensaje.indexOf('!') != -1) {
+                                $("#DivDanger").css('display', 'block');
+                                $("#CadenaDanger").html(mensaje);
+                                $("#DivDanger").delay(4000).fadeOut(300);
+                            } else {
+                                $("#DivSucess").css('display', 'block');
+                                $("#CadenaSucess").html(mensaje);
+                                $("#DivSucess").delay(2000).fadeOut(300);
+
+                                var url = urlPrincipal;//MantPermisos/Mantenimiento
+                                window.location.href = url;
+                            }
+                        },
+                        error: function () { }
+                    });
+                //} else { swal('', 'Favor seleccionar un acción antes de guardar.', 'error');  }
+            } else { swal('', 'Favor agregar al menos una acción para los clientes antes de guardar.', 'error'); }
+        }
+
+       //SELECCIONAR TODOS CLIENTES
+        $(".checkClientes_Full").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                IterateCheckTableHtml('.checkClientes',true);
+            } else {
+                IterateCheckTableHtml('.checkClientes',false);
+            }
+        });
+
+        function IterateCheckTableHtml(body_ID, estado)
+        {
+            $(String(body_ID)).each(function () {  //todos los que sean de la clase del check
+                $(String(body_ID)).prop('checked', estado);
+            });
+        }
+
+        //SELECCIONAR TODOS CONTRATOS
+        $(".checkContratos_Full").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                IterateCheckTableHtml('.checkcontratos',true);
+            } else {
+                IterateCheckTableHtml('.checkcontratos',false);
+            }
+        });
+
+        function IterateCheckTableHtml(body_ID, estado)
+        {
+            $(String(body_ID)).each(function () {  //todos los que sean de la clase del check
+                $(String(body_ID)).prop('checked', estado);
+            });
+        }
+
+        //SELECCIONAR TODOS PROYECTOS
+        $(".checkProyectos_Full").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                IterateCheckTableHtml('.checkproyectos',true);
+            } else {
+                IterateCheckTableHtml('.checkproyectos',false);
+            }
+        });
+
+        function IterateCheckTableHtml(body_ID, estado)
+        {
+            $(String(body_ID)).each(function () {  //todos los que sean de la clase del check
+                $(String(body_ID)).prop('checked', estado);
+            });
+        }
+
+
+    </script>
+}

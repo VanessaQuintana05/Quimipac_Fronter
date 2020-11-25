@@ -1,0 +1,383 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_GrupoTrabajoEquipo
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaEquiposGrupoTrabajo = ViewBag.listaEquiposGrupoTrabajo as List<sp_Quimipac_ConsultaMT_EquipoGrupoTrabajo_Result>;
+    var grupo_trabajo = ViewBag.grupo_trabajo;
+}
+
+<title>Fronter | Equipos Grupo de Trabajo</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<section class="content-header">
+    @{
+
+        int cadena = 0;
+    <h2 style="text-align:left">
+
+
+        @*@foreach (var itemGrupoTrabajo2 in listaEquiposGrupoTrabajo)
+    {
+        if (cadena >= 0)
+        {*@
+
+        <font id="itemTitulo"> @Html.DisplayFor(model => grupo_trabajo)  </font>
+                @*break;
+                }
+
+                else
+                {
+                @cadena;
+                }
+
+                }*@
+                / Equipos
+        </h2>
+    }
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li><a href="@Url.Action("MantGrupoTrabajo", "Mantenimiento")">Mantenimiento de Grupos de Trabajo</a></li>
+        <li class="active">Equipos Grupo de Trabajo</li>
+    </ol>
+    <br>
+
+    <div class="row">
+        <div class="col-md-2">
+            <button id="btnAgregarEquipoGrupoTrabajo" type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalAgregarEquipoGrupoTrabajo">
+                <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Equipo
+            </button>
+        </div>
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id ="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Equipos Grupo de Trabajo</h3>
+                    </div>*@
+                <div class="box-body" id="CssDivBox">
+                    @{
+                        if (listaEquiposGrupoTrabajo.Count != 0)
+                        {
+                            <div class="table-responsive">
+                                <table id="tablaEquiposGrupoTrabajo" class="js-dynamitable table table-bordered">
+                                    @*class="table table-bordered table-hover"*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acci&oacute;n</th>
+                                            <th>Id Equipo</th>
+                                            <th>Equipo</th>
+                                            <th>Grupo Trabajo</th>
+                                            <th>Estado</th>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Equipo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Grupo"></th>
+
+                                            <th>
+                                                <select class="js-filter  form-control">
+                                                    <option value=""></option>
+                                                    <option value="A">A</option>
+                                                    <option value="I">I</option>
+                                                </select>
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var equipoGrupoTrabajo in listaEquiposGrupoTrabajo)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    <button type="button" class="btn btnEditarBoton class_editar_EquipoGrupoTrabajo" style="text-align:center" data-toggle="modal" data-target="#modalEditarEquipoGrupoTrabajo" data-id="@equipoGrupoTrabajo.Id_GrupoTrabajoEquipo">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                                                        </span>*@
+                                                    </button>
+                                                </td>
+                                                <td nowrap>@Html.DisplayFor(model => equipoGrupoTrabajo.Id_Equipo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => equipoGrupoTrabajo.Nom_Equipo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => equipoGrupoTrabajo.Nom_GrupoT)</td>
+                                                <td nowrap>@Html.DisplayFor(model => equipoGrupoTrabajo.Estado)</td>
+
+                                            </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAgregarEquipoGrupoTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;Agregar Equipo de Grupo Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario es para el Ingreso de Equipos" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaEquipoGrupoTrabajo">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Equipos de Mantenimiento de los Grupos deTrabajo&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; Los Equipos del Mantenimiento de los Grupos de Trabajos</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="modalEditarEquipoGrupoTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Equipo de Grupo Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+                <div id="modal-editaEquipoGrupoTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Scripts/Modales.js"></script>
+
+    <script type="text/javascript">
+
+        modalAdd('#btnAgregarEquipoGrupoTrabajo', 'modal-agregaEquipoGrupoTrabajo', '@Url.Action("Agregar_EquipoMantGrupoTrabajo", "Mantenimiento")');
+        modalEdit('.class_editar_EquipoGrupoTrabajo', 'modal-editaEquipoGrupoTrabajo', '@Url.Action("Editar_EquipoMantGrupoTrabajo", "Mantenimiento", new { id = "param-id" })');
+
+        $(document).ready(function () {
+
+            modalAdd('#btnAgregarEquipoGrupoTrabajo', 'modal-agregaEquipoGrupoTrabajo', '@Url.Action("Agregar_EquipoMantGrupoTrabajo", "Mantenimiento")');
+            modalEdit('.class_editar_EquipoGrupoTrabajo', 'modal-editaEquipoGrupoTrabajo', '@Url.Action("Editar_EquipoMantGrupoTrabajo", "Mantenimiento", new { id  = "param-id"})');
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+            $.noConflict();
+            $('#tablaEquiposGrupoTrabajo').DataTable({
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+
+            //$('#tablaEquiposGrupoTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+        });
+
+    </script>
+}
+
+
+
+

@@ -1,0 +1,364 @@
+﻿@using Quimipac_.Models;
+@using Quimipac_.Repositorio;
+
+@{
+    ViewBag.Title = "DatosPersonales";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    // var LkDatosUsuarios = ViewBag.LkDatosUsuarios;
+
+
+    var bde = new DataBase_Externo();
+    string usuario = System.Web.HttpContext.Current.Session["usuario"] as string;
+
+    var modelo = bde.DatosUsuario(usuario);
+    //var modelo = ViewBag.modelo;// bde.DatosUsuario(usuario);
+    string fecha_nac = Convert.ToDateTime(modelo.fecha_nacimiento).ToString("MM/dd/yyyy");
+
+}
+
+
+<title>Fronter | Datos Personales</title>
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<section class="content-header">
+    <h2 style="text-align:left">Datos Personales</h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li class="active">Datos Personales</li>
+    </ol>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box" id="BordeDiv">
+                <div class="box-header"></div>
+
+                <div class="box-body" id="CssDivBox">
+                    @{
+                        //DataBase_Externo bde = new DataBase_Externo();
+                        //string usuario = System.Web.HttpContext.Current.Session["usuario"] as string;
+                        //var model = bde.DatosUsuario(usuario);
+
+                        //bde.DatosUsuario()
+                    }
+
+
+                    @*<div class="col-md-8 col-md-offset-2">*@
+                    <div class="col-md-3">
+                        @*//                        @using (Html.BeginForm("DatosPersonales", "Usuarios", FormMethod.Post))*@
+                        @using (Html.BeginForm("Fotousuario", "Mantenimiento", FormMethod.Post))
+                        {
+                            @*<input type="hidden" value="" name="FotoBase64" id="FotoBase64"/>*@
+                            <input type='hidden' name='FotoBase64' value='/Content/bower_components/ImagenVQ/usuDefault.png' />
+                            <div class="col-md-12 Header-Foto">
+                                <div class="col-md-12" style="background-color:#556267;">
+                                    <div class="imgPreview" style="padding:24px;">
+                                        @*<img id='imgUpload' src="/imgs/img-default.png">*@
+                                        <img id='imgUpload' src="~/Content/bower_components/ImagenVQ/usuDefault.png" class="img-circle center-block" style="height:110px;width:110px;" />
+                                    </div>
+
+                                    <div class="input-group EditIMG" style="margin-bottom: 15px;margin-top: -10px;">
+                                        <span class="input-group-btn" style="margin: 0 auto;text-align: center;font-size: 15px;">
+                                            <span class="btn btn-file" style="color:#000;font-size: 14px;background:#f5f5f5;border:1px solid #f5f5f5;">Cambiar Foto<input type="file" id="imgInp"></span>
+                                        </span>
+                                    </div>
+                                    <div class="RemoveIMG" style="display:none;text-align:center;margin-bottom:15px;">
+                                        <button type="button" id="QuitarimgInp" style="padding: 4px 10px;">Eliminar</button>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12 btn btn-warning" style="margin-top: 2px;padding: 0;">
+                                    <input type="submit" value="Guardar Foto" class="btn" style="background: none;outline: none;">
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-9">
+                        @*@using (Html.BeginForm("DatosPersonales", "Usuarios", FormMethod.Post, new { autocomplete = "off" }))
+                            {
+                            @Html.AntiForgeryToken()*@
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="panel panel-default panel-flat">
+                            <div class="panel-heading" style="text-align:left">
+                                <h5 class="panel-title text-bold" style="padding:6px 0 0 0;">&nbsp;&nbsp;Datos Personales</h5>
+                            </div>
+                            <div class="panel-body">
+                                <br />
+                                <!-- Div Usuario-->
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="form-group">
+                                        @*<table>
+                                            <tr>
+                                                <td>*@
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user"><label>&nbsp;&nbsp;Usuario</label></i></div>
+                                            @Html.EditorFor(model => modelo.user_Id, new { htmlAttributes = new { @class = "form-control", @placeholder = "Usuario", @type = "text", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.user_Id, "", new { @class = "text-danger" })
+                                        </div>
+                                        @*</td>
+                                            <td> </td>
+                                            <td>*@
+                                    </div>
+                                </div>
+
+                                @* <div class="col-sm-1" style="padding:0px"> </div>*@
+                                <!-- Div Clave-->
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-key"><label>&nbsp;&nbsp;Clave&nbsp;&nbsp;&nbsp;&nbsp;</label></i>
+                                            </div>
+                                            @Html.EditorFor(model => modelo.user_Clave, new { htmlAttributes = new { @class = "form-control", @placeholder = "Clave", @type = "password", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.user_Clave, "", new { @class = "text-danger" })
+                                        </div>
+                                        @*</td>
+                                               </tr>
+                                            </table>*@
+
+                                    </div>
+                                </div>
+
+
+                                <!-- Div Email-->
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-at"><label>&nbsp;&nbsp;Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></i>
+                                            </div>
+
+                                            @Html.EditorFor(model => modelo.email, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "Email", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.email, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Div Nombre-->
+                                <div class="col-md-12" style="padding:0px">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-address-card-o"><label>&nbsp;&nbsp;Nombres&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></i>
+                                            </div>
+
+                                            @Html.EditorFor(model => modelo.primer_nombre, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nombres", @type = "text", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.primer_nombre, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Div Apellido-->
+                                <div class="col-md-12" style="padding:0px">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-address-card-o"> <label>&nbsp;&nbsp;Apellidos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></i>
+                                            </div>
+                                            @Html.EditorFor(model => modelo.primer_apellido, new { htmlAttributes = new { @class = "form-control", @placeholder = "Apellidos", @type = "text", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.primer_apellido, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Div Descripcion-->
+                                <div class="col-md-12" style="padding:0px">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-address-card-o"> <label>&nbsp;&nbsp;Descripcion&nbsp;&nbsp;</label></i>
+                                            </div>
+                                            @Html.EditorFor(model => modelo.user_descrip, new { htmlAttributes = new { @class = "form-control", @placeholder = "Descripcion", @type = "text", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.user_descrip, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Div FechaNacimineto-->
+                                @*@Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })*@
+
+
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="form-group">
+
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"> <label>&nbsp;&nbsp;F. Nacimiento</label></i>
+                                            </div>
+
+                                            @Html.EditorFor(model => modelo.fecha_nacimiento, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "fNacimiento", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => modelo.fecha_nacimiento, "", new { @class = "text-danger" })
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Div Genero-->
+                                @*<div class="col-md-6" style="padding:0px">
+                                        <div class="form-group">
+
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-venus-mars"> <label>&nbsp;&nbsp;Género</label></i>
+                                                </div>
+
+                                                @Html.DropDownListFor(model => modelo.genero, new List<SelectListItem>() { new SelectListItem() { Value = "002", Text = "Femenino", Selected = true }, new SelectListItem() { Value = "001", Text = "Masculino", Selected = true } }, new { @class = "form-control", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(model => modelo.genero, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-venus-mars"> <label>&nbsp;&nbsp;Género</label></i>
+                                            </div>
+                                            @Html.DropDownListFor(model => modelo.genero, new List<SelectListItem>() { new SelectListItem() { Value = "001", Text = "Masculino", Selected = true }, new SelectListItem() { Value = "002", Text = "Femenino", Selected = true } }, new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(model => modelo.genero, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                @*
+                                    <div class="col-md-6" style="padding:0px">
+                                        <div class="form-group">
+                                            <label>País:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-map-o"></i>
+                                                </div>
+                                                @Html.DropDownListFor(model => model.IdPais, (SelectList)paises, new { @class = "form-control select2", @style = "width: 100%" })
+                                                @Html.ValidationMessageFor(model => model.IdPais, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+                        @*  }*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+@section scripts {
+
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/Content/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+    <script type="text/javascript">
+
+
+        start = new Date('@fecha_nac');
+        $('#fNacimiento').val(moment(start).format('DD/MM/YYYY'))
+
+
+        $(document).ready(function () {
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        //console.log(e.target.result);
+                        $('#imgUpload').attr('src', e.target.result);
+                        //***$('#imgUsuario').attr('src', e.target.result);
+                        //$('.Header-Foto').append(`<input type='hidden' name='FotoBase64' value='` + e.target.result+`'/>`);
+
+                        $('input:hidden[name=FotoBase64]').val(String(e.target.result));
+                        //*$("#FotoBase64").val(String(e.target.result));
+                        //console.log($('input:hidden[name=id_pagina]').val());
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#imgInp").change(function () {
+                readURL(this);
+                /*$("#QuitarimgInp").css("display", "block");
+                $("#imgInp").css("display", "none");*/
+                /*var cadImg = String(readURL(this));
+                if (String(cadImg).includes('data:image'))
+                {}*/
+                $('.RemoveIMG').show();
+                $('.EditIMG').hide();
+
+            });
+
+
+            //ELIMINAR MG
+            $("#QuitarimgInp").click(function () {
+
+                $('#imgUpload').attr('src', '/Content/bower_components/ImagenVQ/usuDefault.png');//'/imgs/img-default.png');
+                $('input:hidden[name=FotoBase64]').val(String('/Content/bower_components/ImagenVQ/usuDefault.png'));
+                //$('.Header-Foto').append(`<input type='hidden' name='FotoBase64' value='/Content/bower_components/ImagenVQ/usuDefault.png'/>`);
+                $('.RemoveIMG').hide();
+                $('.EditIMG').show();
+            });
+        });
+
+    </script>
+}

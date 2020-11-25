@@ -1,0 +1,303 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Repositorio;
+@*@model Quimipac_.Models.MT_OrdenTrabajo*@
+@model Quimipac_.Models.OrdenGrupo_IntegranteEquipoCliente
+
+@{
+
+    Layout = null;
+
+    /*
+    var listaClientes = ViewBag.listaClientes;
+    var lstaGrupoTrabajo = ViewBag.listaGrupoTrabajo;*/
+
+
+    //var Id_Cliente = ViewBag.Id_Cliente ;
+    var ClienteID = ViewBag.ClienteID;
+    var Id_Orden = ViewBag.Id_Orden;
+    var Fecha_Inicio = ViewBag.fecha_Inicio ;
+    var Fecha_Fin = ViewBag.fecha_Fin ;
+    string fecha_a = Convert.ToDateTime(Fecha_Inicio).ToString("MM/dd/yyyy");
+    string fecha_c = Convert.ToDateTime(Fecha_Fin).ToString("MM/dd/yyyy");
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarEntregaOrden");
+    attributes.Add("autocomplete", "off");
+
+    var idOET = ClienteID;// Id_Cliente;
+
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Editar_AsignarGrupo_OrdenTrabajo", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Cliente)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%", @Disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @*<div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Cliente", (SelectList)listaClientes, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Grupo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_GrupoTrabajo, (SelectList)lstaGrupoTrabajo, new { @class = "form-control select2", @id = "comboGrupo", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_GrupoTrabajo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <!---->
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Cliente", null, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Grupo:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_GrupoTrabajo", null, new { @class = "form-control select2", @id = "comboGrupo", @style = "width: 100%" })
+                @*@Html.DropDownListFor(model => model.Id_GrupoTrabajo, (SelectList)lstaGrupoTrabajo, new { @class = "form-control select2", @id = "comboGrupo", @style = "width: 100%" })
+        @Html.ValidationMessageFor(model => model.Id_GrupoTrabajo, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+        <!---->
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Seleccione Orden de Trabajo:</label>
+            <div class="table-responsive col-md-8" style="padding:5px 15px 5px 15px">
+                @* table table-bordered table-hover  ">     table id="tablaPreciosItems" border="1">*@
+                <table border="1" style="font-size:10pt" class="table table-bordered" id="tablaMPR">
+                    <thead id="theadOrden">
+
+                        <tr>
+                            <th>Check</th>
+                            @*<th>Codigo Orden</th>*@
+                        </tr>
+
+                    </thead>
+                    <tbody id="tbodyOrdenTrabajo">
+                        @{
+                            var dbe = new DataBase_Externo();
+                            var IdOTE = ClienteID;// Id_Cliente;
+
+
+                            //var lk = dbe.Get_MT_OrdenesGrupo(Id_Cliente, "Id_Orden", Id_Orden);
+                            var lk = dbe.Get_MT_OrdenesGrupo(ClienteID, "Id_Orden", Id_Orden);
+                            
+                            foreach (var item in lk)
+                            {
+                                if (item.Id_OrdenTrabajo == Id_Orden)
+                                {
+                                    //var checkedOTE = "checked";
+                                    <tr id="@item.Id_OrdenTrabajo">
+                                        <td nowrap><input type="checkbox" name="@item.Codigo_Cliente" value="@item.Id_OrdenTrabajo" id="@item.Id_OrdenTrabajo" class="check_OTE" checked />@item.Codigo_Cliente @item.Descripcion</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr id="@item.Id_OrdenTrabajo">
+                                        <td nowrap><input type="checkbox" name="@item.Codigo_Cliente" value="@item.Id_OrdenTrabajo" id="@item.Id_OrdenTrabajo" class="check_OTE" />@item.Codigo_Cliente @item.Descripcion</td>
+                                    </tr>
+                                }
+
+                            }
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @* <input type="submit" value="Guardar" class="btn btn-warning" />*@
+                <button type="button" id="btnGuardar" name="" class="btn btn-warning" title="Guardar Cambios" onclick="GuardarEOT(this)">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+
+<script type="text/javascript">
+
+
+    start = new Date('@fecha_a');
+    end = new Date('@fecha_c');
+
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'));
+    $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'));
+
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $('#datepickerCloseA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $(document).ready(function () {
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    });
+
+
+    function GuardarEOT(x) {
+        var Id_ClienteGrupoOrden = '@idOET';
+       // alert(Id_Entrega_Orden_Trabajo);
+        console.log(Id_ClienteGrupoOrden);
+        var Id_Cliente = document.getElementById("comboCliente").value;
+        var FechaEnvio = $('#datepickerOpenA').val();
+        var FechaRecep = $('#datepickerCloseA').val();
+        var Id_Grupo = document.getElementById("comboGrupo").value;
+        
+        
+        var resultadoChecked = [];
+        //console.log(Id_Entrega_Orden_Trabajo'Id_Cliente:' + Id_Cliente + 'comentario:' + comentario + ' RecibidoX:' + RecibidoX + ' FechaEnvio:' + FechaEnvio + ' FechaRecep:' + FechaRecep);
+        $('.check_OTE:checked').each(function () {
+            var Id_OrdenTrabajo = $(this).prop("id");
+           // var Codigo_Cliente = $(this).val();
+          //  var Codigo_Cliente = $(this).prop("name");
+
+
+          // var fila = {
+            // Id_OrdenTrabajo,
+               // Codigo_Cliente
+           //};
+            resultadoChecked.push(Id_OrdenTrabajo);
+        });
+        console.log('Ckeched:');
+        console.log(resultadoChecked);
+        var resultadoCheckTotal = [];
+        //console.log('Id_Cliente:' + Id_Cliente + 'comentario:' + comentario + ' RecibidoX:' + RecibidoX + ' FechaEnvio:' + FechaEnvio + ' FechaRecep:' + FechaRecep);
+        $('.check_OTE').each(function () {
+            var Id_OrdenTrabajoToT = $(this).prop("id");
+          //  var Codigo_ClienteToT = $(this).prop("name");// $(this).val();
+         //   var filaToT = {
+           //   Id_OrdenTrabajoToT,
+              //  Codigo_ClienteToT
+            //};
+            resultadoCheckTotal.push(Id_OrdenTrabajoToT);
+
+        });
+        console.log('Total:');
+        console.log(resultadoCheckTotal);
+
+        var url = '@Url.Action("Guardar_Editar_AsignarGrupo_OrdenTrabajo", "OrdenTrabajo", new { id ="param-id"})';
+        url = url.replace("param-id", Id_ClienteGrupoOrden);
+        //   alert(url);
+       // alert('aqui0');
+        ejecutaAjaxGuardarEditar(url, Id_ClienteGrupoOrden, resultadoChecked, resultadoCheckTotal, Id_Cliente, FechaEnvio, FechaRecep,Id_Grupo);
+           // idClienteCheck = $(this).prop("name");
+//Id_Entrega_Orden_Trabajo,List<Temp_EditarEntregaOrden> lkEOT,int Id_Cliente, string comentario, string RecibidoX,DateTime FechaEnvio,DateTime FechaRecep
+    }
+
+    function ejecutaAjaxGuardarEditar(url, Id_ClienteGrupoOrden, resultadoChecked, resultadoCheckTotal, Id_Cliente, FechaEnvio, FechaRecep, Id_Grupo) {
+        //alert('aqui');
+        //Id_Entrega_Orden_Trabajo, List < string > lkChecked, List < string > lkCheckTotal, int Id_Cliente, string comentario, string RecibidoX, DateTime FechaEnvio, DateTime FechaRecep
+        var jsonObject = { Id_ClienteGrupoOrden: Id_ClienteGrupoOrden, resultadoChecked: resultadoChecked, resultadoCheckTotal: resultadoCheckTotal, Id_Cliente: Id_Cliente, FechaEnvio: FechaEnvio, FechaRecep: FechaRecep, Id_Grupo: Id_Grupo };
+        console.log('Id_ClienteGrupoOrden:' + Id_ClienteGrupoOrden + ' Id_Cliente:' + Id_Cliente + ' FechaEnvio:' + FechaEnvio + ' FechaRecep:' + FechaRecep + ' Id_Grupo:' + Id_Grupo);
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(jsonObject),
+
+            success: function (mensaje) {
+                if (mensaje.indexOf('!') != -1) {
+                   /* $("#DivDanger").css('display', 'block');
+                    $("#CadenaDanger").html(mensaje);
+                    $("#DivDanger").delay(4000).fadeOut(300);*/
+                    console.log(mensaje); //alert(mensaje);
+                } else {
+                 /*   $("#DivSucess").css('display', 'block');
+                    $("#CadenaSucess").html(mensaje);
+                    $("#DivSucess").delay(2000).fadeOut(300);*/
+                    console.log(mensaje); //alert(mensaje);
+                    //location.reload();
+
+                    var url = '@Url.Action("AsignarGrupo_OrdenTrabajo", "OrdenTrabajo")';
+                    window.location.href = url;
+                }
+            },
+            error: function () {
+                //$("#DivError").css('display', 'block');
+                //$("#DivError").delay(1000).fadeOut(300);
+            }
+
+        });
+
+    }
+</script>

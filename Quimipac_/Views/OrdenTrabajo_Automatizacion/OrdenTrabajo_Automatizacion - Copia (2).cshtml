@@ -1,0 +1,1375 @@
+﻿@*@model IPagedList<Quimipac_.Models.Orden_Trabajo_FiltCli>*@
+@model IPagedList<Quimipac_.Models.ConsultaMT_OrdenTrabajo_AuxVM>
+@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@*@model Quimipac_.Models.Orden_Trabajo_FiltCli*@
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaOrdenTrabajo = ViewBag.listaOrdenTrabajo as List<ConsultaMT_OrdenTrabajo_AuxVM>;
+                                                                          //using Quimipac_.Models.ConsultaMT_OrdenTrabajo_AuxVM
+    var listalkTipo_Trabajo = ViewBag.listalkTipo_Trabajo;
+    //var listalkCampamento = ViewBag.listalkCampamento;
+    var listalkSucursal = ViewBag.listalkSucursal;
+    var listalkEstacion = ViewBag.listalkEstacion;
+    //var listalkSector = ViewBag.listalkSector;
+    var listalkContrato = ViewBag.listalkContrato;
+    var listalkEstado = ViewBag.listalkEstado;
+    var listakClientes = ViewBag.listakClientes;// as List<sp_LINK_ConsultaClientes_Result>;
+                                                //var listalkOrdenPadre = ViewBag.listakOrdenPadre;
+    var lista_Proceso = ViewBag.lista_Proceso as List<ConsultaMT_OrdenTrabajo_AuxVM>;
+    var lista_Alerta = ViewBag.lista_Alerta as List<ConsultaMT_OrdenTrabajo_AuxVM>;
+    var lista_Caida = ViewBag.lista_Caida as List<ConsultaMT_OrdenTrabajo_AuxVM>;//sp_Quimipac_ConsultaMT_OrdenTrabajo_Result
+    var listaContratoexcel = ViewBag.listalkContrato;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+
+
+    var lkFiltro = TempData["listaFiltro"] as List<ConsultaMT_OrdenTrabajo_AuxVM>;
+    var ParametroBusqueda = TempData["ParametroBusqueda"] as string;
+
+    if (lkFiltro != null)
+    {
+        listaOrdenTrabajo = lkFiltro;
+    }
+    //var ParametroBusqueda = ViewBag.ParametroBusqueda;
+
+    //if(TempData["ParametroBusqueda"].ToString() != null){
+    //    cadBusqueda = TempData["ParametroBusqueda"].ToString();
+
+    //}
+    var opcEtapa = ViewBag.listaEtapas;
+}
+
+<title>Fronter | Orden de Trabajo Automatización</title>
+
+<!--COMBO FILTRABLE-->
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+@*DisenoCanvas*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/CanvasDiseno/Canvas.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+@* Boton input archivo *@
+<link href="~/Content/bower_components/bootstrap/dist/css/file-input.css" rel="stylesheet" />
+@* hasta aqui *@
+
+<style type="text/css">
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: left !important;
+    }
+
+    #tablaTiposTrabajo_length {
+        float: right;
+    }
+</style>
+
+<section class="content-header">
+    <h2 style="text-align:left">Orden de Trabajo Automatización</h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li class="breadcrumb-item active">Orden de Trabajo Automatización</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (ViewBag.mensaje != null)
+            {
+                <div class="" style="background-color:red;color:#fff;border-radius:5px;padding:15px;margin-bottom:10px">
+                    <strong style="color:#fff;">@ViewBag.mensaje</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close" style="color:#fff;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <div class="row rowresponsive" style="margin-right: -15px;margin-left: -15px;">
+        <div class="form-group">
+            <div class="col-md-2" style="width:300px; ">
+                @if (oPermiso.Crear == true)
+                {
+
+                    <a href="@Url.Action("Agregar_OrdenTrabajo", "OrdenTrabajo_Automatizacion")" type="button" class="btn btn-sm btn-warning" data-original-title="Agrega Orden Trabajo">
+                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Agregar Orden Trabajo
+                    </a>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+
+                <!--Div botones-->
+                <div class="box-body">
+                    <div class="row col-md-12">
+                        <div class="table-responsive">
+
+                            @*<table >
+
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-xs" style="background-color:#865fc5" onclick="mostrarDivFiltro()">
+                                                <span class="glyphicon glyphicon-filter" style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font>
+                                            </button>
+                                        </td>
+
+                                        <td>
+                                            <button id="btnLista" type="button" class="btn btn-xs btn-info" style="margin-left: 5px;" value="MostrarLista" onclick="mostrarLista()">
+                                                <span class="fa fa-list-alt"></span>
+                                                &nbsp;&nbsp;Lista&nbsp;&nbsp;
+                                            </button>
+                                        </td>
+
+                                        <td>
+                                            <button id="btnCanvas" type="button" class="btn btn-xs btn-warning" style="margin-left: 5px;" value="MostrarCanvas" onclick="mostrarCanvasUDP()">
+                                                <span class="fa fa-th-large"></span>&nbsp;&nbsp;Canvas&nbsp;&nbsp;
+                                            </button>
+                                        </td>
+
+                                        <td >
+                                            <select name="Etapas" id="Etapas" class="form-control" style="margin-left: 5px;">
+                                                <option value="DESC">Caida, Alerta, Proceso</option>
+                                                <option value="ASC">Proceso, Alerta, Caida</option>
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <button type="button" class="btn btn-xs" style="background-color:#9c9c9c; margin-left: 10px;" onclick="mostrarDivFiltro_REPO()">
+                                                <span class="fa fa-wrench" style="color:white"></span><font color="white">&nbsp;&nbsp;Herramientas&nbsp;&nbsp;</font>
+                                            </button>
+
+                                        </td>
+
+
+
+                                    </tr>
+                                </table>*@
+                            <div id="divFiltro" class="" style="display:none;">
+                                @*@using (Html.BeginForm("OrdenTrabajo_Automatizacion", "OrdenTrabajo_Automatizacion", new { @id = string.Empty }, FormMethod.Post, new { @id = "formFilter" }))//, new { @id = "modal1" }*@
+                                @using (Html.BeginForm("OrdenTrabajo_Filter", "OrdenTrabajo_Automatizacion", new { @id = string.Empty }, FormMethod.Post, new { @id = "formFilter" }))//, new { @id = "modal1" }
+                                {
+                                    @Html.AntiForgeryToken() //ParametrosBusquedaOT paramBusca = new ParametrosBusquedaOT(); table-responsive col-md-12"
+
+                                    string default_fDE = DateTime.Today.AddDays(-6).ToString("yyyy-MM-dd");
+                                    string default_fHASTA = DateTime.Today.ToString("yyyy-MM-dd");
+
+                                    <div class="row col-md-12" style="display:inline-flex;margin-left:0;">
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='checkbox' name='MenuSelectedFecha' value="1" id="chk_fecha" /> <span class=''>Fecha</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="and" /> <span class=''>and</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="or" /> <span class=''>or</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class=" row-filtro col-md-12" id="fechas_busqueda">
+                                        <div style="display:inline-flex;width:100%;margin-top: 6px;margin-bottom: 10px;">
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">De:</div>
+                                            <div class="">
+                                                @Html.EditorFor(model => model[0].Fecha_asignacion, new { htmlAttributes = new { @name = "Fecha_Inicio", @class = "form-control is-valid", @type = "date", @required = "required", @id = "FeInicio", @style = "height:22px;font-size: 9pt; ", @Value = @default_fDE } })
+                                                @*@Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })*@
+                                            </div>
+
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">Hasta:</div>
+                                            <div>
+                                                @*<input type="date" name="FeFin" id="FeFin" value="@default_fHASTA" class="form-control is-valid" style="height:22px;font-size: 9pt;" required />*@
+                                                @Html.EditorFor(model => model[0].Fecha_registro, new { htmlAttributes = new { @name = "Fecha_registro", @id = "FeFin", @class = "form-control is-valid", @type = "date", @required = "required", @style = "height:22px;font-size: 9pt;", @Value = @default_fHASTA } })
+                                                @*@Html.ValidationMessageFor(model => model.Fecha_registro, "", new { @class = "text-danger" })*@
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-bold control-label" style="text-align:left;width:100%;margin-left:15px;">Parámetro:</div>
+                                    <div class=" row-filtro col-md-12" style="display: inline-flex;">
+                                        <div class="btnParametroBoton_C">
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="TIPOTRABAJO" id="check_tipotrabajo" /> <span class=''>Tipo Trabajo</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formTipoTrabajo">
+                                                        @Html.DropDownListFor(model => model[0].Id_tipo_trabajo_ejecutado, (SelectList)listalkTipo_Trabajo, new { @class = "form-control select2", @style = "height:27px; width: 135px; font-size:6pt", @id = "comboTipoTrabajo" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    @*<div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                                @ *<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>* @
+                                                                <input type='checkbox' name='check_parametro' value="CAMPAMENTO" id="check_campamento" /> <span class=''>CAMPAMENTO</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="" id="formCampamento">
+                                                            @Html.DropDownListFor(model => model.Id_campamento, (SelectList)listalkCampamento, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCampamento" })
+                                                        </div>*@
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="ESTACION" id="check_estacion" /> <span class=''>ESTACION</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formEstacion">
+                                                        @Html.DropDownListFor(model => model[0].Id_estacion, (SelectList)listalkEstacion, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstacion" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    @*<div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                                @ *<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>* @
+                                                                <input type='checkbox' name='check_parametro' value="SECTOR" id="check_sector" /> <span class=''>SECTOR</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="" id="formSector">
+                                                            @Html.DropDownListFor(model => model.Id_sector, (SelectList)listalkSector, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSector" })
+                                                        </div>*@
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="SUCURSAL" id="check_sucursal" /> <span class=''>SUCURSAL</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formSucursal">
+                                                        @Html.DropDownListFor(model => model[0].Id_sucursal, (SelectList)listalkSucursal, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSucursal" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="CONTRATO" id="check_contrato" /> <span class=''>CONTRATO</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formContrato">
+                                                        @Html.DropDownListFor(model => model[0].Id_contrato, (SelectList)listalkContrato, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboContrato" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="ESTADO" id="check_estado" /> <span class=''>ESTADO</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formEstado">
+                                                        @Html.DropDownListFor(model => model[0].Estado, (SelectList)listalkEstado, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstado" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="CLIENTE" id="check_cliente" /> <span class=''>CLIENTE</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formCliente">
+                                                        @Html.DropDownListFor(model => model[0].cod_cli, (SelectList)listakClientes, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCliente" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            @*<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>*@
+                                                            <input type='checkbox' name='check_parametro' value="ETAPA" id="check_etapa" /> <span class=''>ETAPA</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formEtapa">
+                                                        @Html.DropDownListFor(model => model[0].Etapa, new SelectList(new List<string>() { "EN PROCESO", "ALERTA", "CAIDA" }), new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @name = "Etapa" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    @*<div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                                @ *<input type='checkbox' name='check_tipo' value="check_tipo"id="check_tipo" /> <span class=''>Tipo</span>* @
+                                                                <input type='checkbox' name='check_parametro' value="ORDENPADRE" id="check_ordenpadre" /> <span class=''>ORDEN PADRE</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="" id="formOrdenPadre">
+                                                            @Html.DropDownListFor(model => model.Id_OrdenTrabajo, (SelectList)listalkOrdenPadre, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboOrdenPadre" })
+                                                        </div>*@
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div>
+                                            <button type="button" style="background-color:#865fc5;border-color:#865fc5;color:white;padding:5px 15px;margin: 20px 30px;margin-botom:6px;" onclick="Set_DataForm_filter(this)">Buscar</button>
+                                            @*<input type="submit" id="btnSubmitFiltro_Busq" hidden="hidden"/>*@
+                                        </div>
+
+                                    </div>
+
+                                    @*<table class="" style="font-size:12px" border="0">
+                                            <tr>
+                                                <td nowrap><span style="margin-left:6px">&nbsp;&nbsp;</span><span class="fa fa-calendar"></span>&nbsp;&nbsp;&nbsp;&nbsp;Desde</td>
+                                                <td nowrap><span style="margin-left:2px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap>
+                                                    @Html.EditorFor(model => model.Fecha_asignacion, new { htmlAttributes = new { @name = "FeInicio", @class = "form-control is-valid", @type = "text", @required = "required", @id = "FeInicio", @style = "height:22px;width:88px;font-size: 9pt;" } })
+                                                    @Html.ValidationMessageFor(model => model.Fecha_asignacion, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td nowrap><span style="margin-left:4px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap><span class="fa fa-calendar"> </span>&nbsp;&nbsp;Hasta</td>
+                                                <td nowrap><span style="margin-left:2px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap>
+                                                    @Html.EditorFor(model => model.Fecha_registro, new { htmlAttributes = new { @name = "FeFin", @id = "FeFin", @class = "form-control is-valid", @type = "text", @required = "required", @style = "height:22px;width:88px;font-size: 9pt;" } })
+                                                    @Html.ValidationMessageFor(model => model.Fecha_registro, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td nowrap><span style="margin-left:4px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap><span class="fa fa-ellipsis-v"> </span>&nbsp;&nbsp;Par&aacute;metro</td>
+                                                <td nowrap><span style="margin-left:2px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap>
+
+                                                    @Html.DropDownListFor(model => model.Origen, new SelectList(new List<string>() { "Ninguno", "Tipos_Trabajo", "Campamento", "Estacion", "Sector", "Sucursal", "Contrato", "Estado", "Cliente", "Etapa", "OrdenPadre" }), new { @id = "CmbParametro", @class = "form-control select2", @style = "height:27px;width:145px;font-size:6pt", @onchange = "CmbParametroSelected();" })
+                                                </td>
+                                                <td nowrap><span style="margin-left:4px">&nbsp;&nbsp;</span>Ingrese:</td>
+                                                <td nowrap><span style="margin-left:2px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap style="padding:0 0 0 0">
+
+                                                    <div class="" id="formTipoTrabajo">
+                                                        @Html.DropDownListFor(model => model.Id_tipo_trabajo_ejecutado, (SelectList)listalkTipo_Trabajo, new { @class = "form-control select2", @style = "height:27px; width: 135px; font-size:6pt", @id = "comboTipoTrabajo" })
+                                                    </div>
+
+                                                    <div class="" id="formCampamento">
+                                                        @Html.DropDownListFor(model => model.Id_campamento, (SelectList)listalkCampamento, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCampamento" })
+                                                    </div>
+                                                    <div class="" id="formSucursal">
+                                                        @Html.DropDownListFor(model => model.Id_sucursal, (SelectList)listalkSucursal, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSucursal" })
+                                                    </div>
+                                                    <div class="" id="formEstacion">
+                                                        @Html.DropDownListFor(model => model.Id_estacion, (SelectList)listalkEstacion, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstacion" })
+                                                    </div>
+                                                    <div class="" id="formSector">
+                                                        @Html.DropDownListFor(model => model.Id_sector, (SelectList)listalkSector, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSector" })
+                                                    </div>
+
+                                                    <div class="" id="formContrato">
+                                                        @Html.DropDownListFor(model => model.Id_contrato, (SelectList)listalkContrato, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboContrato" })
+                                                    </div>
+                                                    <div class="" id="formEstado">
+                                                        @Html.DropDownListFor(model => model.Estado, (SelectList)listalkEstado, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstado" })
+                                                    </div>
+
+                                                    <div class="" id="formCliente">
+                                                        @Html.DropDownListFor(model => model.cod_cli, (SelectList)listakClientes, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCliente" })
+                                                    </div>
+
+                                                    <div class="" id="formEtapa">
+                                                        @Html.DropDownListFor(model => model.Etapa, new SelectList(new List<string>() { "EN PROCESO", "ALERTA", "CAIDA" }), new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @name = "Etapa" })
+                                                    </div>
+
+                                                    <div class="" id="formOrdenPadre">
+                                                        @Html.DropDownListFor(model => model.Id_OrdenTrabajo, (SelectList)listalkOrdenPadre, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboOrdenPadre" })
+                                                    </div>
+
+
+
+                                                </td>
+                                                <td nowrap><span style="margin-left:6px">&nbsp;&nbsp;</span></td>
+                                                <td nowrap>
+                                                    <button type="button" style="background-color:#865fc5;border-color:#865fc5;color:white;" onclick="ValidaFecha(this)">Buscar</button>
+                                                    <input type="submit" id="btnSubmitFiltro" hidden="hidden" />
+                                                </td>
+                                            </tr>
+                                        </table>*@
+                                }
+                                <!--Fin Div Filtro-->
+                            </div>
+
+                            <div class="col-md-12" id="botoneraOT" style="display:none;">
+                                <div class="form-group row-2 col-md-12">
+                                    <label class="col-md-2" style="font-weight:normal;padding-right: 15px;padding-top: 5px; width: 145px;"><span class=''>Escoga Contrato:</span></label>
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("Id_Contrato", (SelectList)listaContratoexcel, new { @class = "form-control cmd select2", @style = "width:100%", @id = "Id_Contrato" })
+                                    </div>
+                                </div>
+
+                                @using (Html.BeginForm("Import", "OrdenTrabajo_Automatizacion", FormMethod.Post, new { enctype = "multipart/form-data", @type = "button" }))
+                                {
+                                    @Html.Raw(ViewBag.Error) // si tienes el decorador [ValidateAntiForgeryToken] en tu accion del controlador
+                                    @*<div class="form-group"> style="width:250px; top:-14px"*@
+                                    <div class="" style="display:inline-flex">
+                                        <div class="" style="padding-top: 5px;">
+                                            <input type="file" name="excelfile" id="file-1" class="inputfile inputfile-1" style="background: #f39c12;color: white;border: none;height: 20px;" data-multiple-caption="{count} archivos seleccionados" multiple /><label for="file-1" style="position: relative;width:230px;"><svg xmlns="http://www.w3.org/2000/svg" class="iborrainputfile" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg><span class="iborrainputfile" style="font-family:inherit; font-size:12px;">Seleccionar archivo</span></label>
+                                            @*<input type="submit" value="Import" name="file-1" id="file-1" class="inputfile inputfile-1" /><label for="file-1"><span class="iborrainputfile">Import</span></label>*@
+                                            <input type="hidden" id="contrato_excel" name="contrato_excel" value="">
+                                        </div>
+                                        @*</div>*@
+                                        @*<div class="form-group"> style="width:300px; top:-14px"*@
+                                        <div class="" style="margin-left: -30px;padding-top: 5px;">
+                                            <input type="submit" value="Importar" style="background: #f39c12;color: white;border: none;height: 30px; position: relative; font-family:inherit; font-size:12px;" /><label for="file-1"></label>
+                                        </div>
+                                    </div>
+                                    @*</div>*@
+
+                                }
+                            </div>
+                        </div>
+
+                        <!--2  </div>
+                        </div> -->
+
+                    </div>
+                </div>
+
+
+                <!--divLista-->
+                <div class="row" id="divLista">
+                    <div class="col-md-12">
+                        <div class="box-body" id="CssDivBox">
+                            @{
+                                if (lkFiltro == null)
+
+                                {
+                                    if (listaOrdenTrabajo != null)// && lkFiltro != null)
+                                    {
+                                        if (listaOrdenTrabajo.Count != 0)
+                                        {
+                                            @*<div class="table-responsive">label class="col-md-12" style="color:white;background-color:#f2f5f7; text-align: center;height:24px;padding:2px 0 0 0">*@
+                                            <div class="table-responsive col-md-12">
+
+                                                <table id="tablaTiposTrabajo" class="js-dynamitable table table-bordered  ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Acciones</th>
+                                                            <th>C&oacute;digo</th>
+                                                            <th>Tipo de Trabajo Planeado</th>
+                                                            <th>Alerta</th>
+                                                            <th>Clasificacion</th>
+                                                            <th>Fecha asignacion</th>
+                                                            <th>Estado</th>
+                                                            <th>Tipo de Trabajo Ejecutado</th>
+                                                            @*<th>Padre</th>*@
+                                                            <th>Contrato</th>
+                                                            <th>% Avance</th>
+                                                            <th>Tiempo transcurrido</th>
+                                                            <th>Grupo de Trabajo</th>
+                                                            <th>Fecha Fin Obra</th>
+                                                            <th>Fecha Finalizacion</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Planeado"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Alerta"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Clasificacion"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha asignacion"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Ejecutado"></th>
+                                                            @*<th><input class="js-filter form-control" type="text" value="" placeholder="Padre"></th>*@
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Contrato"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="% Avance"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tiempo Transcurrido"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Grupo Trabajo"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Fin obra"></th>
+                                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Finalizacion"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @{
+                                                            string estilo = string.Empty;
+                                                            DataBase_Externo dbe = new DataBase_Externo();}
+
+                                                        @*@foreach (var ordenTrabajo in listaOrdenTrabajo)*@
+                                                            @foreach (var ordenTrabajo in Model)
+                                                            {
+
+
+                                                                
+                                                                var objMT_TipoTrab = dbe.ObtenerCriterioAccionOT(ordenTrabajo.Id_tipo_trabajo_ejecutado);
+                                                                //int Orden_trabajoID, int? TipoTrabajoId
+                                                                //string parametros = dbe.IsValidParametroCANVAS_OT(ordenTrabajo.Id_OrdenTrabajo, ordenTrabajo.Id_tipo_trabajo_ejecutado);
+                                                                string colorOT = "";
+                                                                if (ordenTrabajo.Estado_P_A_C != null)
+                                                                {
+                                                                    switch (ordenTrabajo.Estado_P_A_C)//parametros)
+                                                                    {
+                                                                        case "EN PROCESO": colorOT = "background:Green; color:white;"; break;
+                                                                        case "ALERTA": colorOT = "background:Yellow; color:black;"; break;
+                                                                        case "CAIDA": colorOT = "background:Red; color:white;"; break;
+                                                                    }
+
+
+                                                                    <tr class="TRRows" style="@estilo">
+                                                                        <td class="TDRows">
+                                                                            @{
+                                                                                //aqui es para ver si la actividad ha sido iniciada si no lo ha sido pues presenta el icono editar coso contrario no
+                                                                                //DataBase_Externo dbi = new DataBase_Externo();
+                                                                                //var iniciada = dbi.Actividad_Iniciada(ordenTrabajo.Id_OrdenTrabajo);
+                                                                                //if (iniciada == false)
+                                                                                //{
+                                                                                if (oPermiso.Modificar == true)
+                                                                                {
+                                                                                    <a href="@Url.Action("Editar_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = @ordenTrabajo.Id_OrdenTrabajo })" data-popup="tooltip" title="Editar" target="_self" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_OrdenTrabajo" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                                        </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                                //}
+
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                <a href="@Url.Action("Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnActividadesBoton_OT " title="Actividades" style="text-align:center">
+                                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                                                </a>
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                if (objMT_TipoTrab.Control_Equipo.Equals("S"))
+                                                                                {
+                                                                                    <a href="@Url.Action("Equipos_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEquiposBoton_OT" title="Equipos" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-wrench"> </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+
+                                                                                if (objMT_TipoTrab.Control_Integrante.Equals("S"))
+                                                                                {
+                                                                                    <a href="@Url.Action("Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnIntegrantesBoton_OT" title="Integrantes" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-user"> </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                            }
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                if (objMT_TipoTrab.Control_Item.Equals("S"))
+                                                                                {
+                                                                                    <a href="@Url.Action("Items_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnItemsBoton_OT" title="Items" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt"> </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                if (objMT_TipoTrab.Control_Medida.Equals("S"))
+                                                                                {
+                                                                                    <a href="@Url.Action("Medidas_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnMedidassBoton_OT " title="Medidas" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                            }
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                <a href="@Url.Action("Formularios_OT", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
+                                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-file">
+                                    </span>*@
+                                                                                </a>
+                                                                            }
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                <a href="@Url.Action("OrdenTrabajo_Valor", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnValorBoton_OT" title="Valor" style="text-align:center">
+                                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                                                </a>
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                <a href="@Url.Action("OrdenTrabajo_Estado", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEstadoBoton_OT" title="Estado" style="text-align:center">
+                                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                                                </a>
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+
+                                                                                if (objMT_TipoTrab.Control_Raiz.Equals("S"))
+                                                                                {
+
+                                                                                    <a href="@Url.Action("OrdenTrabajo_CausaRaiz", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnCausaRaizBoton_OT" title="Causa Raiz" style="text-align:center">
+                                                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                                                    </a>
+                                                                                }
+                                                                            }
+
+                                                                            @if (oPermiso.Consultar == true)
+                                                                            {
+                                                                                <a href="@Url.Action("Alerta_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnAlertaBoton_OT" title="Alerta" style="text-align:center">
+                                                                                    @*<span aria-hidden="true" class="fa fa-bell">
+                                    </span>*@
+                                                                                </a>
+                                                                            }
+
+
+
+                                                                        </td>
+
+                                                                        @*<td>@Html.DisplayFor(model => ordenTrabajo.Codigo_Cliente)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Dtrabajo)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.descripcionPadre)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.NombreContrato)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Porcentaje_avance)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Tiempo_transcurrido)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Descripcion)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Nombre)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_asignacion)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_finalizacion_obra)</td>
+                        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_fin_ejecucion)</td>*@
+                                                                        <td>@ordenTrabajo.Codigo_Cliente</td>
+                                                                        <td>@ordenTrabajo.Dtrabajo</td>
+                                                                        <td style="@colorOT">@ordenTrabajo.Estado_P_A_C</td>
+                                                                        <td>@ordenTrabajo.clasif_orden_ttrabajoej</td>
+                                                                        <td>@ordenTrabajo.Fecha_asignacion</td>
+                                                                        <td>@ordenTrabajo.Descripcion</td>
+                                                                        <td>@ordenTrabajo.trabajoejecutado</td>
+                                                                        @*<td>@ordenTrabajo.descripcionPadre</td>*@
+                                                                        <td>@ordenTrabajo.NombreContrato</td>
+                                                                        <td>@ordenTrabajo.Porcentaje_avance</td>
+                                                                        <td>@ordenTrabajo.Tiempo_transcurrido</td>
+                                                                        <td>@ordenTrabajo.Nombre</td>
+                                                                        <td>@ordenTrabajo.Fecha_finalizacion_obra</td>
+                                                                        <td>@ordenTrabajo.Fecha_fin_ejecucion</td>
+                                                                        @*<td style="@colorOT">@Html.DisplayFor(model => parametros)</td>*@
+
+                                                                    </tr>
+                                                                    /* cntFila++;*/
+                                                                }
+
+
+                                                            }
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                            <div class="columna columna-100">
+                                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                            </div>
+
+                                            <div class="columna columna-100">
+                                                @*@Html.PagedListPager(Model, page => Url.Action("Index",
+                                                    new { sortOrder = ViewBag.CategoriaSortParm, search = Request.QueryString["search"], page }))*@
+                                                @Html.PagedListPager(Model, page => Url.Action("OrdenTrabajo_Automatizacion",
+                                                        new { sortOrder = "", search = "", page }))
+
+                                            </div>
+
+                                        } //end if  Count !=0
+                                    } //end if  !=null
+                                }//enf lkFiltro== Null
+
+                               
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!--Div Canvas-->
+               
+
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<div id="modalEditarEntregaOrden" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> <font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Entrega Orden Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="modal-editaEntregaOrden">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+    <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+
+    @*este es el del boton input archivo  *@
+    <script src="~/Content/bower_components/EstiloExterno/JsExterno/custom-file-input.js"></script>
+
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        //Default_Contrato
+        var id_contrato = $('#Id_Contrato').val();
+        var idcmb = id_contrato;
+
+        $('#contrato_excel').val(idcmb);
+
+        //Change_Contrato
+        //$('#Contrato_Id').on('change', function (event) {
+        $('#Id_Contrato').on('change', function (event) {
+
+            var idcmb = $(this).val();
+
+            $('#contrato_excel').val(idcmb);
+        });
+
+        $(document).ready(function () {
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+            $.noConflict();
+            $('#tablaCanvas').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Cantidad a Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+
+            $('#tablaTiposTrabajo').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                //'autoWidth': false
+                'autoWidth': true
+
+            });
+            //$('div#tablaTiposTrabajo_filter').html();
+            //$('div#tablaTiposTrabajo_filter').append(`<button type="button" class="btn btn-xs" style="background-color:#865fc5; position: absolute;top: 50%;" onclick="mostrarDivFiltro()"><span class="glyphicon glyphicon-filter" style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font></button>`);
+
+            ////$('$('div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').append(`style="float:left"`);').html(`<style="float:right">`);
+            ////$('div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').append(`style="float:right"`);
+            //$('div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').css(`style="float:left"`);
+            //$('div.dataTables_wrapper > div.row > div[class^="col-"]:last-child').css(`"style=float:right"`);
+            //$('div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').append(`style="float:left"`);
+            $('div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:last-child').css({ 'float': 'left' })
+            $('div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:first-child').css({ 'float': 'right' })
+            $('div#tablaTiposTrabajo_filter').append(`<button type="button" class="btn btn-xs" style="background-color:#865fc5; float:left;margin-right: 10px;" onclick="mostrarDivFiltro()"><span class="glyphicon glyphicon-filter" style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font></button>`);
+            $('div#tablaTiposTrabajo_filter').append(`<button type="button" class="btn btn-xs" style="background-color:#9c9c9c; margin-left: 10px;" onclick="mostrarDivFiltro_REPO()"><span class="fa fa-wrench" style="color:white"></span><font color="white">&nbsp;&nbsp;Herramientas&nbsp;&nbsp;</font></button>`);
+            $('div#tablaTiposTrabajo_length').append(`<button id="btnLista" type="button" class="btn btn-xs btn-info" style="margin-left: 5px;" value="MostrarLista" onclick="mostrarLista()"><span class="fa fa-list-alt"></span>&nbsp;&nbsp;Lista&nbsp;&nbsp;</button>`);
+            $('div#tablaTiposTrabajo_length').append(`<button id="btnCanvas" type="button" class="btn btn-xs btn-warning" style="margin-left: 5px;" value="MostrarCanvas" onclick="mostrarCanvasUDP()"><span class="fa fa-th-large"></span>&nbsp;&nbsp;Canvas&nbsp;&nbsp;</button>`);
+            $('div#tablaTiposTrabajo_length').append(`<select name="Etapas" id="Etapas" class="form-control" style="margin-left: 5px;width: 195px;"><option value="DESC">Caida, Alerta, Proceso</option><option value="ASC">Proceso, Alerta, Caida</option></select>`);
+            $('div.dataTables_wrapper div.dataTables_filter').css({ 'text-align': 'left !important' })
+        });
+
+
+        var contLista = 0;
+        var contCanvas = 0;
+
+        function mostrarLista() {
+            contLista = 1;
+
+            if (contLista == 1 && contCanvas == 0) {
+                document.getElementById('divLista').style.display = 'block';
+                document.getElementById('divCanvasUPD').style.display = 'none';
+                contCanvas = 0;
+            }
+            if (contLista = 1) {
+                window.location.reload();
+            }
+            contLista = 0;
+
+        }
+
+        function mostrarCanvasUDP() {
+            contCanvas = 1;
+            if (contCanvas == 1 && contLista == 0) {
+                document.getElementById('divCanvasUPD').style.display = 'block';
+                document.getElementById('divLista').style.display = 'none';
+                contLista = 0;
+            }
+
+            contCanvas = 0;
+
+            //renderCanvas();
+        }
+
+
+        var contFiltro = 0;
+        function mostrarDivFiltro() {
+
+            if (contFiltro % 2 == 0) {
+                document.getElementById('divFiltro').style.display = 'block';
+
+                //contLista = 0;
+            }
+            else {
+                document.getElementById('divFiltro').style.display = 'none';
+            }
+            contFiltro = contFiltro + 1;
+        }
+
+        contFiltro_rEPO = 0;
+        function mostrarDivFiltro_REPO()
+        {
+            if (contFiltro_rEPO % 2 == 0) {
+                document.getElementById('botoneraOT').style.display = 'block';
+            }
+            else {
+                document.getElementById('botoneraOT').style.display = 'none';
+            }
+            contFiltro_rEPO = contFiltro_rEPO + 1;
+        }
+
+        //Combo Parametro
+
+        $('.select2').select2();
+
+        $(function () {
+            $("#filtro").keyup(function () {
+                var texto = $(this).val();
+
+                $(".bloco").each(function () {
+                    var resultado = $(this).text().toLowerCase().indexOf(texto.toLowerCase());
+
+                    if (resultado < 0) {
+                        $(this).fadeOut();
+                    }
+                    else {
+                        $(this).fadeIn();
+                    }
+                });
+            });
+        });
+        /*
+        start = new Date(moment().subtract(6, 'days'));
+        end = new Date(moment());
+
+        $('#FeInicio').val(moment(start).format('DD/MM/YYYY'))
+        $('#FeFin').val(moment(end).format('DD/MM/YYYY'))
+
+        $('#FeInicio').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+        $('#FeFin').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    */
+        function ValidaFecha(form) {
+            var fecha_ap = $('#FeInicio').val();
+            var fecha_ci = $('#FeFin').val();
+
+            var datearray1 = fecha_ap.split("/");
+            var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+
+            var datearray2 = fecha_ci.split("/");
+            var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+
+            var primera = Date.parse(newdate_ap);
+            var segunda = Date.parse(newdate_ci);
+            if (segunda < primera) {
+                swal('', 'Fecha hasta debe ser mayor', 'error');
+            }
+            else {
+                var obj = document.getElementById("btnSubmitFiltro");
+
+                if (obj) {
+                    obj.click();
+                }
+            }
+        }
+        /*
+    Html.DropDownList("IdCmbParametro",
+    new SelectList(new List<string>() { "Ninguno", "Tipos de Trabajo", "Campamento", "Estacion", "Sector", "Sucursal" }),
+    new { id = "CmbParametro", class = "form-control select2", Style = "height:27px;width:110px;font-size:8pt" })
+
+        1  "Ninguno"
+        2  "Tipos de Trabajo"
+        3  "Campamento"
+        4  "Estacion"
+        5  "Sector"
+        6  "Sucursal"
+            */
+        $('#formTipoTrabajo').prop("hidden", true);
+        //$('#formCampamento').prop("hidden", true);
+        $('#formSucursal').prop("hidden", true);
+        $('#formEstacion').prop("hidden", true);
+        //$('#formSector').prop("hidden", true);
+        $('#formContrato').prop("hidden", true);
+        $('#formEstado').prop("hidden", true);
+        $('#formCliente').prop("hidden", true);
+        $('#formEtapa').prop("hidden", true);
+        //$('#formOrdenPadre').prop("hidden", true);
+
+        function CmbParametroSelected() {
+            //var cod = document.getElementById("CmbParametro").value;
+
+            var combo = document.getElementById("CmbParametro");
+            var selected = combo.options[combo.selectedIndex].text;
+            //alert(selected);
+
+            // $('#CmbParametro').change(function (e) {
+
+            if (selected == 'Ninguno') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            else if (selected == 'Tipos_Trabajo') {
+                $('#formTipoTrabajo').prop("hidden", false);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            //else if (selected == 'Campamento') {
+            //    $('#formTipoTrabajo').prop("hidden", true);
+            //    $('#formCampamento').prop("hidden", false);
+            //    $('#formSucursal').prop("hidden", true);
+            //    $('#formEstacion').prop("hidden", true);
+            //    //$('#formSector').prop("hidden", true);
+            //    $('#formContrato').prop("hidden", true);
+            //    $('#formEstado').prop("hidden", true);
+            //    $('#formCliente').prop("hidden", true);
+            //    $('#formEtapa').prop("hidden", true);
+            //    //$('#formOrdenPadre').prop("hidden", true);
+            //}
+            else if (selected == 'Estacion') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", false);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            //else if (selected == 'Sector') {
+            //    $('#formTipoTrabajo').prop("hidden", true);
+            //    $('#formCampamento').prop("hidden", true);
+            //    $('#formSucursal').prop("hidden", true);
+            //    $('#formEstacion').prop("hidden", true);
+            //    $('#formSector').prop("hidden", false);
+            //    $('#formContrato').prop("hidden", true);
+            //    $('#formEstado').prop("hidden", true);
+            //    $('#formCliente').prop("hidden", true);
+            //    $('#formEtapa').prop("hidden", true);
+            //    $('#formOrdenPadre').prop("hidden", true);
+            //}
+            else if (selected == 'Sucursal') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", false);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            else if (selected == 'Contrato') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", false);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                $('#formOrdenPadre').prop("hidden", true);
+            }
+            else if (selected == 'Estado') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", false);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            else if (selected == 'Cliente') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", false);
+                $('#formEtapa').prop("hidden", true);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            else if (selected == 'Etapa') {
+                $('#formTipoTrabajo').prop("hidden", true);
+                //$('#formCampamento').prop("hidden", true);
+                $('#formSucursal').prop("hidden", true);
+                $('#formEstacion').prop("hidden", true);
+                //$('#formSector').prop("hidden", true);
+                $('#formContrato').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formEtapa').prop("hidden", false);
+                //$('#formOrdenPadre').prop("hidden", true);
+            }
+            //else if (selected == 'OrdenPadre') {
+            //    $('#formTipoTrabajo').prop("hidden", true);
+            //    $('#formCampamento').prop("hidden", true);
+            //    $('#formSucursal').prop("hidden", true);
+            //    $('#formEstacion').prop("hidden", true);
+            //    $('#formSector').prop("hidden", true);
+            //    $('#formContrato').prop("hidden", true);
+            //    $('#formEstado').prop("hidden", true);
+            //    $('#formCliente').prop("hidden", true);
+            //    $('#formEtapa').prop("hidden", true);
+            //    $('#formOrdenPadre').prop("hidden", false);
+            //}
+        }
+
+        /*2da opcion oara enviar los 2 tanto el check como el combox*/
+        function Set_DataForm_filter(form)
+        {
+            active_check_param_ID("#check_tipotrabajo", "#comboTipoTrabajo");
+            //active_check_param_ID("#check_campamento", "#comboCampamento");
+            active_check_param_ID("#check_sucursal", "#comboSucursal");
+            active_check_param_ID("#check_estacion", "#comboEstacion");
+            //active_check_param_ID("#check_sector", "#comboSector");
+            active_check_param_ID("#check_contrato", "#comboContrato");
+            active_check_param_ID("#check_estado", "#comboEstado");
+            active_check_param_ID("#check_cliente", "#comboCliente");
+            active_check_param_ID("#check_etapa", "#comboEtapa");
+            //active_check_param_ID("#check_ordenpadre", "#comboOrdenPadre");
+            $("#formFilter").submit();
+        }
+
+
+        //Check Parámetros
+        function active_check_param_ID(id_element_filter_param,id_select_cmb)
+        {
+            if ($(String(id_element_filter_param)).is(':checked')) {
+                var anterior_value_chk = $(String(id_element_filter_param +':checked')).val();
+                var Aux_ID_ = String($(id_select_cmb + ' option:selected').val());
+                $(String(id_element_filter_param)).val(String(anterior_value_chk+':'+Aux_ID_));
+                //return ;
+            }
+            //return '0';// null;
+        }
+        /*hasta aqui la 2da opcion */
+
+    function renderCanvas ()
+    {
+        var jsonObject = { paraAuxiliar: "" };
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("LoadCanva_OT", "OrdenTrabajo_Automatizacion")",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+                success: function (data)
+                {
+                    if (data.length > 0) {
+                        //$.each(data, function (i, item) {  });
+                        console.log(data);
+                    }
+                    else if (data == null) {
+                        console.log('Rederict a login');
+                    }
+                },
+                error: function () {
+                     console.log('er_Save');
+                 }
+            });
+    }
+
+
+    $('#Etapas').on('change', function (event)
+    { //Suma_CD(); Suma_CI(); Suma_RD(); Suma_RI(); Suma_TD(); Suma_TI(); Suma_DivTotal();
+        //Changefecha();
+        var opCombo = $('#Etapas option:selected').val();
+        //alert(opCombo);
+        ajaEtapax(opCombo);
+
+    });
+
+    function ajaEtapax(opCombo) {
+        var jsonObject = {OTCriterio:opCombo};
+        $.ajax({
+                type: 'POST',
+                url: "@Url.Action("OrderByEtapa", "OrdenTrabajo_Automatizacion")",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(jsonObject),
+                success: function (data)
+                {
+                    if (data == "OK") {
+                        //$.each(data, function (i, item) {  });
+                        //Window.location(true);
+                        location.reload(true);
+                        //alert('Resfresh');
+                    }
+                    else {// if (data == null) {
+                     //alert('Rederict a login');
+                        location.href = '@Url.Action("IniciarSesion", "Home")';
+                    }
+                },
+                error: function () {
+                     console.log('er_Save');
+                 }
+            });
+        }
+
+        $('#Etapas').val('@opcEtapa');
+
+
+        /* 1era opcion aqui para el juego de los checks si es none o block de los div de cada check */
+                //check fechas busqueda
+        $("#chk_fecha").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        });
+
+        if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+        }
+
+        function show_id_elemente(id_element_filter,div_id_filter) {
+            if ($(String(id_element_filter)).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById(String(div_id_filter)).style.display = 'block';
+            } else {
+                document.getElementById(String(div_id_filter)).style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        }
+
+        $("#check_tipotrabajo").on('change', function () {
+            show_id_elemente("#check_tipotrabajo","formTipoTrabajo");
+        });
+        //$("#check_campamento").on('change', function () {
+        //    show_id_elemente("#check_campamento","formCampamento");
+        //});
+        $("#check_estacion").on('change', function () {
+            show_id_elemente("#check_estacion","formEstacion");
+        });
+        //$("#check_sector").on('change', function () {
+        //    show_id_elemente("#check_sector","formSector");
+        //});
+        $("#check_sucursal").on('change', function () {
+            show_id_elemente("#check_sucursal","formSucursal");
+        });
+        $("#check_contrato").on('change', function () {
+            show_id_elemente("#check_contrato","formContrato");
+        });
+        $("#check_estado").on('change', function () {
+            show_id_elemente("#check_estado","formEstado");
+        });
+        $("#check_cliente").on('change', function () {
+            show_id_elemente("#check_cliente","formCliente");
+        });
+        $("#check_etapa").on('change', function () {
+            show_id_elemente("#check_etapa","formEtapa");
+        });
+        //$("#check_ordenpadre").on('change', function () {
+        //    show_id_elemente("#check_ordenpadre","formOrdenPadre");
+        //});
+        /*hasta aqui 1era opcion */
+
+
+    </script>
+}
+@*06-11-2018 15:03*@

@@ -1,0 +1,414 @@
+﻿@*@using Quimipac_.Models*@
+@using Quimipac_.Repositorio;
+@model IEnumerable<Quimipac_.Models.Roles>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<title>Fronter | Rol Menú</title>
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+
+
+<section class="content-header">
+    <h2 style="text-align:left">Roles Menú</h2>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Roles Menú</li>
+    </ol>
+    <br>
+
+    <div class="row">
+        <div class="col-md-2">
+            <button id="btnAgregarTablas" type="button" class="Crear_MTPR btn btn-warning " data-toggle="modal" data-target="#modalAsignarMenu">
+                <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Crear Rol
+            </button>
+        </div>
+        <div class="vFlotante">
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger" id="MSNError">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success" id="MSNOK">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning" id="MSNUPD">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Tablas</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+                    <!--ROLES-->
+                    <div class="col-md-12">
+                        <table id="tablaHtml" class="js-dynamitable table table-bordered  ">
+                            <thead>
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Menu</th>
+                                    <!--.MENU,M.PADRE,M.ORDEN,M.NIVEL_PROFUNDIDAD,M.ICONO,MR.ID_MENUROL,MR.ID_ROL-->
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><input class="js-filter form-control" type="text" value="" placeholder="Rol"></th>
+                                    <th>
+                                        <select class="js-filter form-control">
+                                            <option value=""></option>
+                                            <option value="A">A</option>
+                                            <option value="I">I</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <input class="js-filter form-control" type="text" value="" placeholder="Menu">
+                                        @*@Html.DropDownList("RolesLI", null, new { @class = "js-filter form-control" })*@
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td nowrap>
+                                                @*<button type="button" class="btn btnEditarBoton class_editar_MantSector" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalMantEditarSector" data-id="@sector.Id_Sector">*@
+                                                <button type="button" class="btn btnEditarBoton " title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarRol" onclick="setNombreRolEdit('@item.Descripcion',@item.Id_Rol)" id="@item.Id_Rol">
+                                                </button>
+                                                <a href="@Url.Action("MantMenuDRol_Eliminar", "Mantenimiento", new { id = item.Id_Rol })" target="_self" class="btn btnEliminarBoton" style="text-align:center"></a>
+                                                <a href="@Url.Action("MantMenuDRol_Editar", "Mantenimiento", new { id = item.Id_Rol })" target="_self" class="btn-sm btn-success " style="text-align:center" title="Menú Rol">MR</a>
+                                                <a href="@Url.Action("MantRolUsuario", "Mantenimiento", new { id = item.Id_Rol })" target="_self" class="btn-sm btn-primary " style="text-align:center" title="Roles Usuarios">RU</a>
+
+                                            </td>
+                                            <td nowrap>@item.Descripcion</td>
+                                            <td nowrap>@item.Estado</td>
+                                            <td nowrap>
+                                                <button id="btnMenos" class="" onclick="HideShow_Menu(@item.Id_Rol)"><</button>
+                                                <div class="col-md-12" id="DIV_itemMenuRol_@item.Id_Rol">
+                                                    @{/*onclick="$(this).toggle();"*/
+                                                        var ctx = new DataBase_Externo();
+                                                        //foreach (var item2 in ctx.getItemActivosMenuRol(item.Id_Rol))
+                                                        var lista = ctx.getItem_Menu(item.Id_Rol).Where(vq => vq.IsSelected == true);
+                                                        foreach (var item2 in lista)
+                                                        {
+                                                            string maginLeft = (item2.Nivel_Profundidad == 2) ? "margin-left:10px;" : "";
+                                                            if (item2.IsSelected == true)
+                                                            {
+                                                                <p style="@maginLeft">@item2.Descripcion_Menu</p>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAsignarMenu" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Crear Rol &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="">
+
+                    <div class="form-horizontal">
+                        @using (Html.BeginForm("EditarRol", "Mantenimiento"))
+                        {
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-md-2 control-label">Nombre:</label>
+                                <div class="col-md-10">
+                                    @Html.Editor("Rol", null, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                <input type="submit" value="Crear" class="btn btn-warning" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditarRol" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp; Editar Rol &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    @using (Html.BeginForm("EditRol", "Mantenimiento"))
+                    {
+                        <input type="hidden" id="RolID_Edit=" name="RolID_Edit" value="" />
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Nombre:</label>
+                            <div class="col-md-10">
+                                @Html.Editor("NombreRolEdit", null, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <input type="submit" value="Crear" class="btn btn-warning" />
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--*-->
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Menu Roles&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de los Roles Menu</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTablas/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    @*<script src="~/Scripts/Modales.js"></script>*@
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //$("#RolesLI").append("<option value></option>");
+            //$("#RolesLI selected:option").val("0");
+            $.noConflict();
+            $('#tablaHtml').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false,
+                //para la cabecera fija
+                //"scrollY": "290px",
+                //"scrollCollapse": true
+            });
+        });
+
+        //$('#btnMenos').hide();
+        /*$("#btnMenos").on("click", function () {
+
+            $('#itemMenuRol').parent().toggle();
+        });*/
+        function HideShow_Menu(x) {
+            console.log(x);
+            $("#DIV_itemMenuRol_" + x).toggle();
+            /*$('#anadir').hide();
+            $("#nueva").on("click", function() {
+            $('#anadir').toggle();
+            });*/
+        }
+
+        function setNombreRolEdit(nombre, rid) {
+            //alert(nombre + ":" + rid);
+            //document.getElementById("RolID_Edit").value = rid;
+            $("[name=RolID_Edit]").val(String(rid));
+            $("#NombreRolEdit").val(nombre);
+        }
+
+        $("#MSNError").delay(2000).fadeOut(300);
+        $("#MSNOK").delay(2000).fadeOut(300);
+        $("#MSNUPD").delay(2000).fadeOut(300);
+
+    </script>
+}
+
+

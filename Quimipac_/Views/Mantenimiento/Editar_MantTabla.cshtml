@@ -1,0 +1,120 @@
+﻿@model Quimipac_.Models.MT_Tablas
+
+@{
+    /**/
+
+    Layout = null;
+
+    
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantTabla");
+    attributes.Add("autocomplete", "off");
+
+}
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Editar_MantTabla", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Tabla)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        
+
+        @*Input validador*@
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Tabla:</label>
+            <div class="col-md-10">
+                    @Html.EditorFor(model => model.Tabla, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                    @Html.ValidationMessageFor(model => model.Tabla, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Descripci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+        $('#modal1').bootstrapValidator({
+            //    message:"Este valor no es valido",
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }//,
+
+            //fields: {
+            //    txtObligatorio: {
+            //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+            //                 stringLength: {
+            //                     min: 3,
+            //                     max: 5,
+            //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+            //                 }
+            //             }
+            //    }
+            //}
+
+        });
+    })
+
+</script>

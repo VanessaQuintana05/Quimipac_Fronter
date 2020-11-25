@@ -1,0 +1,427 @@
+﻿
+@using Quimipac_.Models
+@model Quimipac_.Models.MT_PrecioReferencial
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaPreciosrefer = ViewBag.listaPreciosrefer as List<sp_Quimipac_ConsultaMT_PrecioReferencial_Result>;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+<title>Fronter | Mantenimiento de Precios Referenciales</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        Mantenimiento de Precios Referenciales
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a><i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Mantenimiento de Precios Referenciales</li>
+    </ol>
+    <br>
+
+    <div class="row">
+        @if (oPermiso != null)
+        {
+            if (oPermiso.Crear == true)
+            {
+                <div class="col-md-2">
+                    <a href="@Url.Action("Agregar_MantPrecioReferencial", "Mantenimiento")" type="button" class="btn btn-warning" data-original-title="Agrega Orden Trabajo">
+                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;  Agregar Precio Referencial
+                    </a>
+                    
+                </div>
+            }
+        }
+        else { 
+            <div class="col-md-2" style="width: 40%; color:red">
+               <h2>Debe asignar permisos para poder agregar precios referenciales</h2> 
+
+            </div>
+        }
+
+                <div class="vFlotante">
+                    @*hgroup style="display:inline-block;">*@
+                    <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    @*</hgroup>*@
+                </div>
+
+            </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id ="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Precios Referenciales</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+
+                    @{
+
+                        if (listaPreciosrefer.Count != 0)
+                        {
+
+                            <div class="table-responsive">
+                                @* table table-bordered table-hover  ">*@
+                                <table id="tablaPreciosReferenciales" class="js-dynamitable table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Acci&oacute;n</th>
+                                            <th>Proy./Cont. Cod Cliente</th>
+                                            <th>Tipo</th>
+                                            @*<th>Proy./Cont. Cod Interno</th>*@
+                                            <th>Tipo Trabajo</th>                                            
+                                            @*<th>Item</th>
+                                            <th>F. Inicio</th>
+                                            <th>F. Fin</th>
+                                            <th>Moneda</th>
+                                            <th>Precio</th>
+                                            <th>Costo</th>
+                                            <th>Estado</th>*@
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            @*<div class="col-md-12">*@
+                                            <th>
+                                                <input class="js-filter form-control" type="text" value="" placeholder="Proy./Cont. Codigo_Cliente">
+                                            </th>
+                                            <th style="width:auto">
+                                                <select class="js-filter  form-control" style="width:auto;">
+                                                    <option value=""></option>
+                                                    <option value="Proyecto">Proyecto</option>
+                                                    <option value="Contrato">Contrato</option>
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <input class="js-filter form-control" type="text" value="" placeholder="Tipo de Trabajo">
+                                            </th>
+                                            @*<th><input class="js-filter form-control" class2="text-bold col-md-2" type="text" value="" placeholder="Item"></th>
+
+                                            <th><input class="js-filter form-control" class2="text-bold col-md-2" type="text" value="" placeholder="Fecha Inicio"></th>
+                                            <th><input class="js-filter form-control" class2="text-bold col-md-2" type="text" value="" placeholder="Fecha Fin"></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>
+                                                <select class="js-filter  form-control">
+                                                    <option value=""></option>
+                                                    <option value="A">A</option>
+                                                    <option value="I">I</option>
+                                                </select>
+                                            </th>*@
+
+                                            @*</div>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var precioreferencial in listaPreciosrefer)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    @if (oPermiso.Modificar == true)
+                                                    {
+                                                        <a href="@Url.Action("Editar_MantPrecioReferencial", "Mantenimiento", new { id = precioreferencial.Id_PrecioReferencial })" title="Editar" target="_self" type="button" class="btn btnEditarBoton class_editar_PrecioReferencial" data-original-title="Agrega Orden Trabajo" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-edit"></span>*@
+                                                        </a>
+                                                    }
+
+
+                                                    @*<button type="button" class="Modificar_MTPR btn btnEditarBoton class_editar_PrecioReferencial" style="text-align:center" title="Editar" data-toggle="modal" data-target="#modalEditarPrecioReferencial" data-id="@precioreferencial.Id_PrecioReferencial">
+            <span aria-hidden="true" class="glyphicon glyphicon-edit">
+            </span>
+        </button>*@
+                                                    @if (oPermiso.Eliminar == true)
+                                                    {
+                                                        <a href="@Url.Action("EliminarPrecioReferencial", "Mantenimiento", new { id = precioreferencial.Id_PrecioReferencial })" title="Eliminar" target="_self" class="btn btnEliminarBoton" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-remove">
+                </span>*@
+                                                        </a>
+                                                    }
+
+                                                    </td>
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.Codigo_Cliente)</td>                                                
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.tipoTrabajo)</td>
+                                                @*<td>@Html.DisplayFor(model => precioreferencial.Codigo_Interno)</td>*@
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.CodigoMTTipoTrabajo)</td>
+                                                @*<td nowrap>@Html.DisplayFor(model => precioreferencial.descripcion)</td>
+                                                @{
+                                                    string fecha_Inicio = precioreferencial.Fecha_Inicio.ToString();
+                                                    fecha_Inicio = Convert.ToDateTime(fecha_Inicio).ToString("dd/MM/yyyy");
+
+                                                    string fecha_Fin = precioreferencial.Fecha_Fin.ToString();
+                                                    fecha_Fin = Convert.ToDateTime(fecha_Fin).ToString("dd/MM/yyyy");
+                                                }
+                                                <td nowrap>
+                                                    @Html.DisplayName(fecha_Inicio)
+                                                </td>
+                                                <td nowrap>
+                                                    @Html.DisplayName(fecha_Fin)
+                                                </td>
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.nom_moneda)</td>
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.Precio)</td>
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.Costo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => precioreferencial.Estado)</td>*@
+
+
+                                            </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Mantenimiento Precio Referencial&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento del Precio Referencial </center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@*<div id="modalEditarPrecioReferencial" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table style="text-align:center">
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp; Editar Precio Referencial &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-editaPrecioReferencial">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        //modalAdd('#btnAgregarPrecioReferencial', 'modal-agregaPrecioReferencial', '@Url.Action("Agregar_MantPrecioReferencial", "Mantenimiento")');
+      //  modalEdit('.class_editar_PrecioReferencial', 'modal-editaPrecioReferencial', '@Url.Action("Editar_MantPrecioReferencial", "Mantenimiento", new { id = "param-id" })');
+
+
+
+        $(document).ready(function () {
+
+               @*// modalAdd('#btnAgregarPrecioReferencial', 'modal-agregaPrecioReferencial', '@Url.Action("Agregar_MantPrecioReferencial", "Mantenimiento")');
+               // modalEdit('.class_editar_PrecioReferencial', 'modal-editaPrecioReferencial', '@Url.Action("Editar_MantPrecioReferencial", "Mantenimiento", new { id  = "param-id"})');*@
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+
+            //$('#tablaPreciosReferenciales').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+            $.noConflict();
+            $('#tablaPreciosReferenciales').DataTable({
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+        });
+        // Mostrar informacion de pagina
+        var i = 2;
+        function insertHtml() {
+            if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento precio referenciales</span><br><br>") }
+            else {
+                $("#htmlins").html("")//remove();
+            }//.html("<span>este codigo html fue insertado</span>") }
+
+            i++;
+        };
+
+    </script>
+}
+
+

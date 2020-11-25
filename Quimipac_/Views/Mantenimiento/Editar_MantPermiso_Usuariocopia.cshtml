@@ -1,0 +1,954 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+@model Quimipac_.Models.sp_Quimipac_ConsultaUsuarios_Permisos_Result
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    string cadenaUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+    string[] Separado = cadenaUrl.Split('/');
+    string IdUsuario = Separado[Separado.Length - 1];
+    var dbe = new DataBase_Externo();
+
+    var lkPermiso = dbe.ObtenerPermisosXUsuario(IdUsuario);
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<!--Toggle-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.css" />
+
+<style>
+    button:hover {
+        background: #000000; /* rgba(0,0,0,0);*/
+        color: black;
+        box-shadow: inset 0 0 0 3px #3d80bb;
+    }
+
+</style>
+
+
+<title>Fronter | Editar Permiso</title>
+
+<section class="content-header">
+    <h2 style="text-align:left">Permiso</h2>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li><a href="@Url.Action("MantPermisos", "Mantenimiento")">Permisos</a></li>
+        <li class="active">Editar permisos</li>
+    </ol>
+
+    <div class="row">
+        <div class="vFlotante">
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" class="" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert-alert-danger" id="DivDanger" style="display:none">
+                <strong><label id="CadenaDanger"></label> </strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" id="DivSucess" style="display:none">
+                <strong><label id="CadenaSucess"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="alert alert-warning" id="DivWarning" style="display:none">
+                <strong><label id="CadenaWarning"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" id="BordeDiv">
+                <div class="box-header" style="display:none;">
+                </div>
+                <div class="box-body" id="CssDivBox" style="height:455px">
+
+                    <div class="col-md-12">
+
+                        @using (Html.BeginForm("Agregar_MantRol", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <label for="recipient-name" class="text-bold control-label col-md-12" style="text-align:left;background-color:#f19f1d;height:30px;">
+                                            <font size="2"><span class="fa fa-edit"></span></font>&nbsp;
+                                            <font color="white"><span aria-hidden="true" class="glyphicon glyphicon-user" style="font-weight:normal"></span></font>
+                                            <font color="white" size="2">
+                                                Usuario,&nbsp;&nbsp;'<font color="black" size="2">@IdUsuario</font>'&nbsp;
+
+                                            </font>
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <hr style="margin-top:4px;margin-bottom:0;" />
+
+                                <!--Div Superior-->
+
+                                <div class="box-body" style="padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--<div class="col-md-12">-->
+                                    <!--1  Div-->
+                                    <div class="col-md-8" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-warning">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#f19403">
+                                                            <span aria-hidden="true" class="fa fa-building-o"></span>&nbsp;Clientes
+                                                        </font>
+                                                    </label>
+                                                    <!--
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table id="">
+                                                            <tr>
+
+
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalAgregarCliente" data-id="@IdUsuario" onclick="contarClients();">
+                                                                        <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                    </button>
+                                                                </td>
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>-->
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (lkPermiso != null)
+                                                    {
+                                                        if (lkPermiso.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaCliente" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <!--  <th></th>
+                                                                                <th></th>-->
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <!-- <th style="width:110px;"></th>
+                                                                            <th style="display:none;"></th>-->
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#f39c12"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbodyClientes">
+                                                                        @{
+                                                                            List<string> tmpLkPermiso = new List<string>();
+                                                                            foreach (var item1 in lkPermiso)
+                                                                            {
+                                                                                if (!tmpLkPermiso.Contains(item1.nom_cli))
+                                                                                {
+                                                                                    tmpLkPermiso.Add(item1.nom_cli);
+
+                                                                                    <tr id="@item1.Id_Cliente">
+                                                                                        <td nowrap>&nbsp;@item1.nom_cli</td>
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                        }
+
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Div Opciones -->
+                                    <div class="col-md-4">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading" style="background-color:#505050;height:30px;">
+                                                <h3 class="panel-title"> <font color="White" size="1"> <span aria-hidden="true" class="fa fa-user-secret" style="margin-left:8px"></span>&nbsp;</font><font color="White" size="2">&nbsp;Acciones</font></h3>
+                                            </div>
+                                            <div class="panel-body" style="height:180px;">
+
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+
+                                                        <div class="box-body">
+                                                            <div id="demo">
+
+                                                                <div id="content" class="col-md-6">
+
+                                                                    @*<div class="flat-toggle" title="Seleccionar" id="1">
+                                                                        <span>Invisibility</span> </div>*@
+                                                                    <table border="0">
+                                                                        <thead><tr><td></td><td></td></tr></thead>
+                                                                        <tbody>
+                                                                            @{
+                                                                                if (lkPermiso != null)
+                                                                                {
+                                                                                    if (lkPermiso.Count > 0)
+                                                                                    {
+                                                                                        var CheckConsultar = false;
+                                                                                        var CheckModificar = false;
+                                                                                        var CheckCrear = false;
+                                                                                        var CheckEliminar = false;
+
+                                                                                        int cont = 0;
+                                                                                        foreach (var itemCheck in lkPermiso)
+                                                                                        {
+                                                                                            if (cont > 0)
+                                                                                            {
+                                                                                                break;
+                                                                                            }
+                                                                                            if (itemCheck.Consultar.Equals("S")) { CheckConsultar = true; }
+                                                                                            if (itemCheck.Modificar.Equals("S")) { CheckModificar = true; }
+                                                                                            if (itemCheck.Crear.Equals("S")) { CheckCrear = true; }
+                                                                                            if (itemCheck.Eliminar.Equals("S")) { CheckEliminar = true; }
+
+                                                                                            <tr>
+                                                                                                <td><input type="checkbox" name="" value="" id="checkConsultar" class="checkOpciones" checked="@CheckConsultar" /></td>
+                                                                                                <td><span style="margin-left:15px"></span>Consultar</td>
+                                                                                            </tr>
+                                                                                            <tr style="height:10px"></tr>
+                                                                                            <tr>
+                                                                                                <td><input type="checkbox" name="" value="" id="checkModificar" class="checkOpciones" checked="@CheckModificar" /></td>
+                                                                                                <td><span style="margin-left:15px"></span>Modificar</td>
+                                                                                            </tr>
+                                                                                            <tr style="height:10px"></tr>
+                                                                                            <tr>
+                                                                                                <td><input type="checkbox" name="" value="" id="checkCrear" class="checkOpciones" checked="@CheckCrear" /></td>
+                                                                                                <td><span style="margin-left:15px"></span>Crear</td>
+                                                                                            </tr>
+                                                                                            <tr style="height:10px"></tr>
+                                                                                            <tr>
+                                                                                                <td><input type="checkbox" name="" value="" id="checkEliminar" class="checkOpciones" checked="@CheckEliminar" /></td>
+                                                                                                <td><span style="margin-left:15px"></span>Eliminar</td>
+                                                                                            </tr>
+                                                                                            cont++;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <button type="button" id="" class="form-control btn btn-sm" title="Actualizar Registro" style="border-color:#4390bd;background:#ffffff;text-align:center;width:auto;" onclick="ActualizarRegistro(this);">
+                                                                        <font color="black"><span aria-hidden="true" class="glyphicon glyphicon-floppy-disk"></span> </font><font color="black">&nbsp;Guardar&nbsp;</font>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Fin Div Superior-->
+                                </div>
+                                <!--Div inferior-->
+                                <div class="box-body" style="padding-top: 0;padding-bottom: 0;padding-left: 0;padding-right: 0;">
+                                    <!--4 Div Contratos-->
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#0d860d">
+                                                            <span aria-hidden="true" class="fa fa-book"></span>&nbsp;Contratos
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver contratos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" onclick='TodoContratos(this)'>
+                                                                        <font color="#198c19"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="#595956"></font>*@
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                @{
+                                                    if (lkPermiso != null)
+                                                    {
+                                                        if (lkPermiso.Count > 0)
+                                                        {
+                                                            <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                                <table id="tablaContratosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                                    <thead>
+                                                                        <tr style="display:none;">
+                                                                            <th>Estado</th>
+                                                                            <th>Contrato</th>
+                                                                            <th>Cliente</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Estado</th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Contrato . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+                                                                            <th>
+                                                                                <div>
+                                                                                    <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                                        <font color="#0d860d"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                                    </div>
+                                                                                    <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                                        <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbodyContratosAdd">
+
+                                                                        @{
+                                                                            if (lkPermiso != null)
+                                                                            {
+                                                                                if (lkPermiso.Count > 0)
+                                                                                {
+
+
+                                                                                    foreach (var itemCont in lkPermiso)
+                                                                                    {
+                                                                                        if (itemCont.Id_Contrato != null)
+                                                                                        {
+                                                                                            <tr id="@itemCont.Id_Contrato" class="@itemCont.Id_Contrato+TR">
+                                                                                                <td style="display:none;">@itemCont.Id_Cliente</td>
+                                                                                                <td style="display:none;">@itemCont.Id_Contrato</td>
+                                                                                                <td nowrap>
+                                                                                                    <div class="flat-toggle toggleContratos" id="@itemCont.Id_Permiso" >
+                                                                                                        @*<span>Invisibility</span>*@
+                                                                                                    </div>
+                                                                                                    @*<button id="btnEliminar_@itemCont.Id_Contrato" type="button" class="btn btn-sm" value="" onclick="EliminarFilaContrato(this)" style="background:none">
+                                                                                                        <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                                    </button>*@
+                                                                                                </td>
+
+                                                                                                <td id="@itemCont.Id_Contrato+TD">@itemCont.Nombre</td>
+                                                                                                <td>@itemCont.nom_cli</td>
+                                                                                                <td style="display:none;">@itemCont.Id_Permiso</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--5 Div proyectos-->
+
+                                    <div class="col-md-6" style="padding:0 10px 0 0;">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading" style="height:30px;">
+                                                <div class="form-group">
+                                                    <label class="col-md-10 control-label" style="padding:0 0 0 22px;color:white;font-weight:normal;text-align:left;">
+                                                        <font color="#3d8bba">
+                                                            <span aria-hidden="true" class="fa fa-briefcase"></span>&nbsp;Proyectos
+                                                        </font>
+                                                    </label>
+                                                    <div class="col-md-2" style="padding:0 0 0 0;">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Ver proyectos a agregar" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" onclick='TodosProyectos(this)'>
+                                                                        <font color="#3d80bb"><span aria-hidden="true" class="fa fa-eye"></span> </font>@*<font color="black">&nbsp;Editar&nbsp;</font>*@
+                                                                    </button>
+                                                                </td>
+                                                                <!--  <td></td>
+                                                                 <td>
+                                                                     &nbsp;<button type="button" class="form-control btn btn-xs class_editar_Tablas" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;" data-toggle="modal" data-target="#modalEditarTablas" data-id="@IdUsuario">
+                                                                         <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">&nbsp;Agregar&nbsp;</font>
+                                                                     </button>
+                                                                 </td>-->
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive" style="height:150px;overflow-y:auto;">
+
+                                                    <table id="tablaProyectosAdd" class="js-dynamitable table table-bordered" style="font-size:9pt;">
+                                                        <thead>
+                                                            <tr style="display:none;">
+                                                                <th>Estado</th>
+                                                                <th>Proyecto</th>
+                                                                <th>Cliente</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Estado</th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Proyecto . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+                                                                <th>
+                                                                    <div>
+                                                                        <div class="col-md-1" style="padding:0 0 0 0;">
+                                                                            <font color="#3d8bba"><span aria-hidden="true" class="fa fa-search"></span></font>
+                                                                        </div>
+                                                                        <div class="col-md-10" style="padding:3px 0 0 0;">
+                                                                            <input class="js-filter form-control" type="text" value="" placeholder="Cliente . . ." style="height:10px;text-align:left;padding:0 0 0 0;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                </th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyProyectosAdd">
+                                                            @{
+                                                                if (lkPermiso != null)
+                                                                {
+                                                                    if (lkPermiso.Count > 0)
+                                                                    {
+                                                                        foreach (var itemProy in lkPermiso)
+                                                                        {
+                                                                            if (itemProy.Id_Proyecto != null)
+                                                                            {
+                                                                                <tr id="@itemProy.Id_Proyecto" class="@itemProy.Id_Proyecto" +"TR">
+                                                                                    <td style="display:none;">@itemProy.Id_Cliente</td>
+                                                                                    <td style="display:none;">@itemProy.Id_Proyecto</td>
+                                                                                    <td nowrap>
+                                                                                        @*<button id="btnEliminar_@itemProy.Id_Proyecto" type="button" class="btn btn-sm" value="" onclick="EliminarFilaProy(this)" style="background:none">
+                                                                                            <font color="#d31519" size="2"><span aria-hidden="true" class="fa fa-trash-o"></span></font>
+                                                                                        </button>*@
+                                                                                        <div class="flat-toggle toggleProyectos" id="@itemProy.Id_Permiso" >
+                                                                                            @*<span>Invisibility</span>*@
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                    <td id="@itemProy.Id_Proyecto+TD">@itemProy.Codigo_Interno</td>
+                                                                                    <td>@itemProy.nom_cli</td>
+                                                                                    <td style="display:none;">@itemProy.Id_Permiso</td>
+                                                                                </tr>
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        }
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+                    <div class="panel-heading">
+                        @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                        <h4 class="text-bold">Notificacion-Mantenimiento Tablas&nbsp;&nbsp; </h4>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" style="height:50px; width:50px;">
+                                </a>
+                            </h6>
+
+                        </td>
+                        <td style="width:10px"></td>
+
+                        <td>
+                            @{
+                                //var dbe = new DataBase_Externo();En esta página se editaran los contratos y proyectos que fueron asignados al usuario.
+                                var lk = dbe.ObtenerDescripcionNoti(40);
+                                var descripcion = "";
+                                foreach (var item in lk)
+                                {
+                                    descripcion = item.Descripcion;
+                                }
+
+
+                            <p><center> @descripcion</center></p>
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+    @*<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>*@
+    <script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+
+
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+    @*<script src="~/Scripts/Modales.js"></script>*@
+
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+
+    <!--Filtro de Permisos
+    <script src="~/Scripts/MantPermisos/jsPermisos.js"></script>-->
+    <!--Paginador-->
+    <script src="~/Scripts/MantPermisos/Paginador.js"></script>
+
+
+    <!-- TogglePermiso
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/js/jquery.js"></script>
+    <script src="~/Content/bower_components/EstiloExterno/TogglePermisos/flat-toggle.js"></script>-->
+    <!--Alert Sweet2-->
+    <script src="~/Scripts/sweetalert2-7.32.2/package/dist/sweetalert2.all.min.js"></script>
+
+    <script type="text/javascript">
+
+
+
+
+        var contTabla = 0;
+        $('.flat-toggle').addClass('on');
+
+
+
+
+
+
+
+        $('.flat-toggle').on('click', function (e) {
+            if ($(this).hasClass('on')) {
+                $(this).removeClass('on');
+
+            } else {
+                $(this).addClass('on');
+
+                var id = e.target.id;
+
+                var nameToggle=$(this).prop("name");
+//                    $('.flat-toggle-Mant').css('background-color', '#8ce2ff');
+              //  alert(nameToggle);
+                //}
+
+
+
+            }
+        });
+        function TodoContratos(btnC) {
+            var filasCont = $("#tbodyContratosAdd").find("tr");
+
+            CadContratos =  '<div><center><table class="" style="font-size=12px;" >';
+            for (var e = 0; e < filasCont.length; e++) {
+
+                var celdasCont = $(filasCont[e]).find("td");
+                IdContratos = $(celdasCont[3]).text();
+
+                CadContratos = CadContratos + '<tr><td>' + IdContratos + '</td></tr>' + '<tr style="height:10px"></tr>';
+
+            }
+            CadContratos = CadContratos + '</table></center></div>';
+
+            //    console.log(CadProyectos);
+
+            swal({
+                title: '<h5><strong><label style="color:#3085d6">Contratos a agregar</label></strong></h5>',
+                // type: 'info',
+                html: CadContratos,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+                confirmButtonAriaLabel: 'Thumbs',
+            });
+
+        }
+
+        //ver todos
+        function TodosProyectos(btnP) {
+            var filasProyectos = $("#tbodyProyectosAdd").find("tr");
+            CadProyectos = '<div><center><table class="" style="font-size=12px;" >';
+            for (var e = 0; e < filasProyectos.length; e++) {
+
+                var celdasProy = $(filasProyectos[e]).find("td");
+                IdEmpresaProyT = $(celdasProy[3]).text();
+
+                CadProyectos = CadProyectos + '<tr><td>' + IdEmpresaProyT + '</td></tr>' + '<tr style="height:10px"></tr>';
+
+            }
+            CadProyectos = CadProyectos + '</table></center></div>';
+
+            //    console.log(CadProyectos);
+
+            swal({
+                title: '<h5><strong><label style="color:#3085d6">Proyectos a agregar</label></strong></h5>',
+                // type: 'info',
+                html: CadProyectos,
+                focusConfirm: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok',
+                confirmButtonAriaLabel: 'Thumbs',
+            });
+
+        }
+
+
+        var contOpcion = 0;
+        function ActualizarRegistro(btnGuardar) {
+
+            var resultadoCheck = [];
+            var resultadoEstadoContr = [];
+            var resultadoEstadoProy = [];
+            $('.checkOpciones:checked').each(function () {
+                var IdCheck = $(this).prop("id");
+                var Valor = 'S';
+                resultadoCheck.push(IdCheck);
+                contOpcion++;
+            });
+            //console.log(resultadoCheck);
+
+            if (contOpcion > 0) {
+
+
+                $('.toggleProyectos').each(function () {
+                    if ($(this).hasClass('on')) {
+
+                        // $(this).removeClass('on');
+                        //alert('if.');
+                        /*console.log("Proyecto  " + $(this).prop("id"));
+                        var idEstado = $(this).prop("id") ;
+                        resultadoEstado.push(idEstado);*/
+                    } else {
+                        console.log("Proyecto  " + $(this).prop("id"));
+                        var idEstado = $(this).prop("id");
+                        resultadoEstadoProy.push(idEstado);
+                    }
+
+                });
+                console.log('Proyectos');
+                console.log(resultadoEstadoProy);
+                $('.toggleContratos').each(function () {
+                    if ($(this).hasClass('on')) {
+                        // $(this).removeClass('on');
+                        /* console.log("Contrato  " + $(this).prop("id"));
+                         var idEstadoproy = $(this).prop("id");
+                         resultadoEstadoProy.push(idEstadoproy);*/
+                    } else {
+                        console.log("Contrato  " + $(this).prop("id"));
+                        var idEstadocontr = $(this).prop("id");
+                        resultadoEstadoContr.push(idEstadocontr);
+                    }
+                });
+
+                console.log('contratos');
+                console.log(resultadoEstadoContr);
+
+
+
+                //Recorrer tabla Contratos
+                var filasContratos = $("#tbodyContratosAdd").find("tr"); //devulve las filas del body de tu tabla
+                //....var resultadoContrato = [];// = "";
+
+                var ArrayMTPermiso = [];
+                for (i = 0; i < filasContratos.length; i++) { //Recorre las filas 1 a 1
+
+                    var celdas = $(filasContratos[i]).find("td"); //devolverá las celdas de una fila
+                    //IdEmpresaContT = $(celdas[0]).text();
+                    //IdEmpresaContT = IdEmpresaContT.replace(" ", "");
+
+                    //IdContratoT = $(celdas[1]).text();
+                    //IdContratoT = IdContratoT.replace(" ", "");
+
+                    Id_Usuario = null;
+                    Id_Cliente = null;
+                    Id_Contrato = null;
+
+                    Id_Permiso = $(celdas[5]).text();
+                    Id_Proyecto = null;
+                    Consultar = 'N';
+                    Modificar = 'N';
+                    Crear = 'N';
+                    Eliminar = 'N';
+
+                    if (resultadoCheck.includes("checkConsultar")) {
+                        Consultar = 'S';
+                    }
+                    if (resultadoCheck.includes("checkModificar")) {
+                        Modificar = 'S';
+                    }
+                    if (resultadoCheck.includes("checkCrear")) {
+                        Crear = 'S';
+                    }
+                    if (resultadoCheck.includes("checkEliminar")) {
+                        Eliminar = 'S';
+                    }
+
+                    /*
+                     Usuario = ;
+                     Fecha_Registro = ;
+                     Estado = 'A';       */
+                    Usuario = null;
+                    Fecha_Registro = null;
+                    Estado = 'A';
+                    if (resultadoEstadoContr.includes(Id_Permiso)) {
+                        Estado = 'I';
+                    }
+
+
+                    var MTPermiso = {
+
+                        //,
+                        Id_Usuario,
+                        Id_Cliente,
+                        Id_Contrato,
+                        Id_Proyecto,
+                        //Id_Tipo_Trabajo,
+                        //Id_Linea,
+                        Consultar,
+                        Modificar,
+                        Crear,
+                        Eliminar,
+                        Usuario,
+                        Fecha_Registro,
+                        Estado,
+                        Id_Permiso
+                    }
+                    ArrayMTPermiso.push(MTPermiso);
+                    contTabla++;
+                    // console.log(ArrayMTPermiso);
+                    //console.log('IdEmpresaCont:' + IdEmpresaContT + '  IdContratoT:'+IdContratoT);
+                }
+
+                var filasProyectos = $("#tbodyProyectosAdd").find("tr");
+                var resultadoProyectos = [];// = "";
+                for (vs = 0; vs < filasProyectos.length; vs++) {
+
+                    var celdasProy = $(filasProyectos[vs]).find("td"); //devolverá las celdas de una fila
+                    // IdEmpresaProyT = $(celdasProy[0]).text();
+                    // IdEmpresaProyT = IdEmpresaProyT.replace(" ", "");
+
+                    // IdProyectoT = $(celdasProy[1]).text();
+                    // IdProyectoT = IdProyectoT.replace(" ", "");
+
+
+
+                    Id_Usuario = null;
+                    Id_Cliente = null;
+                    Id_Contrato = null;
+                    Id_Proyecto = null;
+
+
+                    Id_Permiso = $(celdasProy[5]).text();
+                    Consultar = 'N';
+                    Modificar = 'N';
+                    Crear = 'N';
+                    Eliminar = 'N';
+
+                    Usuario = null;
+                    Fecha_Registro = null;
+                    Estado = 'A';
+                    if (resultadoEstadoProy.includes(Id_Permiso)) {
+                        Estado = 'I';
+                    }
+
+                    if (resultadoCheck.includes("checkConsultar")) {
+                        Consultar = 'S';
+                    }
+                    if (resultadoCheck.includes("checkModificar")) {
+                        Modificar = 'S';
+                    }
+                    if (resultadoCheck.includes("checkCrear")) {
+                        Crear = 'S';
+                    }
+                    if (resultadoCheck.includes("checkEliminar")) {
+                        Eliminar = 'S';
+                    }
+
+                    var MTPermisoProy = {
+
+
+                        Id_Usuario,
+                        Id_Cliente,
+                        Id_Contrato,
+                        Id_Proyecto,
+                        //Id_Tipo_Trabajo,
+                        //Id_Linea,
+                        Consultar,
+                        Modificar,
+                        Crear,
+                        Eliminar,
+                        Usuario,
+                        Fecha_Registro,
+                        Estado,
+                        Id_Permiso
+                    }
+                    ArrayMTPermiso.push(MTPermisoProy);
+                    contTabla++;
+
+                    // console.log('IdEmpresaProyT:' + IdEmpresaProyT + '  IdProyectoT:' + IdProyectoT);
+                }
+                console.log(ArrayMTPermiso);
+
+                var urlG = '@Url.Action("ActualizarPermisos", "Mantenimiento")';
+                AjaxGuardarMT_Permisos(urlG, ArrayMTPermiso);
+            } else { swal('', 'Favor seleccionar al menos una acción antes de guardar.', 'info');}
+        }
+
+        function AjaxGuardarMT_Permisos(urlG, ArrayMTPermiso) {
+            var jsonObjectPer = { lkEditarPermisos: ArrayMTPermiso };
+            if (contTabla > 0) {
+                if (contOpcion > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: urlG,
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(jsonObjectPer),
+
+                        success: function (mensaje) {
+                            if (mensaje.indexOf('!') != -1) {
+                                $("#DivDanger").css('display', 'block');
+                                $("#CadenaDanger").html(mensaje);
+                                $("#DivDanger").delay(4000).fadeOut(300);
+                                console.log(mensaje); //alert(mensaje);
+                            } else {
+
+
+                                /*
+                                $("#DivSucess").css('display', 'block');
+                                $("#CadenaSucess").html(mensaje);
+                                $("#DivSucess").delay(3000).fadeOut(300);
+                                console.log(mensaje); //alert(mensaje);
+                                location.reload();*/
+
+                                $("#DivWarning").css('display', 'block');
+                                $("#CadenaWarning").html(mensaje);
+                                $("#DivWarning").delay(3000).fadeOut(300);
+                                console.log(mensaje); //alert(mensaje);
+                               // location.reload();
+
+                                var url = '@Url.Action("MantPermisos", "Mantenimiento")';
+                                window.location.href = url;
+
+                            }
+                        },
+                        error: function () {
+                            //$("#DivError").css('display', 'block');
+                            //$("#DivError").delay(1000).fadeOut(300);
+                        }
+                    });
+                } else {
+                    swal('', 'Favor seleccionar un acción antes de guardar.', 'error');
+                }
+
+            } else { swal('', 'Favor agregar proyectos o contratos antes de guardar.', 'error'); }
+        }
+
+    </script>
+}

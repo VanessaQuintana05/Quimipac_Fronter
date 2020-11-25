@@ -1,0 +1,80 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.Login
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var listaEmpresas = ViewBag.empresas;
+}
+@*<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fronter | Log in</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+</head>
+<body class="hold-transition login-page">*@
+    <div class="login-box">
+        <div class="login-box-body">
+          
+            <p class="login-box-msg">Inicia Sesión</p>
+            @using (Html.BeginForm("IniciarSesion", "Home", FormMethod.Post, new { autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group has-feedback">
+            @Html.EditorFor(model => model.User_id, new { htmlAttributes = new { @class = "form-control is-valid", @placeholder = "Usuario", @type = "text", @required = "required" } })
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            @Html.ValidationMessageFor(model => model.User_id, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group has-feedback">
+            @Html.EditorFor(model => model.User_clave, new { htmlAttributes = new { @class = "form-control is-valid", @type = "password", @placeholder = "Password", @required = "required" } })
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            @Html.ValidationMessageFor(model => model.User_clave, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group has-feedback">
+            @Html.DropDownListFor(model => model.Id_empresa, (SelectList)listaEmpresas, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+            <span class="glyphicon glyphicon-briefcase form-control-feedback"></span>
+            @Html.ValidationMessageFor(model => model.Id_empresa, "", new { @class = "text-danger" })
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            </div>
+        </div>
+}
+        </div>
+    </div>
+    @*@Scripts.Render("~/Js")*@
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")*@
+@*</body>
+</html>*@
+
+@*@section scripts {
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/plugins/iCheck/icheck.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%'
+            });
+        });
+    </script>
+}*@

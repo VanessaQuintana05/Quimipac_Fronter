@@ -1,0 +1,327 @@
+﻿@model Quimipac_.Models.MT_TipoTrabajo
+
+@{
+    /**/
+
+    Layout = null;
+
+    var listaClientes = ViewBag.listaClientes;
+    var listaLineas = ViewBag.listaLineas;
+    var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+    var listaServicio = ViewBag.listaServicio;
+    var listaTrabajoPadre = ViewBag.listaTrabajoPadre;
+    var listaClasificacion = ViewBag.listaClasificacion;
+
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantTipoTrabajo");
+    attributes.Add("autocomplete", "off");
+
+}
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Editar_MantTipoTrabajo", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_TipoTrabajo)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Servicio:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Servicio, (SelectList)listaServicio, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Servicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*COMBO NORMAL LINEA*@
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Linea:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_Linea, (SelectList)listaLineas, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Id_Linea, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+        @*COMBO FILTRADO LINEA*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Unidad de negocio:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Linea, (SelectList)listaLineas, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Linea, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Input validador*@
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp; C&oacute;digo:</label>
+            <div class="col-md-10">
+                @* <div class="input-group">*@
+                @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Codigo, "", new { @class = "text-danger" })
+                @*<span class="input-group-addon border-left-0">*</span>*@
+                @*<span class="input-group-addon bg-gray border-left-0">*</span>*@
+
+                @*  </div> *@
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Descripci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Tipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Tipo, (SelectList)listaTipoTrabajo, htmlAttributes: new { @class = "form-control", @id = "comboTipos" })
+                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group" id="formTipoTrabajo">
+            <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Padre", (SelectList)listaTrabajoPadre, new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Tipo Trabajo Padre:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Padre, (SelectList)listaTrabajoPadre, htmlAttributes: new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Padre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Clasificación:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Clasificacion, (SelectList)listaClasificacion, htmlAttributes: new { @class = "form-control", @name = "Clasificacion" })
+                @Html.ValidationMessageFor(model => model.Clasificacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control item:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Item, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Item, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control equipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Equipo, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Equipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control integrante:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Integrante, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Integrante, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control anexo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Anexo, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Anexo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control par&aacute;metros:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Medida, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Medida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control costos:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Costo, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Costo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Control Raiz:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Control_Raiz, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Control_Raiz, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Proceso:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Proceso, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Proceso, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Alerta:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Alerta, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Alerta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Caida:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Caida, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Caida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+
+        $('#modal1').bootstrapValidator({
+            //    message:"Este valor no es valido",
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }//,
+
+            //fields: {
+            //    txtObligatorio: {
+            //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+            //                 stringLength: {
+            //                     min: 3,
+            //                     max: 5,
+            //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+            //                 }
+            //             }
+            //    }
+            //}
+
+        });
+    })
+
+    $(document).ready(function () {
+
+
+        $('#comboTipos').on('change', function (event) {
+            var url = '@Url.Action("GetTiposTrabajo", "Mantenimiento", new { id = "param-id" })';
+            url = url.replace("param-id", event.target.value);
+            ejecutaAjax('comboTipoTrabajo', url);
+        });
+
+
+    });
+
+    function ejecutaAjax(id, url) {
+
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+
+                $("#" + id).empty();
+                $.each(data, function (i, item) {
+
+                    var seleccion = '';
+                    if (i == 0) {
+
+                        $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        //$("#" + id).append("<option value='" + data[i].Value + "' selected='" + seleccion + "'>" + data[i].Text + "</option>");
+                    }
+                    else {
+                        $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                    }
+                });
+
+            },
+            error: function (data) {
+                window.location.href = '@Url.Action("Error","Errores")';
+                //window.location.href = '/Errores/Error';
+            }
+
+        });
+    }
+
+</script>

@@ -1,0 +1,152 @@
+﻿
+@model Quimipac_.Models.MT_Planilla_Detalle
+
+@{
+    Layout = null;
+
+    var listaItems = ViewBag.listaItems;
+
+    //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
+    //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarDetallePlanilla");
+    attributes.Add("autocomplete", "off");
+
+}
+@*<link rel="stylesheet" href="~/Content/plugins/timepicker/bootstrap-timepicker.min.css">*@
+
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+<link href="~/Content/jquery.timepicker.css" rel="stylesheet" />
+
+
+
+@*Tamno imagen Info*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+@*Pinta contorno txt Obligatorio
+    <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+*@
+
+@*@using (Html.BeginForm("Editar_Actividades_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_Detalle_Planilla", "Planilla", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Planilla_Detalle)
+        @Html.HiddenFor(model => model.Id_Planilla)
+        
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Items:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Item, (SelectList)listaItems, htmlAttributes: new { @class = "form-control select2" })
+                @Html.ValidationMessageFor(model => model.Id_Item, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;Cantidad:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;Precio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;Valor:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @step = "0.001", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;Iva:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IVA, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.IVA, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*<script src="~/Content/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/jquery.timepicker.js"></script>
+
+<script src="~/Content/datepair.js"></script>
+<script src="~/Content/jquery.datepair.js"></script>
+
+@*filtro combox*@
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $('#comboObligatorioEditar').change(function (e) {
+
+        if ($(this).val() == "S") {
+
+            $('#pesoEditar').prop("hidden", false);
+        }
+        else {
+            $('#pesoEditar').prop("hidden", true);
+        }
+
+    })
+
+    $(document).ready(function () {
+
+
+        $('#datepairExample .time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            minTime: '00:15:00',
+            maxTime: '23:59:59',
+            interval: 15,
+            step: 15
+        });
+
+        $('#datepairExample').datepair();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+    });
+
+
+
+
+
+</script>

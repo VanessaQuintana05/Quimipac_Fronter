@@ -1,0 +1,560 @@
+﻿@model Quimipac_.Models.MT_PrecioReferencial
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaContratos = ViewBag.listaContratos;
+    var listaProyectos = ViewBag.listaProyectos;
+    var listaItems = ViewBag.listaItems;
+    var listaMoneda = ViewBag.listaMoneda;
+    var listaTipos = ViewBag.listaTipos;
+    var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+    string FechaRegistro = Convert.ToDateTime(Model.Fecha_Registro).ToString("MM/dd/yyyy");
+    string[] Separador = FechaRegistro.Split('/');
+    FechaRegistro = Separador[1] + '/' + Separador[0] + '/' + Separador[2];
+
+
+
+
+    string fecha_a = Convert.ToDateTime(Model.Fecha_Inicio).ToString("MM/dd/yyyy");
+    string fecha_c = Convert.ToDateTime(Model.Fecha_Fin).ToString("MM/dd/yyyy");
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantPrecioReferencial");
+    attributes.Add("autocomplete", "off");
+
+    var cnt = 0;
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">*@
+
+@*@using (Html.BeginForm("Editar_MantPrecioReferencial", "Mantenimiento", FormMethod.Post, attributes))*@
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+
+<title>Fronter | Editar Precio Referencial</title>
+
+
+
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        <font id="itemTitulo">
+            Editar / 
+        </font>Precio Referencial
+    </h2>
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-link"></i>Home</a></li>
+        <li><a href="@Url.Action("MantPrecioReferencial", "Mantenimiento")">MantPrecio Referencial</a></li>
+        <li class="active">Editar Precio Referencial</li>
+    </ol>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert-alert-danger" id="DivDanger" style="display:none">
+                <strong><label id="CadenaDanger"></label> </strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" id="DivSucess" style="display:none">
+                <strong><label id="CadenaSucess"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" id="BordeDiv">
+                <div class="box-header">
+                </div>
+                <div class="box-body" id="CssDivBox">
+
+                    <div class="col-md-12">
+
+                        @using (Html.BeginForm("Editar_MantPrecioReferencial", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal2" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default panel-default">
+                                    <div class="panel-heading" style="">
+                                        <h5 class="panel-title text-bold" style="padding:5px 0 0 0;">
+                                            &nbsp;&nbsp; Parametros a ingresar
+                                        </h5>
+                                    </div>
+                                    <div class="panel-body">
+                                        <br />
+
+
+                                        <!--  <div class="panel panel-default"><div class="panel-body">   DivContendor <div class="form-group col-md-12" style="border:none">-->
+
+
+                                        <div class="form-group">
+                                            <table>
+                                                <tr>
+                                                    <td><label for="recipient-name" class="col-md-1 control-label">&nbsp;&nbsp;&nbsp;Tipo:</label></td>
+                                                    <td><span style="margin-left:38px"></span></td>
+                                                    <td>
+                                                        <div class="col-md-4" style="padding:0 40px 0 0">
+                                                            @Html.DropDownList("Id_TipoTablaDetalle", (SelectList)listaTipos, new { @class = "form-control", @id = "comboTipos", @style = "width:138px" })
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </div>
+
+
+
+                                        <div class="" id="formContrato">
+                                            <label for="recipient-name" class="col-md-1 control-label">Contratos:</label>
+                                            <div class="col-md-2">
+                                                @Html.DropDownList("Id_Proyecto_Contrato", (SelectList)listaContratos, new { @class = "form-control select2", @id = "comboContratos" })
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="" id="formProyecto">
+                                            <label for="recipient-name" class="col-md-1 control-label">Proyectos:</label>
+                                            <div class="col-md-2">
+                                                @Html.DropDownList("Id_Proyecto_Contrato", (SelectList)listaProyectos, new { @class = "form-control select2", @id = "comboProyectos" })
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="">
+                                            <label for="status" class="col-md-1 control-label">Tipo de Trabajo:</label>
+                                            <div class="col-md-3">
+                                                @Html.DropDownList("Id_TipoTrabajo", (SelectList)listaTipoTrabajo, new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
+                                                @*  @Html.DropDownList("Id_TipoTrabajo", (SelectList)listaTipoTrabajo, new { @class = "form-control select2", @id = "Id_TipoTrabajo" })*@
+                                                @*@Html.ValidationMessage("Id_TipoTrabajo", "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- <div class="" style="display:block">
+                                            <label for="status" class="text-bold col-md-2 control-label">Items:</label>
+                                            <div class="col-md-4">
+                                                Html.DropDownList("Id_Item", (SelectList)listaItems, new { class = "form-control select2", id = "comboItemsTipoTrabajo", style = "width: 100%" })
+                                            </div>
+                                        </div>-->
+
+                                        <div class="">
+                                            <label for="status" class="text-bold col-md-2 control-label">Moneda:</label>
+                                            <div class="col-md-2">
+                                                @Html.DropDownListFor(model => model.Moneda, (SelectList)listaMoneda, new { @class = "form-control select2", @id = "comboMoneda", @style = "width: 100%" })
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <hr />
+                                        <div class="form-group">
+                                            @*<label for="status" class="text-bold col-md-2 control-label"></label>*@
+                                            <div class="table-responsive col-md-12" style="padding:5px 15px 5px 15px">
+                                                @* table table-bordered table-hover  ">     table id="tablaPreciosItems" border="1">*@
+                                                <table style="font-size:10pt" class="table table-bordered" id="tablaMPR">
+                                                    <thead id="theadItems" style="background:#fcf8e4">
+
+                                                        <tr>
+                                                            <th style="display:none;">Items</th>
+                                                            <th>Descripción</th>
+                                                            <th style="text-align:center;">Unidad</th>
+                                                            <th style="text-align:center;">Fecha Inicio</th>
+                                                            <th style="text-align:center;">Fecha Fin</th>
+                                                            @* <th>Moneda</th>*@
+                                                            <th style="text-align:center;">Precio</th>
+                                                            <th style="text-align:center;">Costo</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+
+                                                    </thead>
+                                                    <tbody id="tbodyItems">
+                                                        @foreach (var item in listaItems)
+                                                        {
+
+                                                            string fi = String.Format("{0:MM/dd/yyyy}", item.Fecha_Inicio);
+                                                            string ff = String.Format("{0:MM/dd/yyyy}", item.Fecha_Fin);
+                                                            // var n = String.Format("{0:MM/dd/yyyy}", item.Fecha_Inicio);/*string [] separadorfi = fi.Split(" ");
+
+                                                            string[] separador = fi.Split('/');
+                                                            fi = separador[1] + "/" + separador[0] + "/" + separador[2];
+
+                                                            string[] separadorFI = ff.Split('/');
+                                                            ff = separadorFI[1] + "/" + separadorFI[0] + "/" + separadorFI[2];
+                                                            string precio = String.Format("{0:0.00}", item.Precio);
+                                                            string costo = String.Format("{0:0.00}", item.Costo);
+
+                                                            <tr>
+                                                                <td nowrap style="display:none">@item.Id_Item</td>
+                                                                <td nowrap>@item.Descripcion</td>
+                                                                <td nowrap style="text-align:center;">@item.Unidad</td>
+                                                                <td nowrap style="text-align:center;"><input type="text" style="width:100px;height:30px;border:0;" name="" onkeyup="mascara(this,true)" maxlength="10" value="@fi" placeholder="dd/mm/yyyy" /></td>
+                                                                <td nowrap style="text-align:center;"><input type="text" style="width:100px;height:30px;border:0;" name="fecha" onkeyup="mascara(this,true)" maxlength="10" value="@ff" placeholder="dd/mm/yyyy" /></td>
+                                                                <td nowrap style="text-align:center;"><input type="text" style="width:70px;height:30px;border:0;text-align:center;" value="@precio" /></td>
+                                                                <td nowrap style="text-align:center;"><input type="text" style="width:70px;height:30px;border:0;text-align:center;" value="@costo" /></td>
+                                                                <td nowrap style="text-align:center;">
+                                                                    <select id="@cnt" name="">
+                                                                        @if (item.Estado.Equals("A"))
+                                                                        {
+                                                                            <option value="A">@item.Estado</option>
+                                                                            <option value="I">I</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="A">A</option>
+                                                                            <option value="I">@item.Estado</option>
+                                                                        }
+                                                                    </select>
+                                                                </td>
+                                                                <td nowrap style="display:none">@item.Id_PrecioReferencial</td>
+                                                            </tr>
+                                                            cnt++;
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+                                        <!--item.Estado-->
+                                        <!-- </div>Fin Div Contenedor</div>-->
+                                        <div class="modal-footer">
+                                            @*  <button type="button" class="btn btn-default" data-dismiss="modal">Guardar</button>*@
+                                            @*<button type="button" class="Crear_MTPR btn btn-warning" onclick="GuardarPrecioReferencial(this)">Crear</button>
+                                                <input type="submit" id="btnSubmitAgregarPrecioReferencial" hidden="hidden" />*@
+
+                                            <button id="btnGuardarTabla" type="button" class="btn btn-warning" onclick="resultado(this);">Guardar</button>
+
+                                            @*   <input type="text" name="fecha" onkeyup="mascara(this,true)" maxlength="10" />*@
+                                            @*<input type="submit" hidden="hidden" />*@
+                                            @* </div> *@
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.HiddenFor(model => model.Id_PrecioReferencial)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!--COMBOX EDITABLE-->
+@*<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+    <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>*@
+
+<!--VaLIDATOR txt-->
+@*<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>*@
+@*...no<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>*@
+@*...................................................................................................*@
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+
+<script src="~/Content/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="~/Content/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="~/Content/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.3.7/bootstrap.min.js"></script>
+<!--PickerAjax-->
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<!--alert-->
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+<script type="text/javascript">
+    //$(document).ready(function () {        //$('.select2').select2();
+    $('.select2').select2({
+        dropdownParent: $('#modal2')
+    });
+
+        if ($("#comboTipos option:selected").val() == 1)
+        {
+            $('#formContrato').prop("hidden", true);
+        }
+        else
+        {
+            $('#formProyecto').prop("hidden", true);
+        }
+
+        $('#comboTipos').change(function (e)
+        {
+            if ($("#comboTipos option:selected").val() == 1)
+            {
+                $('#formProyecto').prop("hidden", false);
+                $('#formContrato').prop("hidden", true);
+            }
+            else {
+                $('#formProyecto').prop("hidden", true);
+                $('#formContrato').prop("hidden", false);
+            }
+        });
+
+        @*$('#comboTipos').on('change', function (event)
+        {
+                var url = '@Url.Action("GetTiposTrabajo", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+                ejecutaAjax('comboTipoTrabajo', url);
+        });*@
+
+        function GuardarPrecioReferencial(form) {
+            var fecha_ap = $('#datepickerOpenE').val();
+            var fecha_ci = $('#datepickerCloseE').val();
+
+            var datearray1 = fecha_ap.split("/");
+            var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+
+            var datearray2 = fecha_ci.split("/");
+            var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+            var FechaReg = Date.parse('@FechaRegistro');
+            var primera = Date.parse(newdate_ap);
+            var segunda = Date.parse(newdate_ci);
+            alert(dater + '.....' + primera + '  P' + segunda + '  S' + ' R' + FechaReg);
+            if (FechaReg >= primera) {
+                   if (segunda < primera) {
+                         swal('', 'Fecha cierre debe ser mayor que fecha apertura', 'error');
+                    }
+                    else {
+                        var obj = document.getElementById("btnSubmitAgregarPrecioReferencial");
+                        if (obj) {
+                            obj.click();
+                        }
+                    }
+            }
+            else {
+                    swal('', 'Fecha de apertura debe ser mayor que fecha de registro', 'error');
+                }
+        }
+
+
+      //  $('#datepickerOpenE').val(moment(start))/*.format('DD/MM/YYYY'))*/
+       // $('#datepickerCloseE').val(moment(end))/*.format('DD/MM/YYYY'))*/
+
+
+     $('#comboTipos').on('change', function (event)
+        {
+                var url = '@Url.Action("GetTiposTrabajoPrecioRef", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+           //     ejecutaAjax('comboTipoTrabajo', url);
+        });
+
+         function ejecutaAjax(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+
+                        var seleccion = '';
+                        if (i == 0)
+                        {
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                            //$("#" + id).append("<option value='" + data[i].Value + "' selected='" + seleccion + "'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+            });
+        }
+
+         $("#comboTipos").prop("disabled", true);
+         $("#comboContratos").prop("disabled", true);
+         $("#comboProyectos").prop("disabled", true);
+         $("#comboTipoTrabajo").prop("disabled", true);
+
+         function mascara(d, nums) {
+             var sep = "/";
+             var pat = new Array(2, 2, 4)
+             //var patron2 = new Array(1, 3, 3, 3, 3)
+
+             if (d.valant != d.value) {
+                 val = d.value
+                 largo = val.length
+                 val = val.split(sep)
+                 val2 = ''
+                 for (r = 0; r < val.length; r++) {
+                     val2 += val[r]
+                 }
+                 if (nums) {
+                     for (z = 0; z < val2.length; z++) {
+                         if (isNaN(val2.charAt(z))) {
+                             letra = new RegExp(val2.charAt(z), "g")
+                             val2 = val2.replace(letra, "")
+                         }
+                     }
+                 }
+                 val = ''
+                 val3 = new Array()
+                 for (s = 0; s < pat.length; s++) {
+                     val3[s] = val2.substring(0, pat[s])
+                     val2 = val2.substr(pat[s])
+                 }
+                 for (q = 0; q < val3.length; q++) {
+                     if (q == 0) {
+                         val = val3[q]
+                     }
+                     else {
+                         if (val3[q] != "") {
+                             val += sep + val3[q]
+                         }
+                     }
+                 }
+                 d.value = val
+                 d.valant = val
+             }
+         }
+
+         function resultado(btn) {
+             var filas = $("#tbodyItems").find("tr"); //devulve las filas del body de tu tabla segun el ejemplo que brindaste
+             var resultadoEdit = [];// = "";
+             var r = "";
+
+             for (i = 0; i < filas.length; i++) {
+                 var celdas = $(filas[i]).find("td");
+
+                // Id_Item = $(celdas[0]).text();
+                 Unidad = $(celdas[2]).text();;
+                 Fecha_Inicio = $($(celdas[3]).children("input")[0]).val();
+                 Fecha_Fin = $($(celdas[4]).children("input")[0]).val();
+                 //Moneda = $($(celdas[3]).children("input")[0]).val();
+                 Precio = $($(celdas[5]).children("input")[0]).val();
+                 if (Precio.includes(",")) {
+                     Precio = Precio.replace(",", ".");
+                 }
+                 Costo = $($(celdas[6]).children("input")[0]).val();
+                 if (Costo.includes(",")) {
+                     Costo = Costo.replace(",", ".");
+                 }
+                 Estado = document.getElementById(i).value;
+                 Id_PrecioReferencial = $(celdas[8]).text();
+
+                 var fila = {
+
+                     //Id_Item,
+                     Unidad,
+                     Fecha_Inicio,
+                     Fecha_Fin,
+                     //Moneda,
+                     Precio,
+                     Costo,
+                     Estado,
+                     Id_PrecioReferencial
+                 };
+                 resultadoEdit.push(fila);
+             }
+             console.log(resultadoEdit);
+
+            var url = '@Url.Action("EditarPreReferencial","Mantenimiento")';
+            ejecutaAjaxEditarPreReferencial(url, resultadoEdit);
+         }
+
+         function ejecutaAjaxEditarPreReferencial(url, resultadoEdit) {
+
+             var ValueProyCont = 0;
+           /*  var combo = document.getElementById("comboTipos");
+             var selected = combo.options[combo.selectedIndex].text;
+
+
+             var ValueTipo = document.getElementById("comboTipos").value;
+
+             if (selected == 'PROYECTO') {//alert('Value :' + valueTipo + '       ' + 'Select: ' + selected);
+                 ValueProyCont = document.getElementById("comboProyectos").value;
+             } else {
+                 ValueProyCont = document.getElementById("comboContratos").value;
+             }
+            // var ValueTipoTrab = document.getElementById("comboTipoTrabajo").value;*/
+             var ValueMoneda = document.getElementById("comboMoneda").value;
+
+
+             var jsonObject = { lkItems: resultadoEdit, ValueMoneda: ValueMoneda };// ValueTipoTrab: ValueTipoTrab, ValueMoneda: ValueMoneda };
+
+             $.ajax({
+                 type: 'POST',
+                 url: url,
+                 data: 'json',
+                 contentType: 'application/json; charset=utf-8',
+                 data: JSON.stringify(jsonObject),
+                 success: function (mensaje) {
+                     if (mensaje.indexOf('!') != -1) {
+                         $("#DivDanger").css('display', 'block');
+                         $("#CadenaDanger").html(mensaje);
+                         $("#DivDanger").delay(4000).fadeOut(300);
+                         console.log(mensaje); //alert(mensaje);
+                         swal('', 'Error durante el proceso, favor verificar datos de ingreso', 'error');
+                     } else {
+                         $("#DivSucess").css('display', 'block');
+                         $("#CadenaSucess").html(mensaje);
+                         $("#DivSucess").delay(4000).fadeOut(300);
+                         
+                         console.log(mensaje); //alert(mensaje);
+                         location.reload();
+                     }
+                 },
+                 error: function () {
+                     swal('', 'Error durante el proceso, favor verificar datos de ingreso', 'error');
+                     //window.location.href = 'Url.Action("Error","Errores")';
+
+                 }
+             });
+    }
+</script>
+
+

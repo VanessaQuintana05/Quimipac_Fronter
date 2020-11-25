@@ -1,0 +1,117 @@
+﻿
+@model Quimipac_.Models.MT_OrdenTrabajo_Medida
+
+@{
+    Layout = null;
+
+    var listaMedidas = ViewBag.listaMedidas;
+    //string fecha_a = Convert.ToDateTime(Model.Fecha_Inicio).ToString("MM/dd/yyyy");
+    //string fecha_c = Convert.ToDateTime(Model.Fecha_Fin).ToString("MM/dd/yyyy");
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMedidasOrdenTrabajo");
+    attributes.Add("autocomplete", "off");
+
+    //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
+    //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
+
+
+
+}
+@*<link rel="stylesheet" href="~/Content/plugins/timepicker/bootstrap-timepicker.min.css">*@
+
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+
+
+@*Tamno imagen Info*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+@*Pinta contorno txt Obligatorio
+    <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+*@
+
+@*@using (Html.BeginForm("Editar_Actividades_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_Medidas_OrdenTrabajo", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Orden_Trabajo_Medida)
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Medida:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Tipo_Trabajo_Medida, (SelectList)listaMedidas, htmlAttributes: new { @class = "form-control select2", @Disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Id_Tipo_Trabajo_Medida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Valor Inicial:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Valor_Ini, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @step = "0.001", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Valor_Ini, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Valor Final:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Valor_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = 0, @step = "0.001", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Valor_Fin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*<script src="~/Content/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+<script src="~/Content/datepair.js"></script>
+<script src="~/Content/jquery.datepair.js"></script>
+
+@*filtro combox*@
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script type="text/javascript">
+
+
+
+
+    $(document).ready(function () {
+
+
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+    });
+
+
+
+
+
+</script>

@@ -1,0 +1,420 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_OrdenTrabajo_Integrante
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaIntegrantesOrdenTrabajo = ViewBag.listaIntegrantes_OrdenTrabajo as List<sp_Quimipac_ConsultaInsMT_IntegranteOrdenTrabajo_Result>;
+    var orden_trabajo = ViewBag.orden_trabajo;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+    <title>Fronter | Integrantes Orden de Trabajo Automatizacion</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<section class="content-header">
+    @{
+
+        int cadena = 0;
+        <h2 style="text-align:left">
+
+
+            @*@foreach (var lkIntegrantesOT in listaIntegrantesOrdenTrabajo)
+        {
+            if (cadena >= 0)
+            {*@
+            <font id="itemTitulo">  @Html.DisplayFor(model => orden_trabajo)</font>
+
+            @*break;
+            }
+
+            else
+            {
+                @cadena;
+        }
+
+        }*@
+            / Integrantes Orden de Trabajo Automatizacion
+
+
+        </h2>
+    }
+
+    <ol class="breadcrumb">
+        <li><i class="fa fa-link">
+</i><a href="@Url.Action("Default", "Main")">Home</a></li>
+        <li><a href="@Url.Action("OrdenTrabajo_Automatizacion", "OrdenTrabajo_Automatizacion")">Orden de Trabajo Automatizacion</a></li>
+        <li class="active">Equipos Grupo de Trabajo</li>
+    </ol>
+    <br>
+
+    <div class="row">
+        <div class="col-md-2">
+            @if (oPermiso.Crear == true)
+            {
+                <button id="btnAgregarIntegranteOrdenTrabajo" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarIntegranteOrdenTrabajo">
+
+                    <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp; Agregar Integrante
+                </button>
+            }
+            </div>
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id ="BordeDiv">
+                @*<div class="box-header">
+                        <br />
+                        <h3 class="box-title">Integrantes Orden de Trabajo</h3>
+                    </div>*@
+                <div class="box-body" id="CssDivBox">
+                    @{
+                        if (listaIntegrantesOrdenTrabajo.Count != 0)
+                        {
+                            <div class="table-responsive">
+                                <table id="tablaIntegrantesOrdenTrabajo" class="js-dynamitable table table-bordered">
+                                    @*class="table table-bordered table-hover"*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acci&oacute;n</th>
+                                            <th>C&oacute;digo</th>
+                                            <th>Nombre Grupo</th>
+                                            <th>Nombre Integrante</th>
+                                            <th>Rol</th>
+                                            <th>Fecha de Inicio</th>
+                                            <th>Fecha de Finalizaci&oacute;n</th>
+                                            <th>Estado</th>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <th><input class="js-filter form-control table-responsive" type="text" value="" placeholder="Codigo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Nombre Grupo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Nombre Integrante"></th>
+                                            <th>
+                                                <select class="js-filter  form-control">
+                                                    <option value=""></option>
+                                                    <option value="Jefe">Jefe</option>
+                                                    <option value="Integrante">Integrante</option>
+                                                </select>
+                                            </th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Inicio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Finalizacion"></th>
+                                            <th>
+                                                <select class="js-filter  form-control">
+                                                    <option value=""></option>
+                                                    <option value="A">A</option>
+                                                    <option value="I">I</option>
+                                                </select>
+                                            </th>
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var lkIntegranteOrdenTrabajo in listaIntegrantesOrdenTrabajo)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    @if (oPermiso.Modificar == true)
+                                                    {
+                                                        <button type="button" class="Modificar_MTPR btn btnEditarBoton class_editar_IntegranteOrdenTrabajo" style="text-align:center" title="Editar" data-toggle="modal" data-target="#modalEditarIntegranteOrdenTrabajo" data-id="@lkIntegranteOrdenTrabajo.Id_OrdenTrabajo_Integrante">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                </span>*@
+                                                        </button>
+                                                    }
+
+                                                    @if (oPermiso.Eliminar == true)
+                                                    {
+                                                        <a href="@Url.Action("Eliminar_IntegranteOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = lkIntegranteOrdenTrabajo.Id_OrdenTrabajo_Integrante })" target="_self" class="Eliminar_MTPR btn btnEliminarBoton" title="Eliminar" style="text-align:center">
+                                                            @*    <span aria-hidden="true" class="glyphicon glyphicon-remove"> </span>*@
+                                                        </a>
+                                                    }
+
+                                                    </td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Codigo_Cliente)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Nombre)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Nombre_Completo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Descripcion_Rol)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Fecha_Inicio)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Fecha_Fin)</td>
+                                                <td nowrap>@Html.DisplayFor(model => lkIntegranteOrdenTrabajo.Estado)</td>
+
+                                            </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAgregarIntegranteOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;Agregar Integrante de Orden Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario es para el Ingreso de Integrantes de orden de trabajo" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaIntegranteOrdenTrabajo">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Integrantes Orden de Trabajo&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; a los Integrantes de la Orden de Trabajo</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="modalEditarIntegranteOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Integrante de Grupo Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+                <div id="modal-editaIntegranteOrdenTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Scripts/Modales.js"></script>
+
+   
+    <script type="text/javascript">
+
+        modalAdd('#btnAgregarIntegranteOrdenTrabajo', 'modal-agregaIntegranteOrdenTrabajo', '@Url.Action("Agregar_Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion")');
+        modalEdit('.class_editar_IntegranteOrdenTrabajo', 'modal-editaIntegranteOrdenTrabajo', '@Url.Action("Editar_Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = "param-id" })');
+
+        $(document).ready(function () {
+
+                @*modalAdd('#btnAgregarEquipoOrdenTrabajo', 'modal-agregaEquipoOrdenTrabajo', '@Url.Action("Agregar_EquipoOrdenTrabajo", "OrdenTrabajo_Automatizacion")');
+                modalEdit('.class_editar_EquipoOrdenTrabajo', 'modal-editaEquipoOrdenTrabajo', '@Url.Action("Editar_Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id  = "param-id"})');*@
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+            $.noConflict();
+            $('#tablaIntegrantesOrdenTrabajo').DataTable({
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+
+            //$('#tablaEquiposGrupoTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+        });
+
+    </script>
+}
+
+

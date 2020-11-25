@@ -1,0 +1,276 @@
+﻿@model Quimipac_.Models.MT_Planilla
+
+@{
+    Layout = null;
+
+    //var listaProyectos = ViewBag.listaProyectos;
+    // var listaContratos = ViewBag.listaContratos;
+    //var listaItems = ViewBag.listaItems;
+    //var listaMoneda = ViewBag.listaMoneda;
+    //var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+
+
+
+    var listaContratos = ViewBag.listaContratos;
+    var listaProyectos = ViewBag.listaProyectos;
+    var listaMoneda = ViewBag.listaMoneda;
+    var listaTipos = ViewBag.listaTipos;
+    var listaEstado = ViewBag.listaEstado;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarPlanilla");
+    attributes.Add("autocomplete", "off");
+
+}
+
+@*<link rel="stylesheet" href="~/Content/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link href="~/Content/bower_components/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/timepicker/bootstrap-timepicker.min.css">
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+
+    <link href="~/Content/jquery.timepicker.css" rel="stylesheet" />*@
+
+
+
+@*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+@*@using (Html.BeginForm("Agregar_Planilla", "Planilla", FormMethod.Post, attributes))*@
+
+
+@*//COMBO FILTRABLE*@
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@* Boton input archivo *@
+<link href="~/Content/bower_components/bootstrap/dist/css/file-input.css" rel="stylesheet" />
+@* hasta aqui *@
+@*@using (Html.BeginForm("Agregar_Planilla", "Planilla", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))*@
+@*@using (Html.BeginForm("Agregar_Planilla", "Planilla", FormMethod.Post, new { enctype = "multipart/form-data", @type = "button" }))//, new { @id = "modal1" })
+{*@
+<form action="/Planilla/Agregar_Planilla/" enctype="multipart/form-data" method="post" type="button" id="modal1">
+    
+  @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Tipo:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Tipo", (SelectList)listaTipos, new { @class = "form-control", @id = "comboTipos", @style = "width:100%;" })
+            </div>
+        </div>
+
+        <div class="form-group" id="formContrato">
+            <label for="recipient-name" class="col-md-2 control-label">Contratos:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("ContratoID", (SelectList)listaContratos, new { @class = "form-control select2", @name = "ContratoID", @id = "ContratoID", @style = "width:100%;" })
+            </div>
+        </div>
+
+        <div class="form-group" id="formProyecto">
+            <label for="recipient-name" class="col-md-2 control-label">Proyectos:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("ProyectoID", (SelectList)listaProyectos, new { @class = "form-control select2", @name = "ProyectoID", @id = "ProyectoID", @style = "width:100%;" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6" style="width:250px">
+                <input type="file" name="excelfile" id="file-1" class="inputfile inputfile-1" style="background: #f39c12;color: white;border: none;height: 30px;" data-multiple-caption="{count} archivos seleccionados" multiple /><label for="file-1" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" class="iborrainputfile" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg><span class="iborrainputfile">Seleccionar archivo</span></label>
+                @*<input type="submit" value="Import" name="file-1" id="file-1" class="inputfile inputfile-1" /><label for="file-1"><span class="iborrainputfile">Import</span></label>*@
+                @*<input type="hidden" id="contrato_excel" name="contrato_excel" value="">*@
+            </div>
+        </div>
+
+
+
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>*@
+
+
+
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+                <div class="col-md-10">
+                    @Html.DropDownList("Estado", (SelectList)listaEstado, new { @class = "form-control", @id = "comboEstado" })
+                </div>
+            </div>*@
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            @*<button type="button" class="btn btn-warning" onclick="GuardarPlanilla(this)">Crear</button>*@
+            @*<input type="submit" id="btnSubmitAgregarPlanilla" hidden="hidden" value="Import" style="background: #f39c12;color: white;border: none;height: 30px; position: relative;" /><label for="file-1"></label>*@
+            @* <input type="submit" id="btnSubmitAgregarPlanilla" value="Import" style="background: #f39c12;color: white;border: none;height: 30px; position: relative;" /><label for="file-1"></label>*@
+            <input type="submit" value="Import" style="background: #f39c12;color: white;border: none;height: 30px; position: relative;" /><label for="file-1"></label>
+
+        </div>
+    </div>
+@*}*@
+</form>
+
+@*COMBO FILTRABLE*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script src="~/Content/bower_components/EstiloExterno/JsExterno/custom-file-input.js"></script>
+<script type="text/javascript">
+
+        start = new Date(moment().subtract(0, 'days'));
+        end = new Date(moment());
+
+        $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+        $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+        $('#datepickerOpenA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+        $('#datepickerCloseA').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+
+
+        if ($("#comboTipos option:selected").val() == 1)
+        {
+
+            $('#formContrato').prop("hidden", true);
+        }
+        else
+        {
+
+            $('#formProyecto').prop("hidden", true);
+        }
+
+        $('#comboTipos').change(function (e)
+        {
+            if ($("#comboTipos option:selected").val() == 1)
+            {
+
+                $('#formProyecto').prop("hidden", false);
+                $('#formContrato').prop("hidden", true);
+            }
+            else {
+
+                $('#formProyecto').prop("hidden", true);
+                $('#formContrato').prop("hidden", false);
+            }
+        });
+
+
+         
+
+         function GuardarPlanilla(form) {
+
+             //var fecha_ap = $('#datepickerOpenA').val();
+             //var fecha_ci = $('#datepickerCloseA').val();
+
+             //var datearray1 = fecha_ap.split("/");
+             //var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+
+             //var datearray2 = fecha_ci.split("/");
+             //var newdate_ci = datearray2[1] + '/' + datearray2[0] + '/' + datearray2[2];
+
+             //var primera = Date.parse(newdate_ap);
+             //var segunda = Date.parse(newdate_ci);
+
+             //if (segunda < primera)
+             //{
+             //    swal('', 'Fecha cierre debe ser menor que fecha apertura', 'error');
+             //}
+             //else {
+             //    var obj = document.getElementById("btnSubmitAgregarPlanilla");
+
+             //    if (obj)
+             //    {
+             //        obj.click();
+
+             //    }
+
+             //}
+
+
+             
+
+         }
+
+
+         //INICIO COMBOX FILTRO
+         $(document).ready(function () {        //$('.select2').select2();
+             $('.select2').select2({
+                 dropdownParent: $('#modal1')
+             });
+         });//FIN COMBOX FILTRO
+
+
+           //TxtIconoObligatorio
+         $('#modal1').bootstrapValidator({
+             //    message:"Este valor no es valido",
+             feedbackIcons: {
+                 valid: 'glyphicon glyphicon-ok',
+                 invalid: 'glyphicon glyphicon-remove',
+                 validating: 'glyphicon glyphicon-refresh'
+             }//,
+
+             //fields: {
+             //    txtObligatorio: {
+             //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+             //                 stringLength: {
+             //                     min: 3,
+             //                     max: 5,
+             //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+             //                 }
+             //             }
+             //    }
+             //}
+
+         });
+
+
+   
+
+</script>

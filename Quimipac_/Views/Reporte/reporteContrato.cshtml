@@ -1,0 +1,1004 @@
+﻿@using Quimipac_.Models
+@*@model IEnumerable<Quimipac_.Models.MT_Contrato>*@
+@model Quimipac_.Models.sp_Quimipac_ConsultaMT_ContratoGeneral_Result
+@{
+    ViewBag.Title = "Index";
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listalkTipo = ViewBag.listalkTipo;
+    var listalkClienteC = ViewBag.listalkClienteC;
+    var listalkContratoPadre = ViewBag.listalkContratoPadre;
+    var listalkEstadoC = ViewBag.listalkEstadoC;
+    //var listalkLinea = ViewBag.listalkLinea;
+    //var listalkCategoria = ViewBag.listalkCategoria;
+    //var listakSubcategoria = ViewBag.listakSubcategoria;
+    var listalkReferencia = ViewBag.listalkReferencia;
+    var listalkLocalidad = ViewBag.listalkLocalidad;
+    var listakResponsable = ViewBag.listakResponsable;
+
+    var lkFiltro = TempData["listaFiltro"] as List<sp_Quimipac_ConsultaMT_ContratoGeneral_Result>;
+    var ParametroBusqueda = TempData["ParametroBusqueda"] as string;
+
+    if (lkFiltro != null)
+    {
+        ViewBag.ContratosSearch = lkFiltro;
+    }
+}
+<title>Fronter | Reporte Contrato</title>
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+<style>
+    #tablaContrato tr th,
+    #tablaContrato tr td {
+        padding: 2px;
+        text-align: center;
+    }
+
+    .btnReport_ {
+        background: no-repeat;
+        border: none;
+    }
+
+    #btnImprime:hover {
+        background: #ededed;
+    }
+
+    #btnReportExcel:hover {
+        background: #ededed;
+    }
+
+    #tablaContrato tr {
+        border-bottom: none !important;
+    }
+    /*@@page {
+        size: 25cm 35.7cm;
+        margin: 5mm 5mm 5mm 5mm;
+    }*/
+    /*@@media{
+               @@page { size: landscape; }
+        }*/
+    /*@@media print {
+         div#imprimeDIV {
+             writing-mode: tb-rl;
+             height: 80%;
+             margin: 10% 0%;
+         }
+     }*/
+    .select2 {
+        font-size: 8px !important;
+    }
+    #formFilter {
+        margin-top: 0;
+    }
+</style>
+<section class="content-header">
+
+    <h2 style="text-align:left">
+            Reporte de Contratos y Proyectos
+        </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li><a href="@Url.Action("Contrato", "Contrato")">Contratos y Proyectos</a></li>
+        <li class="breadcrumb-item active">Reportes Contratos y Proyectos</li>
+    </ol>
+    <br>
+
+
+    @*<div class="row">
+            <div class="col-md-2">
+                @/* @ if (oPermiso.Crear == true)
+                    {
+                        <button id="btnAgregarContrato" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarContrato">
+                            <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Contrato
+                        </button>
+                    }*/@
+            </div>
+
+            <div class="vFlotante">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>*@
+
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+
+
+</section>
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                <div class="box-body" id="CssDivBox" style="">
+
+                    @**@
+                    <div class="col-md-12 " id="titleReport" style="margin: 0; padding: 0; ">
+                        @*<div style="">*@
+                        <div style="display:inline-flex;margin-left: 10px;">
+                            <span class="fa fa-calendar" style="margin: 5px;font-size:20px; "></span>
+                            <h4 style="margin-top: 8px;margin-left: 10px;font-size: 14px;font-weight: 600;">Reporte Contratos y Proyectos</h4>
+                        </div>
+                        @*</div>*@
+                    </div>
+
+                    <div class="col-md-12 ">
+                        <div style="display:inline-flex;">
+                            <button type="button" class="btn btn-xs" style="background-color:#865fc5" onclick="mostrarDivFiltro()">
+                                <span class="glyphicon glyphicon-filter"style="color:white"></span><font color="white">&nbsp;&nbsp;Filtrar&nbsp;&nbsp;</font>
+                            </button>
+                        </div>
+                        @if (ViewBag.ContratosSearch != null)
+                        {
+                            if (ViewBag.ContratosSearch.Count > 0)
+                            {
+                                <div style="display:inline-flex;">
+                                    <button type="button" class="btn btn-xs" style="background-color:#9c9c9c" onclick="mostrarDivFiltro_REPO()">
+                                        <span class="fa fa-wrench"style="color:white"></span><font color="white">&nbsp;&nbsp;Herramientas&nbsp;&nbsp;</font>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-12" id="botoneraReport" style="display:none;">
+
+                                    <div>
+                                        <button type="button" class="btnReport_" id="btnImprime" title="Imprimir pdf" onclick="impRepoert('imprimeDIV')" style="margin: 0 -4px;font-size:18px;margin-right: 2px">
+                                            Pdf <span class="fa fa-print" style="background:#fff"></span>
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        @using (Html.BeginForm("ExportExcel", "Reporte", FormMethod.Post))
+                                        {
+                                            <button type="button" id="btnReportExcel" title="Descargar Excel Detallado" class="btnReport_" style="margin: 0 -4px;font-size:18px;margin-right: 2px" onclick="RegistroxBusqueda()">
+                                                Excel<span class="fa fa-file-excel-o" style="color:#000;background:#fff"></span>
+                                            </button>
+                                            <input type="submit" id="btnSubmitxls" hidden="hidden" />
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                    </div>
+
+                            <!-- =""-->
+                            <div class="col-md-12" id="divFiltro" style="display:none;">
+                                @using (Html.BeginForm("Contrato_Filter", "Reporte", new { @id = string.Empty }, FormMethod.Post, new { @id = "formFilter" }))
+                                {
+                                    string default_fDE = DateTime.Today.AddDays(-6).ToString("yyyy-MM-dd");
+                                    string default_fHASTA = DateTime.Today.ToString("yyyy-MM-dd");
+
+                                    <div class="row col-md-12" style="display:inline-flex;margin-left:0;">
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='checkbox' name='MenuSelectedFecha' value="1" id="chk_fecha" /> <span class=''>Fecha</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="and" /> <span class=''>and</span>
+                                            </label>
+                                        </div>
+                                        <div style="margin-top:6px;margin-bottom:6px;">
+                                            <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                <input type='radio' name='SelectedAndOr' value="or" /> <span class=''>or</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class=" row-filtro col-md-12" id="fechas_busqueda">
+                                        <div style="display:inline-flex;width:100%;margin-top: 6px;margin-bottom: 10px;">
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">De:</div>
+                                            <div class="">
+                                                @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @name = "Fecha_Inicio", @class = "form-control is-valid", @type = "date", @required = "required", @id = "FeInicio", @style = "height:22px;font-size: 9pt; ", @Value = @default_fDE } })
+                                            </div>
+
+                                            <div class="text-bold control-label" style="text-align:left;width:auto;">Hasta:</div>
+                                            <div>
+                                                @Html.EditorFor(model => model.Fecha_registro, new { htmlAttributes = new { @name = "Fecha_registro", @id = "FeFin", @class = "form-control is-valid", @type = "date", @required = "required", @style = "height:22px;font-size: 9pt;", @Value = @default_fHASTA } })
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-bold control-label" style="text-align:left;width:100%;margin-left:15px;">Parámetro:</div>
+                                    <div class=" row-filtro col-md-12" style="display:inline-flex;">
+                                        <div class="btnParametroBoton_C">
+                                            <div class="row col-md-12">
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+
+                                                            <input type='checkbox' name='check_parametro' value="TIPO" id="check_tipo" /> <span class=''>Tipo</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formTipo">
+                                                        @Html.DropDownListFor(model => model.tipo, (SelectList)listalkTipo, new { @class = "form-control select2", @style = "height:27px; width: 135px; font-size:6pt", @id = "comboTipo" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="CLIENTE" id="check_cliente" /> <span class=''>Cliente</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formCliente">
+                                                        @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listalkClienteC, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCliente" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="CONT_PADRE" id="check_contratopadre" /> <span class=''>Contrato Padre</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formContratoPadre">
+                                                        @Html.DropDownListFor(model => model.Contrato_Padre, (SelectList)listalkContratoPadre, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboContratoPadre" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="ESTADO" id="check_estado" /> <span class=''>Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formEstado">
+                                                        @Html.DropDownListFor(model => model.Estado, (SelectList)listalkEstadoC, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboEstado" })
+                                                    </div>
+                                                </div>
+                                                @*<div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="LINEA" id="check_linea" /> <span class=''>Unidad de Negocio</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formUnidadNegocio">
+                                                        @Html.DropDownListFor(model => model.Id_Linea, (SelectList)listalkLinea, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboUnidadNegocio" })
+                                                    </div>
+                                                </div>*@
+                                                @*<div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="CATEGORIA" id="check_categoria" /> <span class=''>Tipo Servicio</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formCategoria">
+                                                        @Html.DropDownListFor(model => model.Categoria, (SelectList)listalkCategoria, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboCategoria" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="SUBCATEGORIA" id="check_subcategoria" /> <span class=''>Centro Costo</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formSubcategoria">
+                                                        @Html.DropDownListFor(model => model.Subcategoria, (SelectList)listakSubcategoria, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboSubcategoria" })
+                                                    </div>
+                                                </div>*@
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="REFERENCIA" id="check_referencia" /> <span class=''>Referencia</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formReferencia">
+                                                        @Html.DropDownListFor(model => model.Referencia, (SelectList)listalkReferencia, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboReferencia" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="LOCALIDAD" id="check_localidad" /> <span class=''>Localidad</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formLocalidad">
+                                                        @Html.DropDownListFor(model => model.Localidad, (SelectList)listalkLocalidad, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboLocalidad" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6" style="display:inline-flex">
+                                                    <div style="margin-top:1px;margin-bottom:1px;width:40%">
+                                                        <label class='' style='font-weight:normal;padding-right: 15px;padding-top: 5px;'>
+                                                            <input type='checkbox' name='check_parametro' value="RESPONSABLE" id="check_responsable" /> <span class=''>Responsable</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="" id="formResponsable">
+                                                        @Html.DropDownListFor(model => model.Responsable, (SelectList)listakResponsable, new { @class = "form-control select2", @style = "height:27px;width:135px;font-size:6pt", @id = "comboResponsable" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div>
+                                            <button type="button" style="background-color:#865fc5;border-color:#865fc5;color:white;padding:5px 15px;margin: 20px 30px;margin-botom:6px;" onclick="Set_DataForm_filter(this)">Buscar</button>
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+
+
+                            @if (ViewBag.ContratosSearch != null)
+                            {
+                                if (ViewBag.ContratosSearch.Count > 0)
+                                {
+                                    @*<div class="col-md-6">
+                                        <button type="button" class="btn btn-xs" style="background-color:#9c9c9c" onclick="mostrarDivFiltro_REPO()">
+                                            <font color="white">&nbsp;&nbsp;<span class="glyphicon glyphicon-wrench"></span></font>
+                                        </button>
+                                    </div>*@
+
+                                    @*<div class="col-md-12 " id="botoneraReport" style="margin: 0;border-left: 1px solid #d6d9dd;border-right: 1px solid #d6d9dd;border-bottom: 1px solid #d6d9dd;font-size:14px;padding-top:1px; display:none;">*@
+                                    
+
+                                    <!--TABLE Count-->
+                                    <div class="col-md-12 " style="margin-left:0;margin-top:5px;margin-bottom:5px;">
+                                        Total de registros:&nbsp;@ViewBag.ContratosSearch.Count
+                                        <br />
+                                    </div>
+                                    <div class="col-md-12 " id="titleReport" style="border-left: 1px solid #d6d9dd; border-right: 1px solid #d6d9dd; border-bottom: 1px solid #d6d9dd;">
+                                        <div class="table-responsive">
+                                            <table id="tablaContrato" class="js-dynamitable table table-bordered " style="font-size:12px" border="1" cellpadding="0" cellspacing="0">
+                                                <thead style="font-size:11px;font-family: monospace;">
+                                                    <tr style="">
+                                                        @*empresa*@
+                                                        <th>CLIENTE</th>
+                                                        <th>NOMBRE CLIENTE</th>
+                                                        @*<th>UNIDAD</th>*@
+                                                        <th>PROYECTO</th>
+                                                        <th>SECUENCIAL</th>
+                                                        <th>AñO</th>
+                                                        <th>COD. SECUENCIAL INTERNO</th>
+                                                        <th>COD. SECUENCIAL INTERNO PADRE</th>
+                                                        <th>COD. CONTRATO ASOCIADO</th>
+                                                        <th>FECHA INICIAL</th>
+                                                        <th>PLAZO CONTRATO</th>
+                                                        <th>FECHA FIN</th>
+                                                        <th>MONTO</th>
+                                                        <th>RESPONSABLE</th>
+                                                        <th>COSTO</th>
+                                                        <th>DETALLE</th>
+                                                        <th nowrap>COD. SECUENCIAL INTERNO MIGRADO</th>
+                                                        <th>PRORROGA INICIAL</th>
+                                                        <th>PLAZO PRORROGA</th>
+                                                        <th>OBSERVACIONES</th>
+
+                                                        @*<th style="padding: 4px 10px; width: 138px; height: 30px;">Código Secuencial Interno</th>
+                                            <th style="width:147px;height:30px;">Código Secuencial Interno Padre</th>
+                                            <th style="width:140px;height:30px;">Código Contrato Asociado</th>
+                                            <th style="height: 30px;">Fecha Inicial</th>
+                                            <th style="height: 30px;line-height: 34px;">Plazo</th>
+                                            <th style="height: 30px;">Fecha Final</th>
+                                            <th style="height: 30px;line-height: 34px;">Monto</th>
+                                            <th style="height: 30px;line-height: 34px;">Responsable</th>
+                                            <th style="height: 30px;line-height: 34px;">Costo</th>
+                                            <th style="height: 30px;line-height: 34px;">Detalle</th>
+                                            <th style="height: 30px;">Prórroga Inicial</th>
+                                            <th style="height: 30px;">Plazo Prórroga</th>*@
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:11px;">
+                                                    @{string fecha_Fin = ""; string fecha_proIn = "";
+                                                    }
+                                                    @foreach (var item in ViewBag.ContratosSearch)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.abreviatura_cliente</td>
+                                                            <td nowrap>@item.nombreCliente </td>
+                                                            @*<td>@item.Id_Linea</td>*@
+                                                            <td>@item.Tipo_Contrato</td>
+                                                            <td>@item.Secuencial</td>
+
+                                                            <td>@item.Codigo_Interno.Substring(12, 4)</td>
+                                                            <td>@item.Codigo_Interno</td>
+                                                            <td>@item.Codigo_interno_padre</td>
+                                                            <td>@item.Codigo_Cliente</td>
+                                                            <td nowrap>@item.Fecha_Inicio.ToString("dd/MM/yyyy")</td>
+
+                                                            <td>@item.Dia_Plazo</td>
+                                                            @{
+                                                                if (item.Fecha_Fin != null)
+                                                                {
+                                                                    fecha_Fin = item.Fecha_Fin.ToString();
+                                                                    fecha_Fin = Convert.ToDateTime(fecha_Fin).ToString("dd/MM/yyyy");
+                                                                }
+                                                                else
+                                                                {
+                                                                    fecha_Fin = "";
+                                                                }
+                                                            }
+                                                            <td nowrap>@fecha_Fin</td>
+                                                            <td>@item.monto</td>
+                                                            <td nowrap>@item.Nombres_Completos</td>
+                                                            <td>@item.costo</td>
+
+                                                            <td nowrap style="text-align:left">@item.Nombre</td>
+
+                                                            <td>@item.Codigo_Interno_Ant</td>
+                                                            @{
+                                                                if (item.Fecha_proIni != null)
+                                                                {
+                                                                    fecha_proIn = item.Fecha_proIni.ToString();
+                                                                    fecha_proIn = Convert.ToDateTime(fecha_proIn).ToString("dd/MM/yyyy");
+                                                                }
+                                                                else
+                                                                {
+                                                                    fecha_proIn = "";
+                                                                }
+                                                            }
+                                                            <td>@fecha_proIn</td>
+                                                            <td>@item.Dia_ProIn</td>
+                                                            <td nowrap style="text-align:left">@item.Observaciones</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- * -->
+                                    <div class="col-md-12" id="imprimeDIV" style="display:none !important;">
+                                        <div class="Encabezado">
+                                            <div class="nombre_Empresa col-md-12" style="text-align:center;font-size:14px;font-weight:bold;">@System.Web.HttpContext.Current.Session["empresa_Nombre"]</div>
+                                            <div class="row col-md-12" style="display:inline-flex;font-size:12px;font-weight:bold;">
+                                                <div class="row col-md-12" style="font-weight:bold;">Rango de fechas:&nbsp;<span id="fechHeader_Ini"></span>&nbsp;hasta&nbsp;<span id="fechHeader_Fin">&nbsp;</span></div>
+                                                @*<div class="row col-md-12" style="text-align:right;">Página: 1 de 1</div>*@
+                                            </div>
+                                            <div class="row col-md-12" style="font-size:11px;font-weight:bold;text-align:right">Fecha: &nbsp;@DateTime.Now.ToString("dd/MM/yyyy")</div>
+                                        </div>
+
+
+                                        <div class="DetallePrint">
+                                            <table id="tablaContrato" class="table-no" style="font-size: 12px;" border="0">
+                                                <thead style="font-size:11px;font-family: monospace;">
+                                                    <tr style="">
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 10px;width:138px;height:34px;">Código Secuencial Interno</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;width:147px;height:34px;">Código Secuencial Interno Padre</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;width:140px;height:34px;">Código Contrato Asociado</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;">Fecha Inicial</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;line-height: 34px;">Plazo</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;">Fecha Final</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;line-height: 34px;">Monto</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;line-height: 34px;width:120px;">Responsable</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;line-height: 34px;">Costo</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;line-height: 34px;width:120px;">Detalle</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;">Prórroga Inicial</div></th>
+                                                        <th><div style="border: 1px solid #c5c5c5;padding: 4px 8px;height: 34px;">Plazo Prórroga</div></th>
+                                                    </tr>
+                                                    <tr style="/*border-bottom: 3px solid #acacac;*/">
+                                                        <th colspan="2">
+                                                            <div style="border: 1px solid #c5c5c5;padding: 4px 8px;">Observaciones</div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr></tr>
+                                                    <tr></tr>
+                                                </thead>
+                                                <tbody style="font-size:11px;">
+                                                    @{string fecha_Fin2 = ""; string fecha_proIn2 = "";
+                                                    }
+                                                    @foreach (var item in ViewBag.ContratosSearch)
+                                                    {
+                                                        <tr style="background-color:#ffffff;border-bottom:none;" class="">
+                                                            <td colspan="12" style="text-align:left !important;">
+                                                                <!-- class="DetalleCliente"-->
+                                                                <div style="padding: 4px 0 0;">
+                                                                    <div><span style="font-weight: bold; ">Cliente:</span><span style="font-style:normal !important;margin: 0 5px;">@item.abreviatura_cliente</span><span style="margin: 0 5px;font-style:normal !important;"> @item.nombreCliente</span></div>
+                                                                    @*<div>
+                                                                        <span style="font-weight: bold;">Unidad de negocio:</span><span style="font-style:normal !important;margin: 0 5px;">@item.Id_Linea</span>
+                                                                    </div>*@
+                                                                    <div><span style="font-weight:bold;">Proyecto/Contrato:</span><span style="font-style:normal !important;margin: 0 5px;">@item.Tipo_Contrato</span></div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>@item.Codigo_Interno</td>
+                                                            <td style="width: 147px; ">@item.Codigo_interno_padre</td>
+                                                            <td style="width:147px;">@item.Codigo_Cliente</td>
+                                                            <td>@item.Fecha_Inicio.ToString("dd/MM/yyyy")</td>
+                                                            <td>@item.Dia_Plazo</td>
+
+                                                            @{
+                                                                if (item.Fecha_Fin != null)
+                                                                {
+                                                                    fecha_Fin2 = item.Fecha_Fin.ToString();
+                                                                    fecha_Fin2 = Convert.ToDateTime(fecha_Fin2).ToString("dd/MM/yyyy");
+                                                                }
+                                                                else
+                                                                {
+                                                                    fecha_Fin2 = "";
+                                                                }
+                                                            }
+                                                            <td>@fecha_Fin2</td>
+                                                            <td>&nbsp;$&nbsp;@item.monto&nbsp;</td>
+                                                            <td style="width:120px;">&nbsp;@item.Nombres_Completos</td>
+                                                            <td>$&nbsp;@item.costo&nbsp;</td>
+                                                            <td style="width:120px;">&nbsp;@item.Nombre</td>
+                                                            @{
+                                                                if (item.Fecha_proIni != null)
+                                                                {
+                                                                    fecha_proIn2 = item.Fecha_proIni.ToString();
+                                                                    fecha_proIn2 = Convert.ToDateTime(fecha_proIn2).ToString("dd/MM/yyyy");
+                                                                }
+                                                                else
+                                                                {
+                                                                    fecha_proIn2 = "";
+                                                                }
+                                                            }
+                                                            <td>@fecha_proIn2</td>
+                                                            <td>@item.Dia_ProIn</td>
+                                                        </tr>
+                                                        <tr style="border-bottom: 3px solid #acacac;">
+                                                            <td colspan="12" style="text-align: justify;">
+                                                                @item.Observaciones
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="12">
+                                                                @*<div style="border-bottom:2px solid #acacac;margin:5px auto;width:100%;"></div>*@
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            @*<div style="border-bottom:2px solid #acacac;margin:5px auto;"></div>*@
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    @*<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+        <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>*@
+
+    <script src="~/Content/bower_components/moment/moment.js"></script>
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <script type="text/javascript">
+        //$('#FIni1').datepicker(
+        //{
+        //format: "dd/mm/yyyy",
+        //autoclose: true
+        //    });
+        $('.select2').select2();
+
+        function impRepoert(nombreDiv)
+        {
+            var css = '@@page { size: landscape; }',
+	        head = document.head || document.getElementsByTagName('head')[0],
+	        style = document.createElement('style');
+
+            style.type = 'text/css';
+            style.media = 'print';
+
+            if (style.styleSheet) {
+	            style.styleSheet.cssText = css;
+            } else {
+	            style.appendChild(document.createTextNode(css));
+            }
+
+            head.appendChild(style);
+            var contenido = document.getElementById(nombreDiv).innerHTML;
+            var contenidoOriginal = document.body.innerHTML;
+
+            document.body.innerHTML = contenido;
+
+            window.print();
+
+            document.body.innerHTML = contenidoOriginal;
+        }
+        function impRepoert_Ant(contenido) {
+
+            var ficha = document.getElementById(contenido);
+            var ventanaImpresion = window.open(' ', 'popUp');
+            ventanaImpresion.document.write(ficha.innerHTML);
+            ventanaImpresion.document.close();
+            ventanaImpresion.print();
+            ventanaImpresion.close();
+        }
+
+
+        function RegistroxBusqueda()
+        {
+
+            //ExportExcel
+            var objList = @Html.Raw(Json.Encode(ViewBag.ContratosSearch));
+            var listContrato = [];
+            listContrato = objList;
+            console.log(listContrato);
+            //listContrato = JSON.parse(objList);
+            //console.log(listContrato);
+            if (listContrato != null)
+            {
+                if (listContrato.length > 0)
+                {
+                    /*var auxfecha = moment(new Date(listContrato[0].Fecha_Inicio)).format("DD/MM/YYYY");
+                        alert(auxfecha);*/
+                    for (var i = 0; i < listContrato.length; i++) {
+
+                        listContrato[i].Fecha_Inicio = moment(listContrato[i].Fecha_Inicio).format("DD-MM-YYYY");
+                        listContrato[i].Fecha_Fin = moment(listContrato[i].Fecha_Fin).format("DD-MM-YYYY");
+                        listContrato[i].Fecha_proIni = moment(listContrato[i].Fecha_proIni).format("DD-MM-YYYY");
+                        //listContrato[i].Fecha_Inicio = moment(listContrato[i].Fecha_Inicio).format("DD-MM-YYYY");
+                    }
+                    //listContrato, DateTime fini_contrato, DateTime ffin_contrato
+                    var fini_contrato = $("#FeInicio").val();
+                    var ffin_contrato = $("#FeFin").val();
+                    var obj = {
+                        listContrato: listContrato,
+                        fini_contrato: fini_contrato,
+                        ffin_contrato: ffin_contrato
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("setDataContrato", "Reporte")",
+                        data: JSON.stringify(obj),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data == 'sessionCaducada') {
+                                //redirect home
+                            } else if (data = "OK") {
+                                var obj = document.getElementById("btnSubmitxls");
+                                if (obj) {
+                                    obj.click();
+                                }
+                            }
+                        },
+                        error: function (data) {
+                            alert("Error de conexion ejecutaAjaxDefault" + data);
+                        }
+
+                    });
+                }
+
+            }
+        }
+
+        setDateReportPDf();
+        function setDateReportPDf()
+        {
+      //      var head = '<html><head>'
+      //+ $("head").html()
+      //+ ' <style>body{background-color:white !important;}@@page { size: 84.1cm 59.4cm;margin: 1cm 1cm 1cm 1cm; }</style></head>';
+
+            //$("#fechHeader_Fin").append($("#FIni1").val());
+            var fechaDesde = $("#FeInicio").val();
+            fechaDesde = String(fechaDesde).replace('-', '/');
+            fechaDesde = String(fechaDesde).replace('-', '/');
+            var splitDesde = String(fechaDesde).split('/');
+
+            var fechaHasta = $("#FeFin").val();
+            fechaHasta = String(fechaHasta).replace('-', '/');
+            fechaHasta = String(fechaHasta).replace('-','/');
+            var splitHasta = String(fechaHasta).split('/');
+
+            $("#fechHeader_Ini").html(splitDesde[1]+'/'+splitDesde[2]+'/'+splitDesde[0]);
+            $("#fechHeader_Fin").html(splitHasta[1]+'/'+splitHasta[2]+'/'+splitHasta[0]);
+        }
+
+        //Filtro
+
+        function Set_DataForm_filter(form)
+        {
+            active_check_param_ID("#check_tipo", "#comboTipo");
+            active_check_param_ID("#check_contratopadre", "#comboContratoPadre");
+            active_check_param_ID("#check_linea", "#comboUnidadNegocio");
+            active_check_param_ID("#check_categoria", "#comboCategoria");
+            active_check_param_ID("#check_subcategoria", "#comboSubcategoria");
+            active_check_param_ID("#check_localidad", "#comboLocalidad");
+            active_check_param_ID("#check_cliente", "#comboCliente");
+            active_check_param_ID("#check_estado", "#comboEstado");
+            active_check_param_ID("#check_referencia", "#comboReferencia");
+            active_check_param_ID("#check_responsable", "#comboResponsable");
+            $("#formFilter").submit();
+        }
+         //Check Parámetros
+        function active_check_param_ID(id_element_filter_param,id_select_cmb)
+        {
+            if ($(String(id_element_filter_param)).is(':checked')) {
+                var anterior_value_chk = $(String(id_element_filter_param +':checked')).val();
+                var Aux_ID_ = String($(id_select_cmb + ' option:selected').val());
+                $(String(id_element_filter_param)).val(String(anterior_value_chk+':'+Aux_ID_));
+            }
+        }
+
+        contFiltro = 0;
+        function mostrarDivFiltro()
+        {
+            if (contFiltro % 2 == 0) {
+                document.getElementById('divFiltro').style.display = 'block';
+            }
+            else {
+                document.getElementById('divFiltro').style.display = 'none';
+            }
+            contFiltro = contFiltro + 1;
+        }
+
+        contFiltro_rEPO = 0;
+        function mostrarDivFiltro_REPO()
+        {
+            if (contFiltro_rEPO % 2 == 0) {
+                document.getElementById('botoneraReport').style.display = 'block';
+            }
+            else {
+                document.getElementById('botoneraReport').style.display = 'none';
+            }
+            contFiltro_rEPO = contFiltro_rEPO + 1;
+        }
+
+        $('#formTipo').prop("hidden", true);
+        $('#formCliente').prop("hidden", true);
+        $('#formContratoPadre').prop("hidden", true);
+        $('#formEstado').prop("hidden", true);
+        $('#formUnidadNegocio').prop("hidden", true);
+        $('#formCategoria').prop("hidden", true);
+        $('#formSubcategoria').prop("hidden", true);
+        $('#formReferencia').prop("hidden", true);
+        $('#formLocalidad').prop("hidden", true);
+        $('#formResponsable').prop("hidden", true);
+
+        function CmbParametroSelected() {
+            //var cod = document.getElementById("CmbParametro").value;
+
+            var combo = document.getElementById("CmbParametro");
+            var selected = combo.options[combo.selectedIndex].text;
+            //alert(selected);
+
+            // $('#CmbParametro').change(function (e) {
+
+            if (selected == 'Ninguno') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Tipo') {
+                $('#formTipo').prop("hidden", false);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Cliente') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", false);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Contrato_Padre') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", false);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Estado') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", false);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Unidad_Negocio') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", false);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Categoria') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", false);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Subcategoria') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", false);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Referencia') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", false);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Localidad') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", false);
+                $('#formResponsable').prop("hidden", true);
+            }
+            else if (selected == 'Responsable') {
+                $('#formTipo').prop("hidden", true);
+                $('#formCliente').prop("hidden", true);
+                $('#formContratoPadre').prop("hidden", true);
+                $('#formEstado').prop("hidden", true);
+                $('#formUnidadNegocio').prop("hidden", true);
+                $('#formCategoria').prop("hidden", true);
+                $('#formSubcategoria').prop("hidden", true);
+                $('#formReferencia').prop("hidden", true);
+                $('#formLocalidad').prop("hidden", true);
+                $('#formResponsable').prop("hidden", false);
+            }
+        }
+
+        //check fechas busqueda
+        $("#chk_fecha").on('change', function () {
+            // $(this).val()
+            if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        });
+
+        if ($(this).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById('fechas_busqueda').style.display = 'block';
+            } else {
+                document.getElementById('fechas_busqueda').style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+        }
+
+        function show_id_elemente(id_element_filter,div_id_filter) {
+            if ($(String(id_element_filter)).is(':checked')) {
+                //IterateCheckTableHtml('.checkClientes',true);
+                document.getElementById(String(div_id_filter)).style.display = 'block';
+            } else {
+                document.getElementById(String(div_id_filter)).style.display = 'none';//IterateCheckTableHtml('.checkClientes',false);
+            }
+        }
+
+        $("#check_tipo").on('change', function () {
+            show_id_elemente("#check_tipo","formTipo");
+        });
+        $("#check_cliente").on('change', function () {
+            show_id_elemente("#check_cliente","formCliente");
+        });
+        $("#check_contratopadre").on('change', function () {
+            show_id_elemente("#check_contratopadre","formContratoPadre");
+        });
+        $("#check_estado").on('change', function () {
+            show_id_elemente("#check_estado","formEstado");
+        });
+        $("#check_linea").on('change', function () {
+            show_id_elemente("#check_linea","formUnidadNegocio");
+        });
+        $("#check_categoria").on('change', function () {
+            show_id_elemente("#check_categoria","formCategoria");
+        });
+        $("#check_subcategoria").on('change', function () {
+            show_id_elemente("#check_subcategoria","formSubcategoria");
+        });
+        $("#check_referencia").on('change', function () {
+            show_id_elemente("#check_referencia","formReferencia");
+        });
+        $("#check_localidad").on('change', function () {
+            show_id_elemente("#check_localidad","formLocalidad");
+        });
+        $("#check_responsable").on('change', function () {
+            show_id_elemente("#check_responsable","formResponsable");
+        });
+
+
+    </script>
+}

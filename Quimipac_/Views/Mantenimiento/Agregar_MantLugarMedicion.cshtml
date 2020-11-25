@@ -1,0 +1,269 @@
+﻿@model Quimipac_.Models.MT_Estacion
+
+@{
+    Layout = null;
+
+    var listaClientes = ViewBag.listaClientes;
+    var listaProvincias = ViewBag.listaProvincias;
+    var listaCiudades = ViewBag.listaCiudades;
+    var listaMacrosectores = ViewBag.listaMacrosectores;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarMantLugarMedicion");
+    attributes.Add("autocomplete", "off");
+
+}
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+@*@using (Html.BeginForm("Agregar_MantLugarMedicion", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Agregar_MantLugarMedicion", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*Combox cliente normal*@
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+        @*Combox Filtro Cliente*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*Combox Normal Provincias*@
+        @*<div class="form-group">
+            <label class="col-md-2 control-label">Provincias:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Provincia", (SelectList)listaProvincias, new { @class = "form-control", @id = "comboProvincias" })
+            </div>
+        </div>*@
+
+
+        @*Combox Filtro Provincias*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Provincias:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Provincia", (SelectList)listaProvincias, new { @class = "form-control select2", @id = "comboProvincias", @style = "width: 100%" })
+                @*@Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        @*Combox Normal Ciudades*@
+        @*<div class="form-group">
+            <label class="col-md-2 control-label">Ciudades:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Ciudad", (SelectList)listaCiudades, new { @class = "form-control", @id = "combociudades" })
+            </div>
+        </div>*@
+
+        @*Combox Filtro Ciudades*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Ciudades:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Ciudad", (SelectList)listaCiudades, new { @class = "form-control select2", @id = "combociudades", @style = "width: 100%" })
+            </div>
+        </div>
+
+
+
+
+        @*Combox Normal Macrosector*@
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Macrosector:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Macrosector, (SelectList)listaMacrosectores, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Id_Macrosector, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @*Combox Filtro Macrosector*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">MacroSector:</label>
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.Id_Macrosector, (SelectList)listaMacrosectores, htmlAttributes: new { @class = "form-control select2" })
+                @Html.ValidationMessageFor(model => model.Id_Macrosector, "", new { @class = "text-danger" })
+
+
+                @*@Html.DropDownList("Id_Ciudad", (SelectList)listaCiudades, new { @class = "form-control select2", @id = "combociudades", @style = "width: 100%" })*@
+            </div>
+        </div>
+
+
+
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Ciudades:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_TablaDetalle, (SelectList)listaCiudades, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Id_TablaDetalle, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">*&nbsp;Nombre:</label>
+            <div class="col-md-10">
+                @* <div class="input-group">  *@
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                @*<span class="input-group-addon border-left-0">*</span>
+            </div>*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Direcci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Latitud:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Coordenada_X, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Coordenada_X, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Longitud:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Coordenada_Y, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Coordenada_Y, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="btn btn-warning" />
+        </div>
+    </div>
+
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+        {
+
+            $('#comboProvincias').on('change', function (event) {
+
+                var url = '@Url.Action("GetCiudades", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+
+                ejecutaAjax('combociudades', url);
+
+        });
+
+
+             function ejecutaAjax(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+
+                        var seleccion = '';
+                        if (i == 0)
+                        {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+        }
+
+        });
+</script>
+
+
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$('.select2').select2();
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+
+    //TxtIconoObligatorio
+    $('#modal1').bootstrapValidator({
+        //    message:"Este valor no es valido",
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        }//,
+
+        //fields: {
+        //    txtObligatorio: {
+        //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+        //                 stringLength: {
+        //                     min: 3,
+        //                     max: 5,
+        //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+        //                 }
+        //             }
+        //    }
+        //}
+
+    });
+
+</script>

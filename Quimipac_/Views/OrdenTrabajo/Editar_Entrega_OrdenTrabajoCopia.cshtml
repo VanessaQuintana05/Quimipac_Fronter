@@ -1,0 +1,304 @@
+﻿@model Quimipac_.Models.MT_EntregaOrden_Trabajo
+
+@{
+
+    Layout = null;
+
+    
+    var listaClientes = ViewBag.listaClientes;
+    string fecha_a = Convert.ToDateTime(Model.Fecha_Envio).ToString("MM/dd/yyyy");
+    string fecha_c = Convert.ToDateTime(Model.Fecha_Recepcion).ToString("MM/dd/yyyy");
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarEntregaOrden");
+    attributes.Add("autocomplete", "off");
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Editar_Entrega_OrdenTrabajo", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Entrega_Orden_Trabajo)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%", @Disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Comentario:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label text-success">Recibido por:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Recibido_Por, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required", @id = "txtObligatorio" } })
+                @Html.ValidationMessageFor(model => model.Recibido_Por, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Envio:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Envio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Envio, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Recepcion:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha_Recepcion, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fecha_Recepcion, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Seleccione Orden de Trabajo:</label>
+            <div class="table-responsive col-md-4" style="padding:5px 15px 5px 15px">
+                @* table table-bordered table-hover  ">     table id="tablaPreciosItems" border="1">*@
+                <table border="1" style="font-size:10pt" class="table table-bordered" id="tablaMPR">
+                    <thead id="theadOrden">
+
+                        <tr>
+                            <th>Check</th>
+                            @*<th>Codigo Orden</th>*@
+                        </tr>
+
+                    </thead>
+                    <tbody id="tbodyOrdenTrabajo"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+<script type="text/javascript">
+
+
+    start = new Date('@fecha_a');
+    end = new Date('@fecha_c');
+
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $('#datepickerCloseA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $(document).ready(function () {
+
+
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+
+
+    $(document).ready(function () {
+
+        $('#comboCliente').on('change', function (event) {
+            var url = '@Url.Action("GetOrdenTrabajo", "OrdenTrabajo", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+                ejecutaAjaxtabla('tbodyOrdenTrabajo', url);
+            });
+
+            });
+
+
+
+         function ejecutaAjaxtabla(id, url) {
+
+              $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                $("#" + id).empty();
+                //CombosActivos();
+
+                console.log(data);
+                $.each(data, function (i, item) {
+// "<td nowrap style='display:block'>"+data[i].Value+"</td>" +
+                        //"<td nowrap>" + data[i].Text + "</td> "+
+                    $("#" + id).append("<tr>" +
+                        "<td nowrap><input type='checkbox' name='SelectedTriggers' value = '" + data[i].Value + "' id ='" + data[i].Value + "'/>&nbsp;"+data[i].Text+"</td>")
+                        //"<td><label for='" + data[i].Text + "'>" + data[i].Text + "</label></td></tr>");
+                    //alert('La orden es' + data[i].Value + '' + data[i].Text);
+
+
+
+                    });
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+    }
+
+
+     function resultado()
+         {
+             //$("input[type=checkbox]:checked").each(function () {
+
+             //    // buscamos el td más cercano en el DOM hacia "arriba"
+             //    // luego encontramos los td adyacentes a este
+             //    $(this).closest('td').siblings().each(function () {
+
+             //        // obtenemos el texto del td
+             //        console.log($(this).text());
+             //    });
+             //});
+
+             var resultado = [];// = "";
+             $('input[type=checkbox]:checked').each(function () {
+                 var Id_OrdenTrabajo = $(this).prop("id");
+                 var fila = {
+                     Id_OrdenTrabajo
+                 };
+                 resultado.push(fila);
+
+                 //console.log("Checkbox " + $(this).prop("id") + " (" + $(this).val() + ") Seleccionado");
+             });
+             alert(resultado);
+             var url = '@Url.Action("InsertarOrden", "OrdenTrabajo")';
+             //
+          //   var ValueTipo = document.getElementById("comboCliente").value;
+
+            // alert(ValueTipo);
+             ejecutaAjaxGuardarOrdenEntrega(url, resultado);
+          }
+
+
+         ////Total de seleccionados
+         //var seleccionados = 0;
+
+         //function actualizarTotal(data[i].Value) {
+         //    checkeado = $("#" + data[i].Value ).attr("checked");
+         //    if (checkeado) {
+         //        seleccionados++;
+         //    } else {
+         //        seleccionados--;
+         //    }
+         //}
+
+
+         function ejecutaAjaxGuardarOrdenEntrega(url, resultado) {
+             //var ValueProyCont = 0;
+             //var combo = document.getElementById("comboCliente");
+             //var selected = combo.options[combo.selectedIndex].text;
+
+             var ValueCliente = document.getElementById("comboCliente").value;
+             var ValueFechaEnvio = $('#datepickerOpenA').val();
+             var ValueFechaRecepcion = $('#datepickerCloseA').val();
+             var Comentario = $('#txtComentario').val();
+             var Recibido_Por = $('#txtObligatorio').val();
+
+ //comboCliente,txtComentario,..Recibido...txtObligatorio,datepickerOpenA,datepickerCloseA
+//List<TempEntregaOrden> lkOrden, string ValueCliente, DateTime ValueFechaElaboracion, DateTime ValueFechaEnvio, DateTime ValueFechaRecepcion, string Comentario, string Recibido_Por
+             var jsonObject = { lkOrden: resultado, ValueCliente: ValueCliente, ValueFechaEnvio: ValueFechaEnvio, ValueFechaRecepcion: ValueFechaRecepcion, Comentario: Comentario, Recibido_Por: Recibido_Por };
+             $.ajax({
+                 type: 'POST',
+                 url: url,
+                 dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 data: JSON.stringify(jsonObject),
+
+                 success: function (mensaje) {
+                     if (mensaje.indexOf('!') != -1) {
+                         $("#DivDanger").css('display', 'block');
+                         $("#CadenaDanger").html(mensaje);
+                         $("#DivDanger").delay(4000).fadeOut(300);
+                         console.log(mensaje); //alert(mensaje);
+                     } else {
+                         $("#DivSucess").css('display', 'block');
+                         $("#CadenaSucess").html(mensaje);
+                         $("#DivSucess").delay(2000).fadeOut(300);
+                         console.log(mensaje); //alert(mensaje);
+                         location.reload();
+                     }
+                 },
+                 error: function () {
+                     //$("#DivError").css('display', 'block');
+                     //$("#DivError").delay(1000).fadeOut(300);
+                     console.log('Verificar Registro ');
+                 }
+
+             });
+        }
+
+
+     /*Carga Ajax en tabla por defecto Cmb*/
+    var contAjaxTabla = 0;
+    if (contAjaxTabla == 0) {
+
+        var IdCliente = document.getElementById("comboCliente").value;
+        var url = '@Url.Action("GetOrdenTrabajo", "OrdenTrabajo", new { id = "param-id" })';
+        url = url.replace("param-id", IdCliente);
+        ejecutaAjaxtabla('tbodyOrdenTrabajo', url);
+        contAjaxTabla++;
+    }
+
+</script>

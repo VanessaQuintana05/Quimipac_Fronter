@@ -1,0 +1,218 @@
+﻿@model Quimipac_.Models.MT_Estacion
+@{
+    Layout = null;
+
+    var listaClientes = ViewBag.listaClientes;
+    var listaProvincias = ViewBag.listaProvincias;
+    var listaCiudades = ViewBag.listaCiudades;
+    var listaMacrosector = ViewBag.listaMacrosector;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarMantLugarMedicion");
+    attributes.Add("autocomplete", "off");
+}
+
+@*@using (Html.BeginForm("Editar_MantLugarMedicion", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_MantLugarMedicion", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Estacion)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!-- cmbNormal Cliente-->
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Cliente:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+        @*CmbFiltro Cliente*@
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- cmbNormal Provincias-->
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Provincias:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_Provincia, (SelectList)listaProvincias, htmlAttributes: new { @class = "form-control", @id = "comboProvincias" })
+                    @Html.ValidationMessageFor(model => model.Id_Provincia, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <!-- cmbFiltro Provincias-->
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Provincias:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Provincia, (SelectList)listaProvincias, new { @class = "form-control select2", @id = "comboProvincias", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_Provincia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <!-- cmbNormal Ciudades-->
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Ciudades:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_Ciudad, (SelectList)listaCiudades, htmlAttributes: new { @class = "form-control", @id = "combociudades" })
+                    @Html.ValidationMessageFor(model => model.Id_Ciudad, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <!-- cmbFiltro Ciudades-->
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Ciudades:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Ciudad, (SelectList)listaCiudades, htmlAttributes: new { @class = "form-control select2", @id = "combociudades" })
+                @Html.ValidationMessageFor(model => model.Id_Ciudad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- cmbNormal Macrosector-->
+        @*<div class="form-group">
+                <label for="recipient-name" class="col-md-2 control-label">Macrosector:</label>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Id_Macrosector, (SelectList)listaMacrosector, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Id_Macrosector, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <!-- cmbFiltro Macrosector-->
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">MacroSector:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Id_Macrosector, (SelectList)listaMacrosector, htmlAttributes: new { @class = "form-control select2" })
+                @Html.ValidationMessageFor(model => model.Id_Macrosector, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Nombre Estacion:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Direccion:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Coordenada:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Coordenada_X, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Coordenada_X, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Coordenada Y:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Coordenada_Y, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Coordenada_Y, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new List<SelectListItem>() { new SelectListItem() { Value = "A", Text = "Activo", Selected = true }, new SelectListItem() { Value = "I", Text = "Inactivo", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+        {
+
+            $('#comboProvincias').on('change', function (event) {
+
+                var url = '@Url.Action("GetCiudades", "Mantenimiento", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+
+                ejecutaAjax('combociudades', url);
+
+        });
+
+
+             function ejecutaAjax(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+
+                        var seleccion = '';
+                        if (i == 0)
+                        {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+        }
+
+        });
+</script>
+
+<!--Combox Filtrado-->
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$('.select2').select2();
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+</script>
+

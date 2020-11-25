@@ -1,0 +1,375 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.OrdenGrupo_IntegranteEquipoCliente
+
+@{
+    /**/
+
+    Layout = null;
+
+    var listaClientes = ViewBag.listaClientes;
+    var listaGrupoTrabajo= ViewBag.listaGrupoTrabajo;
+
+
+
+
+}
+<link href="~/Content/jquery.timepicker.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<section>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert-alert-danger" id="DivDanger" style="display:none">
+                <strong><label id="CadenaDanger"></label> </strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" id="DivSucess" style="display:none">
+                <strong><label id="CadenaSucess"></label></strong>
+                <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@using (Html.BeginForm("Agregar_AsignarGrupo_OrdenTrabajo", "OrdenTrabajo", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+   
+<div class="form-horizontal">
+
+    <div class="row">
+        <div class="col-md-12">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Cliente:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Id_Cliente", (SelectList)listaClientes, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%" })
+
+            </div>
+        </div>
+
+    @*<div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Grupo:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.clie, (SelectList)listaClientes, new { @class = "form-control select2", @id = "comboCliente", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.Id_GrupoTrabajo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    <div class="form-group">
+        <label for="status" class="text-bold col-md-2 control-label">Grupo:</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Id_GrupoTrabajo, (SelectList)listaGrupoTrabajo, new { @class = "form-control select2", @id = "comboGrupo", @style = "width: 100%" })
+            @Html.ValidationMessageFor(model => model.Id_GrupoTrabajo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Seleccione Orden de Trabajo:</label>
+        <div class="table-responsive col-md-8" style="padding:5px 15px 5px 15px">
+            @* table table-bordered table-hover  ">     table id="tablaPreciosItems" border="1">*@
+            <table border="1" style="font-size:10pt" class="table table-bordered" id="tablaMPR">
+                <thead id="theadOrden">
+
+                    <tr>
+                        <th>Check</th>
+                        @*<th>Codigo Orden</th>*@
+                    </tr>
+
+                </thead>
+                <tbody id="tbodyOrdenTrabajo"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    @*@{ TestModel dbe = new TestModel();
+            foreach (var item in dbe.Triggers)
+            {
+                <input type="checkbox" name="SelectedTriggers" value="@item.Value" />
+                <label for="@item.Text">@item.Text</label><br />
+            }
+        }*@
+
+
+    @*<div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Crear" class="btn btn-warning" />
+        </div>*@
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-warning" onclick="resultado();">Crear</button>
+        @*<input type="submit" id="btnSubmitAgregarProyecto" hidden="hidden" />*@
+    </div>
+
+</div>
+
+}
+
+
+@*<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>*@
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+<script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.3.7/bootstrap.min.js"></script>
+
+
+
+<!--Valida Fecha-->
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+
+
+<!--PickerAjax-->
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<!--VaLIDATOR txt-->
+<script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+    start = new Date(moment().subtract(0, 'days'));
+    end = new Date(moment());
+
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    $('#datepickerCloseA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+
+    //$('#modal1').bootstrapValidator({
+    //    //    message:"Este valor no es valido",
+    //    feedbackIcons: {
+    //        valid: 'glyphicon glyphicon-ok',
+    //        invalid: 'glyphicon glyphicon-remove',
+    //        validating: 'glyphicon glyphicon-refresh'
+    //    }//,
+
+    //    //fields: {
+    //    //    txtObligatorio: {
+    //    //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+    //    //                 stringLength: {
+    //    //                     min: 3,
+    //    //                     max: 5,
+    //    //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+    //    //                 }
+    //    //             }
+    //    //    }
+    //    //}
+
+    //});
+    $(document).ready(function () {
+        //$('.select2').select2();
+    $('.select2').select2({
+        dropdownParent: $('#modal1')
+    });
+
+    });
+
+    $(document).ready(function () {
+
+        $('#comboCliente').on('change', function (event) {
+            var url = '@Url.Action("GetOrdenTrabajo_Grupo", "OrdenTrabajo", new { id = "param-id" })';
+                url = url.replace("param-id", event.target.value);
+                ejecutaAjaxtabla('tbodyOrdenTrabajo', url);
+            });
+
+            });
+
+
+
+         function ejecutaAjaxtabla(id, url) {
+
+              $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                $("#" + id).empty();
+                //CombosActivos();
+
+                console.log(data);
+                $.each(data, function (i, item) {
+// "<td nowrap style='display:block'>"+data[i].Value+"</td>" +
+                        //"<td nowrap>" + data[i].Text + "</td> "+
+                    $("#" + id).append("<tr>" +
+                        "<td nowrap><input type='checkbox' name='SelectedTriggers' value = '" + data[i].Value + "' id ='" + data[i].Value + "'/>&nbsp;"+data[i].Text+"</td>")
+                        //"<td><label for='" + data[i].Text + "'>" + data[i].Text + "</label></td></tr>");
+                    //alert('La orden es' + data[i].Value + '' + data[i].Text);
+
+
+
+                    });
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+    }
+
+
+         function resultado()
+         {
+             //$("input[type=checkbox]:checked").each(function () {
+
+             //    // buscamos el td más cercano en el DOM hacia "arriba"
+             //    // luego encontramos los td adyacentes a este
+             //    $(this).closest('td').siblings().each(function () {
+
+             //        // obtenemos el texto del td
+             //        console.log($(this).text());
+             //    });
+             //});
+
+             var resultado = [];// = "";
+             $('input[type=checkbox]:checked').each(function () {
+                 var Id_OrdenTrabajo = $(this).prop("id");
+                 var fila = {
+                     Id_OrdenTrabajo
+                 };
+                 resultado.push(fila);
+
+                 //console.log("Checkbox " + $(this).prop("id") + " (" + $(this).val() + ") Seleccionado");
+             });
+            // alert(resultado);
+             var url = '@Url.Action("InsertarOrden_Grupo", "OrdenTrabajo")';
+             //
+          //   var ValueTipo = document.getElementById("comboCliente").value;
+
+            // alert(ValueTipo);
+             ejecutaAjaxGuardarOrdenEntrega(url, resultado);
+          }
+
+
+         ////Total de seleccionados
+         //var seleccionados = 0;
+
+         //function actualizarTotal(data[i].Value) {
+         //    checkeado = $("#" + data[i].Value ).attr("checked");
+         //    if (checkeado) {
+         //        seleccionados++;
+         //    } else {
+         //        seleccionados--;
+         //    }
+         //}
+
+
+         function ejecutaAjaxGuardarOrdenEntrega(url, resultado) {
+             //var ValueProyCont = 0;
+             //var combo = document.getElementById("comboCliente");
+             //var selected = combo.options[combo.selectedIndex].text;
+
+             var ValueCliente = document.getElementById("comboCliente").value;
+             var ValueFechaEnvio = $('#datepickerOpenA').val();
+             var ValueFechaRecepcion = $('#datepickerCloseA').val();
+             var ValueGrupo = document.getElementById("comboGrupo").value;
+             
+
+ //comboCliente,txtComentario,..Recibido...txtObligatorio,datepickerOpenA,datepickerCloseA
+//List<TempEntregaOrden> lkOrden, string ValueCliente, DateTime ValueFechaElaboracion, DateTime ValueFechaEnvio, DateTime ValueFechaRecepcion, string Comentario, string Recibido_Por
+
+
+             //List < TempEntregaOrden_Grupo > lkOrden, string ValueCliente, DateTime ValueFechaInicio, DateTime ValueFechaFin, string ValueGrupo
+             var jsonObject = { lkOrden: resultado, ValueCliente: ValueCliente, ValueFechaInicio: ValueFechaEnvio, ValueFechaFin: ValueFechaRecepcion, ValueGrupo: ValueGrupo};
+             $.ajax({
+                 type: 'POST',
+                 url: url,
+                 dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 data: JSON.stringify(jsonObject),
+
+                 success: function (mensaje) {
+                     if (mensaje.indexOf('!') != -1) {
+                         $("#DivDanger").css('display', 'block');
+                         $("#CadenaDanger").html(mensaje);
+                         $("#DivDanger").delay(4000).fadeOut(300);
+                         console.log(mensaje); //alert(mensaje);
+                     } else {
+                         $("#DivSucess").css('display', 'block');
+                         $("#CadenaSucess").html(mensaje);
+                         $("#DivSucess").delay(2000).fadeOut(300);
+                         console.log(mensaje); //alert(mensaje);
+                         location.reload();
+                     }
+                 },
+                 error: function () {
+                     //$("#DivError").css('display', 'block');
+                     //$("#DivError").delay(1000).fadeOut(300);
+                     console.log('Verificar Registro ');
+                 }
+
+             });
+        }
+
+
+     /*Carga Ajax en tabla por defecto Cmb*/
+    var contAjaxTabla = 0;
+    if (contAjaxTabla == 0) {
+
+        var IdCliente = document.getElementById("comboCliente").value;
+        var url = '@Url.Action("GetOrdenTrabajo_Grupo", "OrdenTrabajo", new { id = "param-id" })';
+        url = url.replace("param-id", IdCliente);
+        ejecutaAjaxtabla('tbodyOrdenTrabajo', url);
+        contAjaxTabla++;
+    }
+    
+</script>
+
+
+

@@ -1,0 +1,1347 @@
+﻿@model Quimipac_.Models.MT_Proyecto
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaClientes = ViewBag.listaClientes;
+    var listaTipoTrabajo = ViewBag.listaTipoTrabajo;
+    var listaLinea = ViewBag.listaLinea;
+    var listaContratoHijo = ViewBag.listaContratoHijo;
+    var listaCategoria = ViewBag.listaCategoria;
+    var listaSubcategoria = ViewBag.listaSubcategoria;
+    var listaProspecto = ViewBag.listaProspecto;
+    var listaProyectoPadre = ViewBag.listaProyectoPadre;
+
+    //contrato
+    var listacliente = ViewBag.listacliente;
+    var listaTipo = ViewBag.listaTipo;
+    var listaContratoPadre = ViewBag.listaContratoPadre;
+    var listaEstado = ViewBag.listaEstados;
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+<link rel="stylesheet" href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+
+
+
+@*<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css" />*@
+<!-- MODAL -->
+@*<link href="~/Content/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />*@
+
+-------
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        Agregar Gestión de Proyectos
+    </h2>
+
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="@Url.Action("Proyectos", "Proyectos")">Proyectos</a></li>
+        <li class="active">Agregar Gestion de Proyectos</li>
+    </ol>
+
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                @*<div class="box-header"><h3 class="box-title">Proyectos</h3>  </div> id="CssDivBox"*@
+                <div class="box-body">
+                    <div class="col-md-12">
+                        @using (Html.BeginForm("Agregar_proyectos", "Proyectos", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal2" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default panel-default">
+                                    <div class="panel-heading" style="text-align:center">
+                                        <h5 class="panel-title text-bold" style="text-align: center;">
+                                            Agregar Gestión Proyectos
+                                        </h5>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <!--Clientes-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Cliente:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Id_Cliente, (SelectList)listaClientes, new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_Cliente, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--Tipo Trabajo-->
+                                                <div class="col-md-12" style="display:none">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Tipo de Trabajo:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Id_TipoTrabajo, (SelectList)listaTipoTrabajo, new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_TipoTrabajo, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <!--Codigo Cliente-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label text-success" style="text-align:left">C&oacute;digo Cliente:</label>
+                                                        <div class="col-md-3">
+                                                            <div class="input-group">
+                                                                @Html.EditorFor(model => model.Codigo_Cliente, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                                @Html.ValidationMessageFor(model => model.Codigo_Cliente, "", new { @class = "text-danger" })
+                                                                <span class="text-danger" name="lbl-danger-CodigoCliente" id="lbl-danger-CodigoCliente"></span>
+                                                            </div>
+                                                        </div>
+                                                        @*</div>
+                                                            </div>*@
+
+                                                        <!--Estado-->
+                                                        @*<div class="col-md-12">
+                                                            <div class="form-group">*@
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Estado:</label>
+                                                        <div class="col-md-3">
+                                                            @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control", @style = "height:28px" })
+                                                            @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Instrumentado por:</label>
+                                                        <button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes col-md-5" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;display: inline-flex;" data-toggle="modal" data-target="#modalAgregarCliente">
+                                                            <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">Agregar</font>
+                                                        </button>
+                                                        <div class="col-md-7">
+                                                            @Html.DropDownListFor(model => model.Id_contrato, (SelectList)listaContratoHijo, new { @class = "form-control select2", @style = "width: 100%", @id = "comboContrato" })
+                                                            @Html.ValidationMessageFor(model => model.Id_contrato, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Prospecto:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Id_Prospecto, (SelectList)listaProspecto, new { @class = "form-control select2", @style = "width: 100%;heigth:50px;", @id = "comboProspecto" })
+                                                            @Html.ValidationMessageFor(model => model.Id_Prospecto, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--Linea-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Unidad de negocio:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Linea, (SelectList)listaLinea, new { @class = "form-control select2", @style = "width: 100%;height:28px", @id = "comboLinea" })
+                                                            @Html.ValidationMessageFor(model => model.Linea, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Tipo de Servicio:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Categoria, (SelectList)listaCategoria, new { @class = "form-control select2 comboCategorias", @style = "width: 100%", @id = "comboCategoria" })
+                                                            @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-categoria" id="lbl-danger-categoria">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-3">
+                                                            <p class="text-bold control-label" style="text-align:left">Centro de Costo</p>
+                                                            <p class="text-bold control-label" style="text-align:left">(Proyecto-Departamento):</p>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Subcategoria, (SelectList)listaSubcategoria, new { @class = "form-control select2 comboSubCategorias", @style = "width: 100%", @id = "comboSubCategoria" })
+                                                            @Html.ValidationMessageFor(model => model.Subcategoria, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-Subcategoria" id="lbl-danger-Subcategoria">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Proyecto Padre:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.DropDownListFor(model => model.Proyecto_Padre, (SelectList)listaProyectoPadre, new { @class = "form-control select2", @style = "width: 100%;heigth:50px;", @id = "comboProyectoPadre" })
+                                                            @Html.ValidationMessageFor(model => model.Proyecto_Padre, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <!--Direccion-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label text-success" style="text-align:left"> Direcci&oacute;n:</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group">
+                                                                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                                                                <span class="input-group-addon border-left-0"><font size="2">*</font></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--Ubicacion-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label text-success" style="text-align:left"> Ubicaci&oacute;n:</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group">
+                                                                @Html.EditorFor(model => model.Ubicacion, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @placeholder = "Lat, Long" } })
+                                                                @Html.ValidationMessageFor(model => model.Ubicacion, "", new { @class = "text-danger" })
+                                                                <span class="input-group-addon border-left-0"><font size="2">*</font></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--Comentario-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Comentario:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "2" })
+                                                            <span class="text-danger" name="lbl-danger-Observacion" id="lbl-danger-Observacion">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Fecha Inicio:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text" } })
+                                                            @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-FechaInicio" id="lbl-danger-FechaInicio">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group divDiaPlazo">
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Días de Plazo:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.EditorFor(model => model.Dia_Plazo, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @min = "0", @onkeyUp = "return ValDiasPlazo(this);" } })
+                                                            @Html.ValidationMessageFor(model => model.Dia_Plazo, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-DiaPlazo" id="lbl-danger-DiaPlazo">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Fecha Final:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA", @type = "text" } })
+                                                            @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-FechaFin" id="lbl-danger-FechaFin">&nbsp;</span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <!--Porc Avance-->
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label text-success" style="text-align:left"> Porc. Avance %:</label>
+                                                        <div class="col-md-9">
+                                                            @* <div class="input-group">*@
+                                                            @Html.EditorFor(model => model.Porcentaje_avance, new { htmlAttributes = new { @class = "form-control is-valid", @type = "number", @max = 100, @min = 0, @required = "required", @style = "height:28px" } })
+                                                            @Html.ValidationMessageFor(model => model.Porcentaje_avance, "", new { @class = "text-danger" })
+                                                            @*<span class="input-group-addon border-left-0"><font size="2">%</font></span>
+                                                                </div>*@
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Valor Referencial:</label>
+                                                        <div class="col-md-2">
+                                                            @Html.EditorFor(model => model.Valor_Inicial_Aux, new { htmlAttributes = new { @class = "form-control is-valid", @type = "decimal", @step = "any", @name = "numero", @onkeypress = "mascara(this,cpf)", @onpaste = "return false" } })
+                                                            @Html.ValidationMessageFor(model => model.Valor_Inicial_Aux, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-ValorReferencial" id="lbl-danger-ValorReferencial">&nbsp;</span>
+                                                        </div>
+
+                                                        <label for="recipient-name" class="col-md-2 control-label" style="text-align:left">Valor Presupuestado:</label>
+                                                        <div class="col-md-2">
+                                                            @Html.EditorFor(model => model.Valor_Ajustado_Aux, new { htmlAttributes = new { @class = "form-control is-valid", @type = "decimal", @step = "any", @name = "numero", @onkeypress = "mascara(this,cpf)", @onpaste = "return false" } })
+                                                            @Html.ValidationMessageFor(model => model.Valor_Ajustado_Aux, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-ValorPresupuestado" id="lbl-danger-ValorPresupuestado">&nbsp;</span>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="Crear_MTPR btn btn-warning" onclick="GuardarProyecto(this)">Crear</button>
+                                            <input type="submit" id="btnSubmitAgregarProyecto" hidden="hidden" />
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+@*<div id="modalAgregarCliente" class="modal fade" role="dialog" aria-hidden="true">*@
+<div id="modalAgregarCliente" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;  Agregar Contrato&nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @*<form action="">*@
+
+                @using (Html.BeginForm("Agregar_Contrato", "Contrato", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    <div class="form-horizontal">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+
+                                <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Tipo:</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("tipo", (SelectList)listaTipo, new { @class = "form-control select2", @style = "width: 100%", @id = "comboTipos_Ctr" })
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Cliente:</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("Id_Cliente", (SelectList)listacliente, new { @class = "form-control select2", @style = "width: 100%", @id = "comboCliente_Ctr" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @*<div class="form-group">*@
+                                <label for="recipient-name" class="text-bold col-md-3 control-label" style="text-align:left">Nombre:</label>
+                                <div class="col-md-9">
+                                    @*@Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })*@
+                                    @Html.Editor("Nombre", new { htmlAttributes = new { @class = "form-control is-valid", @id = "Nombre_Ctr", @type = "text" } })
+
+                                    <span class="text-danger" name="lbl-danger-NombreContrato" id="lbl-danger-NombreContrato">&nbsp;</span>
+                                </div>
+                                @*</div>*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 divContratoPadre">
+                                <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Contrato Padre:</label>
+                                <div class="col-md-9">
+                                    @*@Html.DropDownListFor(model => model.Contrato_Padre, (SelectList)listaContratoPadre, new { @class = "form-control select2 comboDefault", @style = "width: 100%", @id = "comboContratoPadre" })*@
+                                    @Html.DropDownList("Contrato_Padre", (SelectList)listaContratoPadre, new { @class = "form-control select2 comboDefault", @style = "width: 100%", @id = "comboPadre_Ctr" })
+
+                                    @*<span class="text-danger" name="lbl-danger-ContratoPadre" id="lbl-danger-ContratoPadre">&nbsp;</span>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">C&oacute;digo:</label>
+                                <div class="col-md-3">
+                                    @*@Html.EditorFor(model => model.Codigo_Cliente, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })*@
+                                    @Html.Editor("Codigo_Cliente", new { htmlAttributes = new { @class = "form-control is-valid", @id = "Codigo_Cliente_Ctr", @type = "text" } })
+
+                                    <span class="text-danger" name="lbl-danger-CodigoCliente" id="lbl-danger-CodigoCliente">&nbsp;</span>
+                                </div>
+
+
+                                <label for="status" class="text-bold col-md-3 control-label" @*style="text-align:left"*@>Estado:</label>
+                                <div class="col-md-3">
+                                    @*@Html.DropDownListFor(model => model.Estado, (SelectList)listaEstado, new { @class = "form-control select2", @style = "width: 100%", @id = "comboEstado" })*@
+                                    @Html.DropDownList("Estado", (SelectList)listaEstado, new { @class = "form-control select2", @style = "width: 100%", @id = "comboEstado_Ctr" })
+
+                                    <span class="text-danger" name="lbl-danger-Estado" id="lbl-danger-Estado">&nbsp;</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Fecha_Inicio, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA_Ctr", @type = "text", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Fecha_Inicio, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerCloseA_Ctr", @type = "text", @required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="Btn_CerrarCtr">Cerrar</button>
+                            <button type="button" class="btn btn-warning" onclick="GuardarContrato()">Crear</button>
+                            @*<input type="submit" id="btnSubmitValidaFecha" hidden="hidden" />*@
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <!--COMBO FILTRABLE-->
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+    <!--Valida Fecha-->
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+
+    <script src="~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+
+    <!--VaLIDATOR txt-->
+    <script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/bootstrapValidator.min.js"></script>
+    <script src="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/js/es_ES.min.js"></script>
+
+
+    <!-- MODAL -->
+    @*<script src="~/Content/plugins/bootstrap-modal/js/bootstrap-modal.js"></script>
+        <script src="~/Content/plugins/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
+        <script src="~/Content/plugins/bootstrap-modal/js/ui-modals.js"></script>*@
+
+
+
+
+
+    <script type="text/javascript">
+
+    start = new Date(moment().subtract(0, 'days'));
+    end = new Date(moment());
+
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY')) //HH:mm:ss
+    $('#datepickerCloseA').val(moment(end).format('DD/MM/YYYY'))
+
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            //autoclose: true
+        });
+
+    $('#datepickerCloseA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            //autoclose: true
+        });
+
+        $('#datepickerOpenA_Ctr').val(moment(start).format('DD/MM/YYYY'))
+
+        $('#datepickerOpenA_Ctr').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                //autoclose: true
+            });
+
+        $('#datepickerCloseA_Ctr').val(moment(end).format('DD/MM/YYYY'))
+
+        $('#datepickerCloseA_Ctr').datepicker(
+            {
+                format: "dd/mm/yyyy",
+                //autoclose: true
+            });
+
+    ///validar Guardar
+    function valida_Cmb_Ninguno(id_class_combo) {
+        /* var combo_cat = ('#co(mboCategoria').val();
+         if (combo_cat == ) {
+
+         }*/
+        var DescriptionCombo = $(id_class_combo + " option:selected").text();
+        console.log(DescriptionCombo.toUpperCase());
+        return (DescriptionCombo.toUpperCase() == "NINGUNO") ? true : false;
+    }
+
+    function bool_verifica_txt_Vacio(control_id_class) {
+        var controlTxt = $(String(control_id_class)).val();
+        return ((controlTxt == null || controlTxt.length == 0 || /^\s*$/.test(controlTxt)) == true ? true : false);
+    }
+
+
+    function valida_txt_cmb() {
+        var bandCategoria = valida_Cmb_Ninguno("#comboCategoria");//si si es asi
+        var bandSubCategoria = valida_Cmb_Ninguno("#comboSubCategoria");
+
+        var bandCodigo_Cliente = bool_verifica_txt_Vacio("#Codigo_Cliente");
+
+        var bandValorInicial = bool_verifica_txt_Vacio("#Valor_Inicial_Aux");
+
+
+        if (bandCategoria == true) {
+            $('#lbl-danger-categoria').html("Debe selecionar un tipo de servicio");
+            document.getElementById('comboCategoria').focus();
+
+            //            $('#comboCategoria .select2-container--default').css("border","1px solid red !important");
+        } else { $('#lbl-danger-categoria').html(""); }
+
+        if (bandSubCategoria == true) {
+            $('#lbl-danger-Subcategoria').html("Debe selecionar un centro de costo");
+            document.getElementById('comboSubCategoria').focus();
+            //$('#comboSubCategoria .select2-container--default').css("border","1px solid red !important");
+        }
+        else { $('#lbl-danger-Subcategoria').html(""); }
+
+
+
+
+        //if (bandLocalidad == true) {
+        //    $('#lbl-danger-Localidad').html("Debe escribir una Localidad");
+        //    document.getElementById('Localidad').focus();
+        //}
+        //else { $('#lbl-danger-Localidad').html(""); }
+
+
+
+        if (bandCodigo_Cliente == true) {
+            $('#lbl-danger-CodigoCliente').html("Debe escribir un Codigo Cliente");
+            document.getElementById('Codigo_Cliente').focus();
+        }
+        else { $('#lbl-danger-CodigoCliente').html(""); }
+
+
+
+        if (bandValorInicial == true) {
+            $('#lbl-danger-ValorReferencial').html("Debe escribir un Valor Inicial");
+            document.getElementById('Valor_Inicial_Aux').focus();
+        }
+        else { $('#lbl-danger-ValorReferencial').html(""); }
+
+        //if Principal bandLocalidad == true ||
+        var bandPrin = false;
+        if (bandCategoria == true || bandSubCategoria == true || bandCodigo_Cliente == true  || bandValorInicial == true) {
+            bandPrin = true;
+        }
+        return bandPrin;
+
+
+    }
+
+
+
+    function GuardarProyecto(form) {
+
+        var licitacion_band = false;
+
+        licitacion_band = valida_txt_cmb();
+
+        var obj = document.getElementById("btnSubmitAgregarProyecto");
+
+        if (obj) {
+            if (licitacion_band == false) {
+                obj.click();
+                //alert("guardado");
+            }
+            else {
+                //alert("no puede ser guardado porque faltan campos")
+            }
+        }
+
+
+
+    }
+
+    $('.select2').select2();
+    $('.select2').select2({ dropdownParent: $('#modal1') });
+    $('.select2').select2({ dropdownParent: $('#modal2') });
+    //INICIO COMBOX FILTRO
+    $(document).ready(function () {
+
+        //DEFAUT LINEA
+            var id_Linea = $('#comboLinea').val();
+        //debugger;
+            var urldefautCat = '@Url.Action("GetCategoria", "Proyectos", new { id = "param-id" })';
+            //debugger;
+            urldefautCat = urldefautCat.replace("param-id", id_Linea);
+            ejecutaAjaxCat('comboCategorias', urldefautCat);
+            var urldefautSubCat = '@Url.Action("GetSubCategoria", "Proyectos", new { id = "param-id" })';
+            urldefautSubCat = urldefautSubCat.replace("param-id", id_Linea);
+            ejecutaAjaxSubCat('comboSubCategorias', urldefautSubCat);
+
+
+
+
+    });//FIN COMBOX FILTRO
+
+        $('#comboLinea').on('change', function (event) {
+
+                var urlCatAdd = '@Url.Action("GetCategoria", "Proyectos", new { id = "param-id" })';
+            urlCatAdd = urlCatAdd.replace("param-id", event.target.value);
+            urlCatAdd = urlCatAdd.replace("&", "ampersand");
+                ejecutaAjax('comboCategoria', urlCatAdd);
+                var urlSubCat = '@Url.Action("GetSubCategoria", "Proyectos", new { id = "param-id" })';
+            urlSubCat = urlSubCat.replace("param-id", event.target.value);
+            urlSubCat = urlSubCat.replace("&", "ampersand");
+                ejecutaAjax('comboSubCategoria', urlSubCat);
+
+            });
+
+
+    //TxtIconoObligatorio
+    $('#modal1').bootstrapValidator({
+        //    message:"Este valor no es valido",
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        }//,
+
+        //fields: {
+        //    txtObligatorio: {
+        //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+        //                 stringLength: {
+        //                     min: 3,
+        //                     max: 5,
+        //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+        //                 }
+        //             }
+        //    }
+        //}
+
+    });
+
+        //TxtIconoObligatorio
+        $('#modal2').bootstrapValidator({
+            //    message:"Este valor no es valido",
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }//,
+
+            //fields: {
+            //    txtObligatorio: {
+            //             validators: {     Empty: { message: "El nombre de usuario es requerido" },
+            //                 stringLength: {
+            //                     min: 3,
+            //                     max: 5,
+            //                     message: "El nombre de usuario debe tener entre 6 y 30 caracteres de logitud"
+            //                 }
+            //             }
+            //    }
+            //}
+
+        });
+        
+
+    function ejecutaAjax(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    //alert("");
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+
+                        var seleccion = '';
+                        if (i == 0) {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+        }
+
+    function ejecutaAjaxCat(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    //alert("");
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+                        //debugger;
+                        var seleccion = '';
+                        if (i == 0) {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+        }
+
+        function ejecutaAjaxSubCat(id, url) {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    //alert("");
+                    $("#" + id).empty();
+                    $.each(data, function (i, item) {
+                        //debugger;
+                        var seleccion = '';
+                        if (i == 0) {
+
+                            $("#" + id).append("<option value='" + data[i].Value + "' selected='selected'>" + data[i].Text + "</option>");
+                        }
+                        else {
+                            $("#" + id).append("<option value='" + data[i].Value + "'>" + data[i].Text + "</option>");
+                        }
+                    });
+
+                },
+                error: function (data) {
+                    window.location.href = '@Url.Action("Error","Errores")';
+                    //window.location.href = '/Errores/Error';
+                }
+
+            });
+    }
+
+    //MASCARA MIENTRAS SE ESCRIBE
+    function mascara(o, f) {
+        v_obj = o;
+        v_fun = f;
+        setTimeout("execmascara()", 1);
+    }
+    function execmascara() {
+        v_obj.value = v_fun(v_obj.value);
+    }
+    function cpf(v) {
+        v = String(v).replace(/([^0-9\.]+)/g, '');
+        v = String(v).replace(/^[\.]/, '');
+        v = String(v).replace(/[\.][\.]/g, '');
+        v = String(v).replace(/\.(\d)(\d)(\d)/g, '.$1$2');
+        v = String(v).replace(/\.(\d{1,2})\./g, '.$1');
+        v = v.toString().split('').reverse().join('').replace(/(\d{3})/g, '$1,');
+        v = String(v).split('').reverse().join('').replace(/^[\,]/, '');
+        return v;
+    }
+
+    function ValDiasPlazo(control) {
+        control.value = calcular(control.value);
+    }
+    function calcular(variable) {
+
+        Numer = parseInt(variable);
+        if (isNaN(Numer)) {
+            return "";
+        }
+
+        var fini = $('#datepickerOpenA').val(); //dd//mm//¿yyyy
+        var finiSpit = fini.split('/');
+
+        var fecha_Inicio = finiSpit[1] + '/' + finiSpit[0] + '/' + finiSpit[2];//$('#datepickerOpenA').val(); //dia, mes , anio
+        var TuFecha = new Date(fecha_Inicio);
+
+        var dias = parseInt(Numer);
+
+        //nueva fecha sumada
+        TuFecha.setDate(TuFecha.getDate() + dias);
+        //formato de salida para la fecha
+        //alert(TuFecha);
+
+        var diaDD = (parseInt(TuFecha.getDate()) < 10) ? "0" + TuFecha.getDate() : TuFecha.getDate();
+
+        var mes_ = (TuFecha.getMonth() + 1);
+        var mesMM = (parseInt(mes_) < 10) ? "0" + mes_ : mes_;
+
+        //alert(diaDD + '/' +mesMM+ '/' + TuFecha.getFullYear());
+        //document.getElementById('datepickerCloseA').value = TuFecha.getDate() + '/' + (TuFecha.getMonth() + 1) + '/' + TuFecha.getFullYear();
+
+        document.getElementById('datepickerCloseA').value = diaDD + '/' + mesMM + '/' + TuFecha.getFullYear();
+        //document.getElementById('datepickerCloseA').value = TuFecha.getFullYear() + "-" + mesMM + '-' +diaDD  ;
+
+        //var fecha_Fin_ =diaDD + '/' +mesMM+ '/' + TuFecha.getFullYear();
+        //$('#datepickerCloseA').val(moment(fecha_Fin_).format('MM/DD/YYYY'));
+        return Numer;
+    }
+
+    //default Change valor_refrencial
+    function formatear_Default_Money(nStr, id_class_txt_money) {
+        var nStr = String(nStr);
+        nStr += '';
+        x = nStr.split(',');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        //return x1 + x2;
+        $(String(id_class_txt_money)).val(String(x1) + '' + String(x2));
+    }
+
+    $('#comboProspecto').on('change', function (event) {
+
+        var id_ContratoPadre_Change = $('#comboProspecto').val();
+        if (id_ContratoPadre_Change != 0) {
+            ejecutaAjaxDefaultMontoPROReferencial('Valor_Inicial_Aux', id_ContratoPadre_Change);
+            //$('#comboContrato').prop("disabled", true);
+            $('#comboProyectoPadre').prop("disabled", true);
+        }
+        else {
+            $('#comboProyectoPadre').prop("disabled", false);
+        }
+
+            });
+
+            function ejecutaAjaxDefaultMontoPROReferencial(id, id_ContratoPadre_Change) {
+                var id_contrato_Editar = 0;
+
+                var obj = {
+                    id_ContratoPadre_Change: id_ContratoPadre_Change,
+                    id_contrato_Editar: id_contrato_Editar
+
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("GetProspectoPadreMonto", "Proyectos")",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        //var default_valorReferencial_ = data + '';
+
+                        $.each(data, function (i, item) {
+
+                            if (i == 0) {
+                           var default_valorReferencial_ = data[i].Valor_Referencial_Aux;
+                        if (String(default_valorReferencial_).length > 0) {
+
+                            var valor_referencial_punto = String(default_valorReferencial_).indexOf(',');
+                            default_valorReferencial_ = String(default_valorReferencial_).substring(0, (parseInt(valor_referencial_punto) + 3));
+                            //alert()
+                            formatear_Default_Money(default_valorReferencial_, "#Valor_Inicial_Aux");
+                             }
+
+                            var default_valorAjustado_ = data[i].Monto_Aux;
+                            if (String(default_valorAjustado_).length > 0) {
+
+                                var valor_ajustado_punto = String(default_valorAjustado_).indexOf(',');
+                                default_valorAjustado_ = String(default_valorAjustado_).substring(0, (parseInt(valor_ajustado_punto) + 3));
+                                //alert()
+                                formatear_Default_Money(default_valorAjustado_, "#Valor_Ajustado_Aux");
+                                }
+
+                                var dateI = Convertjson_DDMMYYYY(data[i].Fecha_Inicio);
+                                var dateF = Convertjson_DDMMYYYY(data[i].Fecha_Fin);
+
+                                 var diaplazo = data[i].Dia_Plazo;
+
+
+                                //alert(dateI)
+                                document.getElementById('datepickerOpenA').value = dateI;
+                                document.getElementById('datepickerCloseA').value = dateF;
+
+
+                                if (diaplazo != null) {
+                                    document.getElementById('Dia_Plazo').value = diaplazo;
+                                }
+                                else {
+                                    var n = Calcular_DiaPlazo(dateI, dateF);
+                                    debugger;
+                                    document.getElementById('Dia_Plazo').value = n;
+
+                                }
+
+                                var seleccion = '';
+                                var id_linea = data[i].Id_Linea;
+                                var nombre_linea = data[i].lineaProspecto;
+                                var id_categoria = data[i].Categoria;
+                                var nombre_categoria = data[i].nombre_Categoria;
+                                var id_Subcategoria = data[i].Subcategoria;
+                                var nombre_Subcategoria = data[i].nombre_Subcategoria;
+                                console.log(id_linea, nombre_linea, id_categoria, nombre_categoria, id_Subcategoria, nombre_Subcategoria);
+
+                                $("#comboLinea").append("<option value='" + id_linea + "' selected='selected'>" + nombre_linea + "</option>");
+                                $("#comboCategoria").append("<option value='" + id_categoria + "' selected='selected'>" + nombre_categoria + "</option>");
+                                $("#comboSubCategoria").append("<option value='" + id_Subcategoria + "' selected='selected'>" + nombre_Subcategoria + "</option>");
+
+                        }
+                        else {
+                            $("#comboLinea").append("<option value='" + id_linea + "'>" + nombre_linea + "</option>");
+                            $("#comboCategoria").append("<option value='" + id_categoria + "'>" + nombre_categoria + "</option>");
+                            $("#comboSubCategoria").append("<option value='" + id_Subcategoria + "'>" + nombre_Subcategoria + "</option>");
+                        }
+
+                            //$("#" + id).val(x);
+
+                    });
+
+
+
+                        // alert(data+'    '+default_valorReferencial_);
+
+
+
+                    },
+                    error: function (data) {
+                        alert("Error de conexion ejecutaAjaxDefault" + data);
+                    }
+
+                });
+    }
+
+    //ProyectoPadre
+    $('#comboProyectoPadre').on('change', function (event) {
+
+        var id_ProyectoPadre_Change = $('#comboProyectoPadre').val();
+        if (id_ProyectoPadre_Change != 0) {
+            ejecutaAjaxDefaultMontoProyReferencial('Valor_Inicial_Aux', id_ProyectoPadre_Change);
+            $('#comboProspecto').prop("disabled", true);
+        }
+        else {
+            $('#comboProspecto').prop("disabled", false);
+        }
+
+            });
+
+    function ejecutaAjaxDefaultMontoProyReferencial(id, id_ProyectoPadre_Change) {
+        var id_proyecto_Editar = 0;
+
+        var obj = {
+            id_ProyectoPadre_Change: id_ProyectoPadre_Change,
+            id_proyecto_Editar: id_proyecto_Editar
+
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("GetProyectoPadreMonto", "Proyectos")",
+            data: JSON.stringify(obj),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+                $.each(data, function (i, item) {
+
+                    if (i == 0) {
+                        var default_valorReferencial_ = data[i].Valor_Referencial_Aux;
+                        if (String(default_valorReferencial_).length > 0) {
+
+                            var valor_referencial_punto = String(default_valorReferencial_).indexOf(',');
+                            default_valorReferencial_ = String(default_valorReferencial_).substring(0, (parseInt(valor_referencial_punto) + 3));
+                            formatear_Default_Money(default_valorReferencial_, "#Valor_Inicial_Aux");
+                        }
+
+                        var default_valorAjustado_ = data[i].Monto_Aux;
+                        if (String(default_valorAjustado_).length > 0) {
+
+                            var valor_ajustado_punto = String(default_valorAjustado_).indexOf(',');
+                            default_valorAjustado_ = String(default_valorAjustado_).substring(0, (parseInt(valor_ajustado_punto) + 3));
+                            formatear_Default_Money(default_valorAjustado_, "#Valor_Ajustado_Aux");
+                        }
+
+                        var dateI = Convertjson_DDMMYYYY(data[i].Fecha_Inicio);
+                        var dateF = Convertjson_DDMMYYYY(data[i].Fecha_Fin);
+                        var diaplazo = data[i].Dia_Plazo;
+                        //alert(dateI)
+                        document.getElementById('datepickerOpenA').value = dateI;
+                        document.getElementById('datepickerCloseA').value = dateF;
+                        document.getElementById('Dia_Plazo').value = diaplazo;
+
+                        var seleccion = '';
+                        var id_linea = data[i].Id_Linea;
+                        var nombre_linea = data[i].lineaContrato;
+                        var id_categoria = data[i].Categoria;
+                        var nombre_categoria = data[i].nombre_Categoria;
+                        var id_Subcategoria = data[i].Subcategoria;
+                        var nombre_Subcategoria = data[i].nombre_Subcategoria;
+                        console.log(id_linea, nombre_linea, id_categoria, nombre_categoria, id_Subcategoria, nombre_Subcategoria);
+
+                        $("#comboLinea").append("<option value='" + id_linea + "' selected='selected'>" + nombre_linea + "</option>");
+                        $("#comboCategoria").append("<option value='" + id_categoria + "' selected='selected'>" + nombre_categoria + "</option>");
+                        $("#comboSubCategoria").append("<option value='" + id_Subcategoria + "' selected='selected'>" + nombre_Subcategoria + "</option>");
+
+
+                    }
+                    else {
+                        $("#comboLinea").append("<option value='" + id_linea + "'>" + nombre_linea + "</option>");
+                        $("#comboCategoria").append("<option value='" + id_categoria + "'>" + nombre_categoria + "</option>");
+                        $("#comboSubCategoria").append("<option value='" + id_Subcategoria + "'>" + nombre_Subcategoria + "</option>");
+                    }
+
+
+                });
+
+            },
+            error: function (data) {
+                alert("Error de conexion ejecutaAjaxDefault" + data);
+            }
+
+        });
+    }
+
+    function Convertjson_DDMMYYYY(fechajson)//'/Date(1334514600000)/'new Date(parseInt(   ))
+    {
+        var nowDate = new Date(parseInt(String(fechajson).substr(6)));
+        var DDdia = (parseInt(nowDate.getDate()) < 10) ? ("0" + nowDate.getDate()) : nowDate.getDate();
+        var MMmes = (parseInt(nowDate.getMonth() + 1) < 10) ? ("0" + (parseInt(nowDate.getMonth()) + 1)) : (parseInt(nowDate.getMonth()) + 1);
+
+        return DDdia + '/' + MMmes + '/' + nowDate.getFullYear();
+
+    }
+
+        function GuardarContrato() {
+
+
+            var obj = {
+                tipo: $("#comboTipos_Ctr").val(),
+                Id_Cliente: $("#comboCliente_Ctr").val(),
+                Nombre: $("#Nombre_Ctr").val(),
+                Contrato_Padre: $("#comboPadre_Ctr").val(),
+                Codigo_Cliente: $("#Codigo_Cliente_Ctr").val(),
+                Estado: $("#comboEstado_Ctr").val(),
+                Fecha_Inicio: $("#datepickerOpenA_Ctr").val(),
+                Fecha_Fin: $("#datepickerCloseA_Ctr").val(),
+                Estado: $("#comboEstado_Ctr").val()
+
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("CrearContrato", "Proyectos")",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        console.log(data.Id_Contrato, data.Nombre);
+
+                        console.log(data.Id_Contrato, data.Nombre, "Hola");
+                        //debugger;
+                        if (data.Id_Contrato > 0) {
+
+                            $("#comboContrato").append("<option value='" + data.Id_Contrato + "' selected='selected'>" + data.Nombre + "</option>");
+
+                            $("#Btn_CerrarCtr").click();
+                        }
+
+                    },
+                    error: function (data) {
+                        alert("Error de conexion ejecutaAjaxDefault" + data);
+                    }
+
+                });
+        }
+
+        //Para Contrato
+
+            //DEFAUT CLIENTE
+
+            var id_cliente_Change = $('#comboCliente_Ctr').val();
+            var id_tipo_Change = $('#comboTipos_Ctr').val();
+
+            ejecutaAjaxDefaultTipo('comboDefault', id_cliente_Change, id_tipo_Change);
+
+            $('#comboCliente_Ctr').on('change', function (event) {
+
+                var id_cliente_Change = $('#comboCliente_Ctr').val();
+                var id_tipo_Change = $('#comboTipos_Ctr').val();
+
+                ejecutaAjaxDefaultTipo('comboDefault', id_cliente_Change, id_tipo_Change);
+            });
+
+
+            //DEFAULT TIPO
+            var id_cliente_Tipo = $('#comboCliente_Ctr').val();
+    var id_tipo_Tipo = $('#comboTipos_Ctr').val();
+
+    $('#comboTipos_Ctr').on('change', function (event) {
+        console.log('entrá');
+
+        var id_cliente_Change = $('#comboCliente_Ctr').val();
+        var id_tipo_Change = $('#comboTipos_Ctr').val();
+
+        ejecutaAjaxDefaultTipo('comboDefault', id_cliente_Change, id_tipo_Change);
+        ejecutaAjaxDefaultTipo_Estado('#comboEstado_Ctr', id_tipo_Change);
+
+
+
+    });
+
+        function ejecutaAjaxDefaultTipo(id, id_cliente_Tipo, id_tipo_Tipo) {
+                var id_contrato_Editar = 0;
+
+                var obj = {
+                    id_cliente_Tipo: id_cliente_Tipo,
+                    id_contrato_Editar: id_contrato_Editar,
+                    id_tipo_Tipo: id_tipo_Tipo
+
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("GetContratoTipo", "Contrato")",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        //alert("");
+                        $("." + id).empty(); var seleccion = '';
+                        $("." + id).append("<option value='0'>Ninguno</option>")
+
+                        $.each(data, function (i, item) {
+
+
+                            $("." + id).append("<option value='" + item.Id_Contrato + "'>" + item.Codigo_Interno + " | " + item.Nombre + "</option>");
+
+
+                        });
+
+                    },
+                    error: function (data) {
+                        alert("Error de conexion ejecutaAjaxDefault" + data);
+                    }
+
+                });
+    }
+
+
+    function ejecutaAjaxDefaultTipo_Estado(id, id_tipo_Tipo)
+            {
+
+
+                var obj = {
+
+
+                    id_tipo_Tipo: id_tipo_Tipo
+
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("GetContratoTipo_Estado", "Contrato")",
+                    data: JSON.stringify(obj),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    //alert("");
+                    $(id).empty(); var seleccion = '';
+                    //$(id).append("<option value='0'>Ninguno</option>")
+                    //debugger;
+                    $.each(data, function (i, item) {
+                        var tp_prospecto_selected = "";
+                        if (id_tipo_Tipo == 146) {
+                            tp_prospecto_selected = (item.Id_TablaDetalle == 1158) ? selected = 'selected' : '';
+                        }
+                        $(id).append("<option value='" +item.Id_TablaDetalle + "' "+ tp_prospecto_selected+" >" +  item.Descripcion + "</option>");
+
+
+                    });
+
+                },
+                error: function (data) {
+                    alert("Error de conexion ejecutaAjaxDefault" + data);
+                }
+
+            });
+    }
+
+    function Calcular_DiaPlazo(dateI, dateF)
+    {
+        //Numer = parseInt(variable);
+        //if (isNaN(Numer)) {
+        //    return "";
+        //}
+
+        //Fecha Inicio
+        var fini_Ctr = $('#datepickerOpenA').val(); //dd//mm//¿yyyy
+        var finiSpit_Ctr = fini_Ctr.split('/');
+        var fecha_Inicio_Ctr = finiSpit_Ctr[1] + '/' + finiSpit_Ctr[0] + '/' + finiSpit_Ctr[2];//$('#datepickerOpenA').val(); //dia, mes , anio
+        var TuFechaI_Ctr = moment(fecha_Inicio_Ctr);
+
+        //Fecha Fin
+        var ffin_Ctr = $('#datepickerCloseA').val(); //dd//mm//¿yyyy
+        var ffinSpit_Ctr = ffin_Ctr.split('/');
+        var fecha_Fin_Ctr = ffinSpit_Ctr[1] + '-' + ffinSpit_Ctr[0] + '-' + ffinSpit_Ctr[2];//$('#datepickerOpenA').val(); //dia, mes , anio
+        var TuFechaF_Ctr = moment(fecha_Fin_Ctr);
+        //moment.diff(moment, 'intervalo')
+
+        debugger;
+
+
+        //document.getElementById('datepickerCloseA').value = diaDD + '/' + mesMM + '/' + TuFecha.getFullYear();
+        ////document.getElementById('datepickerCloseA').value = TuFecha.getFullYear() + "-" + mesMM + '-' +diaDD  ;
+
+        ////var fecha_Fin_ =diaDD + '/' +mesMM+ '/' + TuFecha.getFullYear();
+        ////$('#datepickerCloseA').val(moment(fecha_Fin_).format('MM/DD/YYYY'));
+        //return Numer;
+        return (TuFechaF_Ctr.diff(TuFechaI_Ctr, 'days'));
+
+    }
+
+
+
+    </script>
+}
+
+

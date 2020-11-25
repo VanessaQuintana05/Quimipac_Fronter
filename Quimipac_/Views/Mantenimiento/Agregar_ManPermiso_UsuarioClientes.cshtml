@@ -1,0 +1,226 @@
+﻿@using Quimipac_.Repositorio;
+@using Quimipac_.Models
+@model Quimipac_.Models.MT_Permiso
+@{
+    Layout = null;
+    //Roles_Usuario
+
+    DataBase_Externo dbe = new DataBase_Externo();
+    //no se esta utilizando
+    var LkClientes = dbe.ObtenerClientes("","");
+
+
+    //var LkClientes = ViewBag.LkClientes as sp_LINK_ConsultaClientes_Result;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormAgregarPermisoUsuario");
+    attributes.Add("autocomplete", "off");
+
+
+
+    string cadenaUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+    string[] Separado = cadenaUrl.Split('/');
+    string IdUsuario = Separado[Separado.Length - 1];
+
+}
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.min.css">
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*Pinta contorno txt Obligatorio*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+
+
+@using (Html.BeginForm("Agregar_ManPermiso_UsuarioClientes", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    @Html.HiddenFor(model => model.Id_Usuario)
+    <div class="form-horizontal">
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @{
+            // int count = 0;
+            <div class="table-responsive">
+                <table id="tabla" class="js-dynamitable table table-bordered  ">
+                    <thead>
+                        <tr>
+                            @* <th></th>*@
+                            <th>Clientes</th>
+                        </tr>
+
+                        <tr>
+                            @*<th><input class="js-filter form-control" type="text" value="" placeholder="Items" style="width:180px;border:none;"></th>*@
+                            <th><input class="js-filter form-control" type="text" value="" placeholder="Cliente.." style="width:100px;border:none;"></th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in LkClientes)
+                    {
+                        <tr>
+                            @*<td nowrap>@Html.DisplayFor(model => item.cod_cli)</td>*@
+                            <td nowrap><input type='checkbox' name='SelectedTriggers' value="@item.cod_cli" id="@item.cod_cli" />&nbsp;@item.nom_cli</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+
+
+        <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-default" data-dismiss="modal" title="Salir">Cerrar</button>
+            @* <input type="submit" value="Agregar" class="Crear_MTPR btn btn-warning" title="Agregar Clientes" onclick="resultado();" />*@
+            <button id="btnGuardarTabla" type="button" value="Agregar" class="Crear_MTPR btn btn-warning" onclick="resultado();">Crear</button>
+        </div>
+    </div>
+
+}
+
+
+
+
+@*<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>*@
+<script src="~/Content/bower_components/select2/dist/js/select2.min.js"></script>
+
+@*<script src="~/Content/bower_components/moment/min/moment.min.js"></script>*@
+<script src="~/Content/SweetAlert/sweet.js"></script>
+
+<!--Filtro de tabla-->
+
+<script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+<script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+        //$('.cmbMultiple').select2();
+
+        //$('.cmbMultiple').on('change', function (event) {
+        //    $('.select2-selection__choice').css('background', '#f39c12');
+        //    $('.select2-selection__choice__remove').css('color', '#ffffff');
+        //});
+
+
+    });
+    //$.noConflict();
+    $('#tabla').DataTable({
+
+        "language": {
+            "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "No Contiene registros",
+            "infoEmpty": "No hay registros disponibles",
+            "decimal": "",
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+            "infoFiltered": "(Filtro de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "  Mostrar _MENU_ registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "No se encontraron coincidencias",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Atras"
+            },
+            "aria": {
+                "sortAscending": ": Activar orden de columna ascendente",
+                "sortDescending": ": Activar orden de columna desendente"
+            },
+        },
+
+
+        'paging': true,
+        'lengthChange': true,
+        'searching': false,
+        'ordering': false,
+        'info': true,
+        'autoWidth': false
+    });
+
+
+
+    function resultado() {
+        var n = 0;
+        var resultado = [];// = "";
+        $('input[type=checkbox]:checked').each(function () {
+            var Id_Cliente = $(this).prop("id");
+            var fila = {
+                Id_Cliente
+            };
+
+            //  console.log("Checkbox " + $(this).prop("id") + " (" + $(this).val() + ") Seleccionado");
+            resultado.push(fila);
+            n++;
+        });
+
+        if (n > 0) {
+            var url = '@Url.Action("AgregarClientes_Permisos", "Mantenimiento", new { id = "param-id" })';
+            url = url.replace("param-id", '@IdUsuario');
+
+            //ejecutaAjaxtabla('tbodyItems', url);
+            //contAjaxTabla++;
+            ejecutaAjaxtabla('@IdUsuario', resultado, url);
+        } else {
+            swal('', 'Para agregar un Cliente debe estar seleccionado al menos un checkbok', 'error');
+        }
+    }
+
+
+    //function ejecutaAjaxtabla(id, url) {
+
+    function ejecutaAjaxtabla(Usuario, resultado, url) {
+        var jsonObject = { lkItems: resultado, Usuario:Usuario };// ValueTipo: ValueTipo, ValueProyCont: ValueProyCont, ValueTipoTrab: ValueTipoTrab, ValueMoneda: ValueMoneda };
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(jsonObject),
+
+            success: function (mensaje) {
+                if (mensaje.indexOf('!') != -1) {
+                    $("#DivDanger").css('display', 'block');
+                    $("#CadenaDanger").html(mensaje);
+                    $("#DivDanger").delay(4000).fadeOut(300);
+                    console.log(mensaje); //alert(mensaje);
+                } else {
+                    $("#DivSucess").css('display', 'block');
+                    $("#CadenaSucess").html(mensaje);
+                    $("#DivSucess").delay(2000).fadeOut(300);
+                    console.log(mensaje); //alert(mensaje);
+                    location.reload();
+                }
+            },
+            error: function () {
+                //$("#DivError").css('display', 'block');
+                //$("#DivError").delay(1000).fadeOut(300);
+            }
+
+        });
+    }
+
+</script>
+
+
+

@@ -1,0 +1,741 @@
+﻿@using Quimipac_.Models;
+@using Quimipac_.Repositorio;
+@* model Quimipac_.Models.ClsNotificacion   *@
+@* model Quimipac_.Models.ClsNotificacion*@
+@* @{
+        // Layout = "~/Views/Shared/_Layout.cshtml";
+        //     var LkNotificacionTitulos = ViewBag.LkNotificacionTitulos;
+    }*@
+@{
+    var ImgSizeUsuario = "110px";
+
+
+    string CadUrl = (HttpContext.Current.Request.Url.AbsoluteUri).ToString();
+       // string[] Separado = CadUrl.Split('/');
+    CadUrl = CadUrl.Replace(":","");
+    //string Final = Separado[Separado.Length - 1];
+    //int orden = Convert.ToInt32(Final);
+
+    if (System.Web.HttpContext.Current.Session["usuario"] == null && System.Web.HttpContext.Current.Session["clave"] == null)
+    {
+        Response.Redirect(Url.Action("IniciarSesion", "Home"));
+    }
+    else
+    {
+        string nombreUsuario = System.Web.HttpContext.Current.Session["nombres"] as string;
+        string usuario = System.Web.HttpContext.Current.Session["usuario"] as string;
+        var clave = System.Web.HttpContext.Current.Session["clave"] as string;
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta http-equiv="Expires" content="0" />
+            <meta http-equiv="Pragma" content="no-cache" />
+            <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+            @*<link rel="stylesheet" href="https ://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
+        <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">*@
+
+            <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css">
+            <link rel="shortcut icon" href="~/Content/bower_components/ImagenVQ/FTIsotipo.png" />
+
+            @*BotonInf*@
+            <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+
+
+            <!--Scrooll Aside Menu-->
+            @*<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/Scroll_Aside/jquery.phancy.css" /><link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/ScrollMenu/perfect-scrollbar.css" />*@
+
+
+
+
+
+            <style>
+
+                /*.slimScrollBar {
+                    background: none repeat scroll 0 0 #ffffff !important;
+                    border-radius: 0;
+                    display: none;
+                    height: 702.936px;
+                    position: absolute;
+                    right: 1px;
+                    top: 145px;
+                    width: 10px !important;
+                    z-index: 99;
+                    opacity: 1 !important;
+                }*/
+
+                body {
+                    padding-right: 0px !important;
+                }
+
+                #divFondo {
+                    /*margin: 0;*/
+                    padding: 28px 0 0 0;
+                    /*background: rgb(230, 236, 236);*/
+                    /*overflow: hidden;*/
+                    background-image: url("../Imagen/FondoFT.jpg");
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    /*width: 100%;
+                    height: 100%;*/
+                }
+
+                /*#main-header {
+                    /*  background: #333; width: 100%;left: 0;
+                    top: 0;  position: fixed;
+                }*/
+
+                /*::-webkit-scrollbar {
+                    width: 10px;
+                    height: 10px;
+                }
+
+
+                ::-webkit-scrollbar-thumb {
+                    background-color: rgba(0, 0, 0, 0.2);
+                    border-radius: 200px;
+                }*/
+                /*#DivMenu {
+                    overflow: auto;
+                }*/
+
+
+
+
+
+                /*.contendorMenu {
+                    width: 400px;
+                    height: 300px;
+                    margin: 50px auto 0 auto;
+                    position: relative;
+                    overflow: auto;
+                }
+
+                .Menu {
+                    width: auto;
+                    height: 200px;
+                }*/
+
+                /*.sidebar {
+                    overflow-y: scroll;
+                    position: fixed;
+                }*/
+
+                /*.slimScrollBar {
+                    background-color: white !important;
+                    opacity: 0.3 !important;
+                }*/
+
+
+                div::-webkit-scrollbar {
+                    width: 3px;
+                    height:3px;/*=> ancho del scroll
+    background-color: #ffffff;=> Color del fondo principal */
+                }
+                div::-webkit-scrollbar-thumb {
+                    background-color: #48acbd; /*#263238;=> color del indicador del scroll */
+    border-radius: 8px; /*10=> bordes redondeados */
+                }
+                
+                .divContenedor::-webkit-scrollbar-track {
+                    background-color: #ffebc9; /* =>rgba(38, 50, 56, 0.19); color de fondo del trayecto del scroll */
+}
+
+                .loader {
+                    position: fixed;
+                    left: 0px;
+                    top: 0px;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 9999;
+                    background: url('/Imagen/geLoader.gif')50% 50% no-repeat rgb(249,249,249);
+                    /*background: url('images/pageLoader.gif') 50% 50% no-repeat rgb(249,249,249);*/
+                    opacity: .8;
+                }
+
+
+            </style>
+            @Styles.Render("~/Css")
+        </head>
+        @* body class="hold-transition skin-purple sidebar-mini">*@
+
+
+        @*onload="doWhatYouNeed();" hold-transition skin-black sidebar-mini fixed    hold-transition skin-black-light sidebar-mini <body class="hold-transition skin-black sidebar-mini" background="../Content/bower_components/ImagenVQ/FondoFT.png"> *@
+        <body class="hold-transition skin-black sidebar-mini fixed">
+            <div class="loader"></div>
+
+
+
+            <div class="wrapper">
+                <header class="main-header" id="main-header" style="position:fixed;width:100%;">
+                    <a href="@Url.Action("Default", "Main")" class="logo">
+                        <span class="logo-mini"><b>F</b>T</span>
+                        <span class="logo-lg"><b>Fronter</b></span>
+                    </a>
+
+                    <nav class="navbar navbar-static-top ">
+
+                        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" id="btnToggle">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+
+
+                        <div class="navbar-custom-menu ">
+                            <ul class="nav navbar-nav">
+
+
+                                @{var d = new DataBase_Externo(); int n = 1; }
+
+
+                                <li class="dropdown messages-menu">
+                                    <!-- Menu toggle button -->
+
+                                    @foreach (var item in d.LkObtenerTitulos()) { n++; }
+
+                                    @*   <button id="liNoti" ">*@
+
+
+                                    @*@ {var nn = detectarBoton(event);}*@
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onmousedown="detectarBoton(event);">
+                                        @*  <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/noti.png" id="infBarra">*@
+                                        <i class="fa fa-bell-o" id="quitaLi"></i>
+                                        <span class="label label-danger">@n</span>
+                                    </a>
+                                    @*</button>*@
+
+                                    <ul class="dropdown-menu">
+                                        <li class="header">Usted tiene @n notificaciones</li>
+                                        <li>
+                                            <!-- inner menu: contains the messages -->
+                                            <ul class="menu">
+                                                @foreach (var item in d.LkObtenerTitulos())
+                                        {
+                                            <li>
+                                                <!-- start message -->
+                                                <a href="#">
+                                                    @*<div class="pull-left table-responsive">*@
+                                                    <div class="pull-left">
+                                                        <!-- User Image -->
+                                                        @*<i class="fa fa-info-circle"></i>*@
+
+                                                        <img src="~/Content/bower_components/ImagenVQ/imgGrupo.png" class="img-circle" alt="User Image" id="imgU">
+                                                    </div>
+                                                    <h4>Estimado, <small><i class="fa fa-clock-o"></i>Fronter</small></h4>
+                                                    <p>@item.Descripcion</p>
+                                                </a>
+                                            </li>
+                                            <!-- end message -->
+                                    n++;
+                                }
+                                            </ul>
+                                            <!-- /.menu -->
+                                        </li>
+                                        <li class="footer"><a href="#">Ver todas las Notificaciones</a></li>
+                                    </ul>
+
+
+                                    <!-- <ul class="dropdown-menu"> -->
+                                    <!-- <li class="header">Titulo Pagina</li> -->
+                                    <!-- <li> -->
+                                    <!-- inner menu: contains the messages -->
+                                    <!-- <ul class="menu"> -->
+                                    <!--arrob foreach (var item in d.LkObtenerTitulos()) -->
+                                    <!-- { -->
+                                    <!-- <li> -->
+                                    <!-- start message -->
+                                    <!-- <a href="#"> -->
+                                    <!-- @*<div class="pull-left table-responsive">*@ -->
+                                    <!-- <div class="fa-pull-left"> -->
+                                    <!-- <!-- User Image -->
+                                    <!-- <i class="fa fa-info-circle"></i> -->
+                                    <!-- @*<img src="https: //almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">*@ -->
+                                    <!-- </div> -->
+                                    <!-- <h4>Estimado, <small><i class="fa fa-clock-o"></i>Fronter</small></h4>                                                    -->
+                                    <!-- <div class="">   <p >arrob  item.Descripcion</p></div> -->
+                                    <!-- </a> -->
+                                    <!-- </li> -->
+                                    <!-- n++; -->
+                                    <!-- } -->
+                                    <!-- </ul> -->
+                                    <!-- </li> -->
+                                    <!-- <li class="footer"><a href="#">See All Messages</a></li> -->
+                                    <!-- </ul> -->
+
+
+                                </li>
+
+
+                                <!--Datos Personales-->
+                                @*  <li class="dropdown user user-menu">*@
+                                @*<a href="@Url.Action("DatosPersonales", "Mantenimiento")" class="dropdown-toggle" aria-expanded="false" data-toggle="dropdown">
+                                <i class="fa  fa-user"></i>
+                                <span class="hidden-xs"> @nombreUsuario </span>
+                            </a>*@
+
+                                @*<a href="@Url.Action("DatosPersonales", "Mantenimiento")">
+                                <i class="fa  fa-user"></i>  @nombreUsuario
+                            </a>*@
+                                @*<ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/bower_components/ImagenVQ/imgGrupo.png" class="img-circle" alt="User Image" />
+                                    <p><small>@nombreUsuario</small></p>
+                                </li>
+
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        @*<a href="Cuenta.aspx" class="btn btn-default btn-flat">Datos Personales</a>* @
+                                        <a href="@Url.Action("DatosPersonales", "Mantenimiento")">
+                                            Datos Personales
+                                        </a>
+                                    </div>
+                                    <div class="pull-right">
+                                        @*  <a href="CerrarSesion.aspx" class="btn btn-default btn-flat">Cerrar Sesión</a>* @
+                                        <a href="@Url.Action("CierraSesion", "Home")"><i class="fa fa-power-off"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                                                      </li>
+                                *@
+                                <!-- Control Sidebar Toggle Button -->
+                                @*<%--
+                            <li>
+                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                            </li>--%>*@
+                                <!--Fin Datos personales-->
+                                <li>
+                                    <a href="@Url.Action("CierraSesion", "Home")"><i class="fa fa-power-off"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+
+
+                <aside class="main-sidebar" style="position:fixed;">
+                    <section class="sidebar">
+
+
+                        <div class="user-panel" style="background-color:#48acbd;position:absolute;">
+                            <div class="">
+                                <br />
+                                <img id="imgUsuario" src="~/Content/bower_components/ImagenVQ/iconoUsr.png" class="img-circle center-block" alt="User Image" style="height:@ImgSizeUsuario;width:@ImgSizeUsuario;border-radius:360px;border:3px solid #ffffff;" />
+                            </div>
+                            <div class="divUsuario" style="font-size:smaller">
+                                <br />
+                                @*<div class="divUsuarioGral" style="font-size:smaller">*@
+                                <center>
+                                    <font size="2" color="white">
+                                        <a href="@Url.Action("DatosPersonales", "Mantenimiento")" title="Ver Datos Personales" style="color:#FFFFFF;">
+                                            <small><span class="fa fa-user text-white"></span>&nbsp;@nombreUsuario</small>
+                                        </a>
+                                    </font>
+                                    <br />
+                                    @* <i class="fa fa-info-circle"></i><font size="2" color="black">Ver datos personales</font>*@
+                                    @* <a href="#"><i class="fa fa-circle text-success"></i> <font size="2" color="black">Online</font></a>*@
+                                </center>
+                                @*  </div> *@
+                            </div>
+                        </div>
+                    
+                        @*<div class="contnedorMenu" >
+        mini style="overflow-y: auto; overflow-x:hidden; position:absolute; top:165px;bottom:0;width:100%;" *@
+                        <div class="MenuContenedor" style="width:100%;overflow-y: auto;overflow-x:hidden;top:184px;bottom:0;position:absolute;">
+                        <div class="img-responsive" >
+                            <ul class="sidebar-menu" data-widget="tree">
+                                @*<li class="header">MENU</li>*@
+
+                                @using Quimipac_.Models
+                                @{
+                BD_QUIMIPACEntities db = new BD_QUIMIPACEntities();
+                var opciones_padre = System.Web.HttpContext.Current.Session["opciones_padres"] as List<sp_Quimipac_ConsultaOpcionesSistema_Result>
+                    ;
+
+                string itemMantenimiento = "Mantenimiento";
+
+                foreach (var item in opciones_padre)
+                {
+                    if (item.Action == "")
+                    {
+                        <li class="treeview" id="itemDiv">
+                            <a href="#"  id="@itemMantenimiento">
+                                <i class="fa fa-gears"></i> <span>@item.Menu</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @{
+                try
+                {
+                    var opciones_nivel2 = db.sp_Quimipac_ConsultaOpcionesSistema(usuario, item.Id_Menu).ToList();
+
+                    if (opciones_nivel2.Count() != 0)
+                    {
+                        foreach (var item2 in opciones_nivel2)
+                        {
+                            var opciones_nivel3 = db.sp_Quimipac_ConsultaOpcionesSistema(usuario, item2.Id_Menu).ToList();
+
+                            if (opciones_nivel3.Count() != 0)
+                            {
+                                <li class="treeview"  id="itemDiv">
+                                    @*   <div id="divMenu">....*@
+                                    <a href="#"  id="@item2.Action">
+                                        <i class="fa fa-archive"></i> @item2.Menu
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    @*....    <ul class="treeview-menu">
+                        @{
+                    foreach (var item3 in opciones_nivel3)
+                    {
+                        <li>@Html.ActionLink(item3.Menu, "AdministrarHoras", "Configuracion")</li>
+                             }
+                        }
+                    </ul>
+                    ....</div>  *@
+                                </li>
+
+        }
+        else
+        {
+                    <li id="itemDiv">
+                        <a href="@Url.Action(item2.Action, item2.controlador)"  id="@item2.Action"> <i class="fa fa-hand-o-right"></i> <span>@item2.Menu</span></a>
+
+                    </li>
+}
+}
+}
+}
+catch (Exception)
+{
+Response.Redirect(Url.Action("Error", "Errores"));
+
+}
+
+                                }
+                            </ul>
+                        </li>
+}
+else//default
+{
+                    <li id="itemDiv">
+                        <a href="@Url.Action(item.Action, item.controlador)" id="@item.Action"> <i class="fa fa-circle-thin"></i><span id="colorp">@item.Menu</span></a>
+                    </li>
+}
+}
+                                }
+                            </ul>
+                            @*</div>
+                            *@
+                        </div>
+                        </div>
+                    </section>
+
+            </aside>
+                <div class="content-wrapper" id="divFondo">
+
+                    <br />
+                    @RenderBody()
+                    
+                </div>
+            <footer class="main-footer" style="bottom:0">
+                <div class="pull-right hidden-xs">
+                    <b>Versi&oacute;n</b> 0.1.0
+                </div>
+                <strong>Copyright &copy; 2018 <a href="#">Quimipac S.A.</a>.</strong> All rights
+                reserved.
+            </footer>
+            <div class="control-sidebar-bg">
+            </div>
+            </div>
+
+            @* Scripts.Render ("~ / bundles / jqgrid ") *@
+
+
+            @Scripts.Render("~/Js")
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+            @RenderSection("scripts", required: false)
+
+            <!--Scroll Aside Menu-->
+            @*<script src="~/Content/bower_components/EstiloExterno/Scroll_Aside/jquery.phancy.js"></script>*@
+            @*<script src="~/Content/bower_components/EstiloExterno/ScrollMenu/jquery-2.2.0.js"></script> <script src="~/Content/bower_components/EstiloExterno/ScrollMenu/perfect-scrollbar.jquery.js"></script>*@
+
+            @* *@
+            @*jquery Notificacion*@
+            @*<script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.1.1/jquery.min.js"></script>*@
+            <script src="~/Content/bower_components/FiltroDataTable/Notificaciones/js/v3.3.7/bootstrap.min.js"></script>
+            <script src="~/Imagen/jquery.min.js"></script>
+
+
+            @*<script src="https ://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>*@
+            <script type="text/javascript">
+
+            //$(document).ready(function () {
+            //    $("#liNoti").mousedown(function (ev) {
+            //        //1 - izquierdo; 2 - medio; 3 - derecho
+            //        if (ev.which == 3) {
+            //            $('#mensaje1').text("se oprimió el botón derecho");
+            //        }
+            //    });
+            //});
+
+                function detectarBoton(event) {
+
+                    if (event.button == 2) {
+                     document.getElementById("quitaLi").value = "0"  // return 0;
+                    }
+
+                @*if (event.button == 2)
+                    alert("El botón del ratón pulsado fue el derecho"+@n);
+                else if (event.button == 1)
+                    alert("El botón del ratón pulsado fue el medio"+@n);
+                else
+                    alert("El botón del ratón pulsado fue el izquierdo"+@n);*@
+
+                    }
+
+                //ImgSizeUsuario
+                //Menu overflow-y: auto; overflow-x:hidden; position : absolute ;  top:80px; bottom:0; width:100%; border-width:1px;
+                //border - color:#669999; border - style:solid;
+
+                var globalFooter =0;
+
+
+
+                 //mini style="overflow-y: auto; overflow-x:hidden; position:absolute; top:165px;bottom:0;width:100%;"
+                     //   <div class="MenuContenedor" style="overflow-y: auto; overflow-x:hidden; position:absolute; top:235px;bottom:0;width:100%;">
+
+                    //div de imagen Usuario
+                    var contToggle = 0;
+                    $(document).ready(function () {
+                        $('#btnToggle').on('click', function (e) {
+                            if (contToggle % 2 == 0) {
+                               // e.preventDefault();
+                                //alert("Hola");
+                                //estiloDiv="display:none"; $("#divUsuario").remove();
+                                //html("style='display:none'");
+ 
+                                $("#imgUsuario").height(25);$("#imgUsuario").width(25);
+                                $(".divUsuario").html("<center><br/> <font size='2' color='white' style='text-bold'>@usuario.Substring(0,2)</p></center>");
+                               
+  //                              $("#itemDiv").hover(function(){
+		//$("#itemDiv").css("background-color", "#48acbd");
+		//});
+                                //if (contToggle == 0) {
+                                //    $(".MenuContenedor").height(184);
+                                //} else { $(".MenuContenedor").height(115);}165
+                                $(".MenuContenedor").css("top",115);
+                                //var logo = document.getElementById("imgUsuario");
+                                //logo.width = 10;
+                                //logo.height = 10;
+
+                            } else {
+                                //document.getElementById('imgUsuario'). = ImgUsuario";
+                               
+                                $("#imgUsuario").height(110); $("#imgUsuario").width(110);
+                                $(".divUsuario").html(""+
+                                    "<div class='divUsuario' style='font-size:smaller'>"+
+                                    "<br />" +
+                                  //  "   <div class='divUsuarioGral' style='font-size:smaller'>" +
+                                    "      <center>" +
+                                    "          <font size='2' color='white'>" +
+                                    "              <small><span class='fa fa-user text-white'></span>&nbsp;@nombreUsuario</small>" +
+                                    "          </font>" +
+                                    "          <br />" +
+                                   //  "          <a href='#'><i class='fa fa-circle text-success'></i> <font size='2' color='black'>Online</font></a>" +
+                                    "      </center>" +
+                                   // "  </div>" +
+                                    "</div>");
+
+                               $(".MenuContenedor").css("top",184);
+
+
+                                //Menu overflow-y: auto; overflow-x:hidden; position : absolute ;  top:80px; bottom:0; width:100%; border-width:1px;
+                //border - color:#669999; border - style:solid;
+                            }
+
+
+                            contToggle++;
+                        });
+                    });
+
+
+                //115 y 187
+                    //jQuery(document).ready(function () {
+                    //    jQuery("#cambiar").click(function () {
+
+                    //        var a = jQuery("#color");
+                    //        a.css("color", "blue");
+                    //        $("#color").html("<label style='color:white;background-color:#5bc0de; text-align: center;height:24px;padding:2px 0 0 0' >"+
+                    //            "<font size='2'>Estado de Orden de Trabajo</font>"+
+                    //            "</label>");
+                    //    });
+                    //});
+
+
+                    //Item Activo
+                    //$('li').on('click', function () {
+                    ////$('li a.activo').removeClass('activo');
+                    ////    $(this).addClass('activo');
+
+                    //
+                    //
+                    //});
+
+                    //$(document).ready(function () {
+                    //    $('.item2').on('click', function (e) {
+                    //        e.preventDefault(); alert("Hola");
+                    //    });
+                    //});
+
+
+
+                    //$(function () {
+                    //    $("li > span").click(function () {
+                    //        //Busca todos los elementos del nav que tengan la clase active y los elimina
+                    //        $(this).closest('.nav').find('li').removeClass('active');
+                    //        //Al elemento seleccionado agrega la clase active
+                    //        $(this).addClass('active');
+                    //    });
+                    //});
+
+                    //addLoadEvent(function () {
+                    //    showLightbox(document.getElementById('btnToggle'));
+                    //});
+
+                    //Mision Fallida
+                    //$(function () {
+                    //    $("#DivMenu").customScroll();
+                    //});
+                    //$('.contendorMenu').perfectScrollbar();
+
+
+
+                    //var height = $(window).height();
+                    //$('.sidebar').css('height', (height));
+
+                    //$(window).resize(function () {
+                    //    var height = $(window).height();
+                    //    $('.sidebar').css('height', (height));
+                    //});
+
+                    var UrlM = location.href;//CadUrl+"";
+                    var datearray1 = UrlM.split("/");
+                    var ActionM = datearray1[4];
+                    //alert(ActionM);
+                    //var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+                    //if ('CadUrl'.indexOf(datearray1[3]) != -1) {
+                    if (ActionM.indexOf('Default') != -1) { //Default    Dashboard#30baca
+
+                        $('#' + ActionM).css("background", "#383d46"); $('#' + ActionM).css("color", "#30baca");$('#' + ActionM).css("font-weight", "Bold");
+                    }
+
+
+                    if (ActionM.indexOf('Mant') != -1) { //Default    Dashboard#30baca
+                        var ActionMantenimiento = ActionM.replace('Mant', '');
+                        //alert(ActionMantenimiento);
+                        $('#Mantenimiento').css("background", "#383d46"); $('#Mantenimiento').css("color", "#30baca"); $('#Mantenimiento').css("font-weight", "Bold");
+                        $('#' + ActionMantenimiento).css("background", "#383d46"); $('#' + ActionMantenimiento).css("color", "#30baca"); $('#' + ActionMantenimiento).css("font-weight", "Bold");
+
+                    }
+
+                    $('#' + ActionM).css("background", "#383d46"); $('#' + ActionM).css("color", "#30baca"); $('#' + ActionM).css("font-weight", "Bold");
+
+
+                    function changeColor(x) {
+                        //////////////var UrlM = x + '';
+                        //////////////var datearray1 = UrlM.split("/");
+                        //////////////var ActionM = datearray1[3];
+                        //var newdate_ap = datearray1[1] + '/' + datearray1[0] + '/' + datearray1[2];
+                        //if ('CadUrl'.indexOf(datearray1[3]) != -1) {
+                        ///////////$('#'+ActionM).css("background", "#383d46"); $('#'+ActionM).css("color", "#48acbd"); $('#'+ActionM).css("font-weight", "Bold");
+                        //alert(ActionM);
+                        //}
+
+                        //if (x.style.color == "#48acbd") {
+                        //    x.style.color = "#ffdda3"; x.style.fontStyle = "bold";
+                        //} else {
+                        //    x.style.color = "#48acbd";
+                        //} //alert(this);
+
+                        //return false;
+                    }
+
+
+
+                /*
+
+                Default
+DatosPersonales
+NULL
+MantTipoTrabajo
+MantPrecioReferencial
+MantLugarMedicion
+MantGrupoTrabajo
+MantSector
+MantServicios
+MantTabla
+MantPermisos
+MantCampamento
+Contrato
+ProgramaTrabajo
+OrdenTrabajo
+OrdenTrabajo
+Proyectos
+MantEquipoTrabajo
+Cotizacion
+Planilla
+Solicitud_Materiales
+IngresoMateriales
+Sincronizacion
+Notificaciones*/
+                 /*if (CadUrl !="") {//.indexOf('l') != -1) {
+                      //$("#itemMenu").css("color", "#48acbd");
+                      alert('Defaulttt')
+                   //   style.color = "#ffdda3"; x.style.fontStyle = "bold
+                  }*/
+
+                //string cadena = HttpContext.Current.Request.Url.AbsoluteUri;
+                        //string[] Separado = cadena.Split('/');
+                        //string Final = Separado[Separado.Length - 1];
+                        //int orden = Convert.ToInt32(Final);
+
+
+                    //$(window).on('load', function () {
+                    //    //setTimeout(function () {
+                    //    //    $(".loader-page").css({ visibility: "hidden", opacity: "0" })
+                    //    //}, 2000);
+
+                    //});
+                    //var tmrReady = setInterval(isPageFullyLoaded, 100);
+                    //function isPageFullyLoaded() {
+                    //         if (document.readyState == "loaded" || document.readyState == "interactive" || document.readyState == "complete") {
+                    //             doWhatYouWant();
+                    //             clearInterval(tmrReady);
+                    //         }
+                    //     }
+
+             
+                    $(window).load(function () {
+                        $(".loader").fadeOut("slow");
+                    });
+            </script>
+
+        </body>
+        </html>
+
+}
+   }

@@ -1,0 +1,433 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_OrdenTrabajo_Egreso
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaItems_OrdenTrabajo = ViewBag.listaItems_OrdenTrabajo as List<sp_Quimipac_ConsultaInsMt_OrdenTrabajoEgreso_Result>;
+    var orden_trabajo = ViewBag.orden_trabajo;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+<title>Fronter | Items de Orden de Trabajo</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<section class="content-header">
+    @{
+
+        int cadena = 0;
+    <h2 style="text-align:left">
+
+        @*@foreach (var itemTipoTrabajo2 in listaItems_OrdenTrabajo)
+        {
+            if (cadena >= 0)
+            {*@
+            <font id="itemTitulo"> @Html.DisplayFor(model => orden_trabajo)</font>
+            
+                @*break;
+            }
+
+            else
+            {
+                @cadena;
+            }
+
+         }*@
+         / Items de Orden de Trabajo
+
+     </h2>
+    }
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("OrdenTrabajo", "OrdenTrabajo")">Orden Trabajo</a>
+        </li>
+        <li class="breadcrumb-item active">Items Orden de Trabajo</li>
+    </ol>
+    <br>
+
+    <div class="row">
+        <div class="col-md-2">
+            @if (oPermiso.Crear == true)
+            {
+                <button id="btnAgregarItemsOrdenTrabajo" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarItemsOrdenTrabajo">
+                    <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp; Agregar Items Orden
+                </button>
+            }
+            </div>
+        <div class="vFlotante">
+            @*hgroup style="display:inline-block;">*@
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+
+            @*</hgroup>*@
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default"  id ="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Items Orden de Trabajo</h3>
+                    </div>*@
+                <div class="box-body" id="CssDivBox">
+                    @{
+                        if (listaItems_OrdenTrabajo.Count != 0)
+                        {
+                            <div class="table-responsive">
+                                <table id="tablaItemsOrdenTrabajo" class="js-dynamitable table table-bordered">
+                                    @*class="table table-bordered table-hover"*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acci&oacute;n</th>
+                                            <th>C&oacute;digo Cliente Orden</th>
+                                            <th>Item</th>
+                                            <th>Tipo</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Moneda</th>
+                                            <th>Precio</th>
+                                            <th>Unidad</th>
+                                            <th>Area</th>
+                                            <th>Fecha</th>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo Items"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Cantidad"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Costo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Moneda"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Precio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Unidad"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Area"></th>
+                                            <th></th>
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var itemsot in listaItems_OrdenTrabajo)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    @if (oPermiso.Modificar == true)
+                                                    {
+                                                        <button type="button" class="Modificar_MTPR btn btnEditarBoton class_editar_ItemsOrdenTrabajo" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarItemsOrdenTrabajo" data-id="@itemsot.Id_OrdenTrabajo_Egreso">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                </span>*@
+                                                        </button>
+                                                    }
+                                                    @if (oPermiso.Eliminar == true)
+                                                    {
+
+                                                        <a href="@Url.Action("EliminarItemsOrdenTrabajo", "OrdenTrabajo", new { id = itemsot.Id_OrdenTrabajo_Egreso })" target="_self" class="Eliminar_MTPR btn btnEliminarBoton" title="Eliminar" style="text-align:center">
+                                                            @*    <span aria-hidden="true" class="glyphicon glyphicon-remove"> </span>*@
+                                                        </a>
+                                                    }
+
+                                                    </td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Codigo_Cliente)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.ItemsItems)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.DescripcionTipo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Cantidad)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Costo)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Moneda)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Precio)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Unidad)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Area)</td>
+                                                <td nowrap>@Html.DisplayFor(model => itemsot.Fecha)</td>
+
+                                            </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="modalAgregarItemsOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;Agregar Items de Orden Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario es para el Ingreso de Equipos" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaItemsOrden">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Items Orden de Trabajo&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; los Items de la Orden de Trabajo</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="modalEditarItemsOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                @*<h5 class="modal-title">Editar Item de Tipo Trabajo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+
+                <div class="modal-title">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <h4 class="text-bold">Editar Items de Orden Trabajo &nbsp;&nbsp; </h4>
+                            </td>
+
+                            <td>
+                                <h6>
+                                    <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                        <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                    </a>
+                                </h6>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-editarItemsOrdenTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Scripts/Modales.js"></script>
+
+    <script type="text/javascript">
+
+        modalAdd('#btnAgregarItemsOrdenTrabajo', 'modal-agregaItemsOrden', '@Url.Action("Agregar_Items_OrdenTrabajo", "OrdenTrabajo")');
+       modalEdit('.class_editar_ItemsOrdenTrabajo', 'modal-editaItemsOrdenTrabajo', '@Url.Action("Editar_Items_OrdenTrabajo", "OrdenTrabajo", new { id = "param-id" })');
+        $(document).ready(function () {
+
+                @*modalAdd('#btnAgregarItemsOrdenTrabajo', 'modal-agregaItems', '@Url.Action("Agregar_Items_OrdenTrabajo", "OrdenTrabajo")');
+                modalEdit('.class_editar_ItemsOrdenTrabajo', 'modal-editarItemsOrdenTrabajo', '@Url.Action("Editar_Items_OrdenTrabajo", "OrdenTrabajo", new { id = "param-id" })');*@
+             modalEdit('.class_editar_ItemsOrdenTrabajo', 'modal-editarItemsOrdenTrabajo', '@Url.Action("Editar_Items_OrdenTrabajo", "OrdenTrabajo", new { id = "param-id" })');
+
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+
+            //$('#tablaItemsTipoTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+            $.noConflict();
+            $('#tablaItemsOrdenTrabajo').DataTable({
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+
+        });
+
+            // Mostrar informacion de pagina
+            var i = 2;
+            function insertHtml() {
+                if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara los items de un mantenimiento de trabajo</span><br>") }
+                else {
+                    $("#htmlins").html("")//remove();
+                }//.html("<span>este codigo html fue insertado</span>") }
+
+                i++;
+            };
+    </script>
+}

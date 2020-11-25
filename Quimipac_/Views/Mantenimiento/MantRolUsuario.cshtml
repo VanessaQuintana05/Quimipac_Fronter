@@ -1,0 +1,234 @@
+﻿@*@using Quimipac_.Models*@
+@model IEnumerable<Quimipac_.Models.Permisos_Rol>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var RolesLI = ViewBag.RolesLI;
+    var TablaGeneralHtml_LI = ViewBag.TablaGeneralHtml_LI;
+}
+
+<title>Fronter | Mantenimiento Rol Usuario</title>
+@*<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">*@
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Mantenimiento de Rol Usuario
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li>
+            <a href="@Url.Action("MantMenuDRol", "Mantenimiento")">
+                <i class="fa fa-link">
+                </i>Mantenimiento Roles &nbsp;&nbsp;
+            </a><i class="" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Edit rol usuario</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        @*<div class="col-md-2">
+                <button id="btnAgregarTablas" type="button" class="Crear_MTPR btn btn-warning " data-toggle="modal" data-target="#modalAgregarRol">
+                    <span class="fa fa-plus-circle"></span>&nbsp;&nbsp; Agregar Rol
+                </button>
+            </div>*@
+        <div class="vFlotante">
+            <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+            <table>
+                <tr>
+                    <td>
+                        <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger" id="MSNError">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success" id="MSNOK">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning" id="MSNUPD">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Tablas</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+                    <div class="col-md-6">
+
+
+                        <table id="tablaTablas" class="js-dynamitable table table-bordered  ">
+                            <thead>
+                                <tr>
+                                    <th>Acciones</th>
+                                    <th>Usuario</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><input class="js-filter form-control" type="text" value="" placeholder="Usuario"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in ViewBag.UsuarioConRol_LI)
+                                    {
+                                        <tr>
+                                            <td nowrap>
+                                                <a href="@Url.Action("MantRolUsuario_Eliminar", "Mantenimiento", new { id = ViewBag.RolID, UserID = item.user_id})" target="_self" title="Quitar rol a Usuario" class="btn btnEliminarBoton" style="text-align:center"></a>
+                                            </td>
+                                            <td nowrap> @item.user_descrip</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        @using (Html.BeginForm("MantRolUsuario", "Mantenimiento", FormMethod.Post))
+                        {
+                            <div class="col-md-8">
+                                <div class="col-md-12" style="font-weight:bold;margin:10px auto;">
+                                    Nombre del Rol:&nbsp;&nbsp;&nbsp;
+                                    <span style="padding: 5px 15px;background: #fafafa;font-weight: normal;margin: 10px auto; border: 1px #dddddd solid;">@ViewBag.NombreRol</span>
+
+                                    @*<input type="text" id="nombre_Rol" name="nombre_Rol" class="form-control" value="@ViewBag.NombreRol" style="width:auto;" required />*@
+
+                                    @*@Html.EditorFor(model => model.Codigo_Cliente, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })*@
+
+                                </div>
+                                <div class="col-md-12" style="margin:5px auto;">
+                                    @Html.DropDownList("UsuarioID", null, new { @class = "select2" })
+                                </div>
+                                <div class="col-md-12">
+                                    <br />
+                                    <input type="submit" value="Guardar Usuario a Rol" class="btn btn-warning" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Mantenimiento Rol Usuario&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" style="width:30px;">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; el Mantenimiento de Roles Usuario</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.select2').select2();
+        $(document).ready(function () {
+            //$('.select2').select2({ dropdownParent: $('#modal1')});
+
+        });
+
+        //MSNError  MSNOK  MSNUPD
+        $("#MSNError").delay(2000).fadeOut(300);
+        $("#MSNOK").delay(2000).fadeOut(300);
+        $("#MSNUPD").delay(2000).fadeOut(300);
+    </script>
+}
+
+

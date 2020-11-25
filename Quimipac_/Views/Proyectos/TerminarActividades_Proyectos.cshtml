@@ -1,0 +1,119 @@
+﻿
+@model Quimipac_.Models.MT_Proyecto_Actividad
+
+@{
+    Layout = null;
+
+    //var listaActividadesOrden = ViewBag.listaActividadesOrden;
+   
+    var listaEstados = ViewBag.listaEstados;
+    //var fechaI = ViewBag.fechaI;
+    //var fechaF = ViewBag.fechaF;
+    //var listaActividad = ViewBag.listaActividad;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormTerminarActividadProyecto");
+    attributes.Add("autocomplete", "off");
+
+    //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
+    //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
+
+
+
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+
+@*Tamno imagen Info*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+
+
+@*@using (Html.BeginForm("Editar_Actividades_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("TerminarActividades_Proyectos", "Proyectos", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id_Proyecto_Actividad)
+
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado Finalizado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, (SelectList)listaEstados, htmlAttributes: new { @class = "form-control select2" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*<script src="~/Content/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/jquery.timepicker.js"></script>
+
+<script src="~/Content/datepair.js"></script>
+<script src="~/Content/jquery.datepair.js"></script>
+
+@*filtro combox*@
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+    //$('#comboObligatorioEditar').change(function (e) {
+
+    //    if ($(this).val() == "S") {
+
+    //        $('#pesoEditar').prop("hidden", false);
+    //    }
+    //    else {
+    //        $('#pesoEditar').prop("hidden", true);
+    //    }
+
+    //})
+
+    $(document).ready(function () {
+
+
+        $('#datepairExample .time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            minTime: '00:15:00',
+            maxTime: '23:59:59',
+            interval: 15,
+            step: 15
+        });
+
+        $('#datepairExample').datepair();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+    });
+
+
+
+
+
+</script>

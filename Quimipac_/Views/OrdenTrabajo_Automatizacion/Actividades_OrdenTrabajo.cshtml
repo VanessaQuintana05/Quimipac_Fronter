@@ -1,0 +1,575 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_OrdenTrabajo_Actividad
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaActividades_OrdenTrabajo = ViewBag.listaActividades_OrdenTrabajo as List<Sp_MtOrdenTActividad_Result>;
+    var orden_trabajo = ViewBag.orden_trabajo;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+    <title>Fronter | Actividades de Orden de Trabajo Automatizacion</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<section class="content-header">
+    @{
+
+        int cadena = 0;
+        <h2 style="text-align:left">
+
+
+            @*@foreach (var itemTipoTrabajo2 in listaActividades_OrdenTrabajo)
+        {
+            if (cadena >= 0)
+            {*@
+            <font id="itemTitulo">@Html.DisplayFor(model => orden_trabajo) </font>
+
+            @*break;
+            }
+
+            else
+            {
+                @cadena;
+            }
+
+        }*@
+            / Actividades de Orden de Trabajo Automatizacion
+        </h2>
+    }
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("OrdenTrabajo_Automatizacion", "OrdenTrabajo_Automatizacion")">Orden Trabajo Automatizacion</a>
+        </li>
+        <li class="breadcrumb-item active">Actividades Orden de Trabajo Automatizacion</li>
+    </ol>
+    <br>
+
+    <div class="vFlotante">
+        @*hgroup style="display:inline-block;">*@
+        <!--<img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">-->
+        <table>
+            <tr>
+                <td>
+                    <input type="button" value="" class="btnInformacionBoton" id="botonimagen" data-toggle="modal" data-target="#modalNotificacion" title="click para informacion" />
+
+                </td>
+            </tr>
+        </table>
+
+        @*</hgroup>*@
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-2">
+                <button id="btnAgregarActividadOrdenTrabajo" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarActividadOrdenTrabajo">
+                    Agregar Actividad
+                </button>
+            </div>
+        </div>*@
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>}
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Actividades Orden de Trabajo</h3>
+                    </div>*@
+                <div class="box-body" id="CssDivBox">
+                    @{
+                        if (listaActividades_OrdenTrabajo.Count != 0)
+                        {
+                            <div class="table-responsive">
+                                <table id="tablaActividadesOrdenTrabajo" class="js-dynamitable table table-bordered">
+                                    @*class="table table-bordered table-hover"*@
+                                    <thead>
+                                        <tr>
+                                            <th>Acci&oacute;n</th>
+                                            <th>C&oacute;digo</th>
+                                            <th>Descripci&oacute;n Actividad</th>
+                                            <th>Estado</th>
+                                            <th>No. Orden</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>Comentario</th>
+                                            <th>Responsable</th>
+
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Descripcion"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="No. Orden"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Inicio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Fin"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Comentario"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Responsable"></th>
+
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var actividad in listaActividades_OrdenTrabajo)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+
+                                            <tr style="@estilo">
+
+                                                <td nowrap>
+                                                    @if (oPermiso.Modificar == true)
+                                                    {
+                                                        if (actividad.Fecha_Ini != null)
+                                                        {
+                                                            <button type="button" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_ActividadOrdenTrabajo" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarActividadOrdenTrabajo" data-id="@actividad.Id_OrdenTrabajo_Actividad">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                    </span>*@
+                                                            </button>
+                                                        }
+                                                    }
+                                                        <!--ACTIVAD DESALOJO -TRU-FALSE-->
+                                                        @if (actividad.Descripcion.ToUpper() == "RETIRO DEL DESALOJO")
+                                                        {
+                                                            <button type="button" id="boton_Operador_Json" class="btn btnIntegrantesBoton_OT btn btn-MODAL class_OperadoresOrdenTrabajo" title="Operador" style="text-align:center;display:none" data-toggle="modal" data-target="#modalOperadoresActividadOrdenTrabajo" data-id="@actividad.Id_OrdenTrabajo_Actividad">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-play">
+                                                                </span>*@
+                                                            </button>
+
+                                                            <button type="button" class="btn btnPlayBoton_OT class_OperadoresOrdenTrabajo" onclick="IniciaActividad_Operdor(@actividad.Id_OrdenTrabajo_Actividad)" title="Operador" style="text-align:center" data-id="@actividad.Id_OrdenTrabajo_Actividad">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-play">
+                                                                </span>*@
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <a href="@Url.Action("IniciarActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = actividad.Id_OrdenTrabajo_Actividad })" target="_self" class="btn btnPlayBoton_OT" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-play">
+                                                                </span>*@
+                                                            </a>
+
+                                                        }
+
+                                                        <button type="button" class="class_Finalizar_ActividadOrdenTrabajo btn btnStopBoton_OT" title="Finalizar" style="text-align:center" data-toggle="modal" data-target="#modalFinalizarActividadOrdenTrabajo" data-id="@actividad.Id_OrdenTrabajo_Actividad">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-stop">
+                                                            </span>*@
+                                                        </button>
+
+                                                        <a href="@Url.Action("Formularios_Actividad", "OrdenTrabajo_Automatizacion", new { id = actividad.Id_OrdenTrabajo_Actividad })" target="_self" class="btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-file">
+                                                            </span>*@
+                                                        </a>
+
+                                                        @*<a href="@Url.Action("TerminarActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = actividad.Id_OrdenTrabajo_Actividad })" target="_self" class="btn btn-primary" style="text-align:center">
+                <span aria-hidden="true" class="glyphicon glyphicon-stop">
+                </span>
+            </a>*@
+
+                                                        @*<a href="@Url.Action("Formularios_Actividad", "Mantenimiento", new { id = actividad.Id_Actividad })" target="_self" class="btn btn-primary" title="Formulario" style="background:#605ca8;text-align:center">
+                <span aria-hidden="true" class="glyphicon glyphicon-file">
+                </span>
+            </a>*@
+                                                    </td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Codigo_Cliente)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Descripcion)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.DescripcionEstado)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Orden)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Fecha_Ini)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Fecha_Fin)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Comentario)</td>
+                                                <td nowrap>@Html.DisplayFor(model => actividad.Responsable)</td>
+
+                                            </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*<div id="modalAgregarActividadOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div class="modal-title">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold">Agregar Actividad de Orden Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="modal-agregaActividad">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+
+<!--div notificacion de ayuda -->
+<div id="modalNotificacion" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title col-md-12">
+
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    <h4 class="text-bold">Notificacion-Actividades Orden de Trabajo&nbsp;&nbsp; </h4>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <h6>
+                                <a href="#" title=" " class="tooltip_elemento center">
+                                    <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png">
+                                </a>
+                            </h6>
+
+                        </td>
+
+                        <td>
+                            <p><center> En esta Pagina se detallar&aacute; las Actividades de las Ordenes de Trabajo</center></p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="modalEditarActividadOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp;Editar Actividad de Orden Trabajo &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-editarActividadOrdenTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Finalizar Actividad OT-->
+
+<div id="modalFinalizarActividadOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                @*<h5 class="modal-title">Editar Item de Tipo Trabajo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+
+                <div class="modal-title">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <h4 class="text-bold">Finalizar Actividad de Orden Trabajo &nbsp;&nbsp; </h4>
+                            </td>
+
+                            @*<td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>*@
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-finalizarActividadOrdenTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalOperadoresActividadOrdenTrabajo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                @*<h5 class="modal-title">Editar Item de Tipo Trabajo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+
+                <div class="modal-title">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <h4 class="text-bold">Operador Actividad de Orden Trabajo &nbsp;&nbsp; </h4>
+                            </td>
+
+                            @*<td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>*@
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-operadoresActividadOrdenTrabajo">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+
+    <script src="~/Scripts/Modales.js"></script>
+
+    <script type="text/javascript">
+
+        @*modalAdd('#btnAgregarActividadOrdenTrabajo', 'modal-agregaActividad', '@Url.Action("Agregar_Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion")');*@
+        modalEdit('.class_editar_ActividadOrdenTrabajo', 'modal-editarActividadOrdenTrabajo', '@Url.Action("Editar_Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = "param-id" })');
+        modalEdit('.class_Finalizar_ActividadOrdenTrabajo', 'modal-finalizarActividadOrdenTrabajo', '@Url.Action("TerminarActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = "param-id" })');
+        modalEdit('.class_OperadoresOrdenTrabajo', 'modal-operadoresActividadOrdenTrabajo', '@Url.Action("Operadores_ActividadOrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = "param-id" })');
+
+
+        $(document).ready(function () {
+
+                @*modalAdd('#btnAgregarActividadOrdenTrabajo', 'modal-agregaActividad', '@Url.Action("Agregar_Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion")');*@
+            //modalEdit('.class_editar_ActividadOrdenTrabajo', 'modal-editarActividadOrdenTrabajo', '***Url.Action("Editar_Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = "param-id" })');
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+
+            //$('#tablaItemsTipoTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+            $.noConflict();
+            $('#tablaActividadesOrdenTrabajo').DataTable({
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            });
+
+        });
+
+            // Mostrar informacion de pagina
+            var i = 2;
+            function insertHtml() {
+                if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara los items de un mantenimiento de trabajo</span><br>") }
+                else {
+                    $("#htmlins").html("")//remove();
+                }//.html("<span>este codigo html fue insertado</span>") }
+
+                i++;
+        };
+
+         
+
+        function IniciaActividad_Operdor(actividad_Id) {
+        //var jsonObject = { id: actividad_Id};
+        $.ajax({
+                type: 'POST',
+                url: '/OrdenTrabajo_Automatizacion/IniciarActividadOrdenTrabajo_Json/'+actividad_Id,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                //data: JSON.stringify(jsonObject),
+
+            success: function (mensaje) {
+                if (mensaje == 'Orden Actividad Iniciada') {
+
+//                    $("#boton_Operador_Json").click();
+                    var obj = document.getElementById("boton_Operador_Json");
+
+        if (obj) {
+            obj.click();
+        }
+
+                    @*var url = "@Url.Action("Actividades_OrdenTrabajo","OrdenTrabajo_Automatizacion", new { id =id_orden})";//'OrdenTrabajo_Automatizacion/Actividades_OrdenTrabajo/'+ id_orden;
+                    window.location.href = url;*@
+                }
+                 else { alert(mensaje);}
+                     },
+                error: function () {alert("Error al ingresar datos"); }
+            });
+    }
+
+    </script>
+}

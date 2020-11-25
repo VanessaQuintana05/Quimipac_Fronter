@@ -1,0 +1,801 @@
+﻿body {
+}
+
+h2 {
+ /*   color: #207446;*/
+}
+
+/*DIV DE ALERTAS*/
+.alert-alert-danger {
+    background: #d30203; /*#f7e4e7;*/
+    width: auto;
+    height: 52px;
+    border-radius: 3px 3px;
+    padding: 15px;
+    margin-bottom: 20px;
+    /*opacity: 0.7;*/
+}
+
+
+
+
+/*General DivContendor*/
+/*-------------------------*/
+#BordeDiv {
+    /*<div class="box box-default" id="BordeDiv">*/
+    border-color: #f39c12;
+    opacity: 0.95;
+}
+
+
+#CssDivBox { /*<div class="box body" id="CssDivBox">*/
+    height: 464px;/*420px;*/
+    overflow-y: auto;
+}
+
+.js-dynamitable {
+    font-size: 9pt;
+}
+/*input filtro*/
+.js-filter {
+    /* width:100%;auto;118px;*/
+    width: 125px;
+    height: 20px;
+    border: 0;
+    font-size: 9pt;
+}
+
+/*CssHeadTablaGral {
+    width:auto;
+}*/
+
+/*Items subpaginas*/
+#itemTitulo {
+    color:cornflowerblue;  
+    font-size:24px;
+}
+
+/*modaes barra titulo*/
+.modal-header {
+    height: 50px;
+    padding: 4px 4px 4px 4px;
+}
+
+
+.modal-title {
+    background:#f5b024;
+    text-align:center;
+    height:40px;
+    padding:0 5px 5px 5px;
+}
+.panel-heading {
+    height: 35px;
+    padding: 3px 2px 2px 2px;
+}
+
+.close {
+    color: #474a56;
+}
+
+/*ESTILO DE DIV NOTIFICANTES*/
+.alert alert-danger {
+    opacity: 0.95;
+}
+
+.alert alert-success {
+    opacity: 0.95;
+}
+
+.alert alert-warning {
+    opacity: 0.95;
+}
+
+
+.btnEditarBoton {
+    /*background-image: url('../../../Imagen/mantenimiento_icons/mantenimiento_icons/icon boton_editar.png');*/
+    /*background: url(../Imagen/lupa-azul.png);*/
+    background: url(../../../Imagen/mantenimiento_icons/mantenimiento_icons/iconboton_editar.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEliminarBoton {
+    background: url(../../../Imagen/mantenimiento_icons/mantenimiento_icons/iconboton_eliminar.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+    
+}
+
+.btnInformacionBoton {
+    background: url(../../../Imagen/mantenimiento_icons/mantenimiento_icons/icon_información.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEquiposBoton {
+    background: url(../../../Imagen/MENU_icons/icons_equiposyherramientas.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnIntegrantesBoton {
+    background: url(../../../Imagen/mantenimiento_icons/gruposdetrabajo_icons/iconboton_equipos.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+
+.btnActividadesBoton {
+    background: url(../../../Imagen/ordendetrabajo_icons/iconboton_actividades.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnItemsBoton {
+
+    background: url(../../../Imagen/mantenimiento_icons/tiposdetrabajo_icons/iconboton_items.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnMedidassBoton {
+  
+    background: url(../../../Imagen/ordendetrabajo_icons/iconboton_medidas.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnFormularioBoton {
+    background: url(../../../Imagen/contrato_icons/icoboton_FORMULARIO.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnDetalleBoton {
+    background: url(../../../Imagen/planilla_icons/iconboton_detalle.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnValorBoton {
+    
+    background: url(../../../Imagen/ordendetrabajo_icons/iconboton_valor.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEstadoBoton {
+
+    background: url(../../../Imagen/ordendetrabajo_icons/iconboton_estado.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnCausaRaizBoton {
+    background: url(../../../Imagen/planilla_icons/iconboton_detalle.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnAlertaBoton {
+
+    background: url(../../../Imagen/contrato_icons/iconboton_ALERTA.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnParametroBoton {
+
+    background: url(../../../Imagen/contrato_icons/iconboton_PARAMETROS.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnProrrogaBoton {
+
+    background: url(../../../Imagen/contrato_icons/iconboton_PRORROGA.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnFiscalizadorBoton {
+
+    background: url(../../../Imagen/contrato_icons/iconboton_FISCALIZADOR.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEventoBoton {
+    background: url(../../../Imagen/equipos_icons/iconboton_eventos.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEntrega_OrdenBoton {
+    /*background: url(../../../Imagen/botones/botones_orange_01.png);
+    /*background-size: 50%;* /
+    background-repeat: no-repeat;
+    /*background-position: 70%;* /
+    border: 1px;
+    height: 90px;
+    width: 600px;
+    margin: 0;*/
+    /*position: absolute;*/
+    background-image: url(../../../Imagen/botones/botones_orange_01.png);
+}
+
+.btnContratoBoton {
+    background: url(../../../Imagen/botones/botones_orange_02.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnEquiposAgregarBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_04.png);    
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnMaterialesBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_05.png);   
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnTipoTrabajoBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_06.png);   
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnSolicitudesBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_07.png);    
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnProyectosBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_08.png);    
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnPresupuestoBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_09.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+.btnPlanillaBoton {
+    background-image: url(../../../Imagen/botones/botones_orange_10.png);
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 25px;
+    width: 35px;
+    margin: 0;
+    /*position: absolute;*/
+}
+
+
+/****************************
+       TABLAS GENEALES
+*****************************/
+/*table tbody tr td {
+    width:auto !important;
+}*/
+
+.TRRows {
+    /*display: inline-flex !important;
+    width: auto !important;*/
+}
+
+.TDRows {
+    display: inline-flex !important;
+    /*width:auto !important;*/
+}
+.table-responsive table tbody tr:nth-child(2n) {
+    background-color: #f9f9f9 !important;
+}
+
+/********************************
+        PERMISOS ACCIONES
+*********************************/
+/**** barra Defaul ****/
+.slimScrollBar {
+    display:none !important;
+}
+
+button.Eliminar_MTPR, a.Eliminar_MTPR {
+    display:inline-flex ;
+}
+
+button.Consultar_MTPR,a.Consultar_MTPR,
+button.Modificar_MTPR,a.Modificar_MTPR,
+button.Crear_MTPR,a.Crear_MTPR,
+button.Eliminar_MTPR,a.Eliminar_MTPR,
+button.Aprobar_MTPR,a.Aprobar_MTPR 
+/*
+button.btnActividadesBoton, button.btnItemsBoton, button.btnMedidassBoton, button.btnDetalleBoton,
+a.btnActividadesBoton, a.btnItemsBoton, a.btnMedidassBoton, a.btnDetalleBoton,
+button.btnEditarBoton, a.btnEliminarBoton, button.btnEliminarBoton, button.btn-warning 
+*/
+{
+    /*display: none;*/
+}
+/*  /CONTRATO GRAL      */
+#divFiltro {
+    margin:0px 0;
+}
+#formFilter {
+    position: fixed;
+    z-index: 1;
+    background: #FFF;
+    border-radius: 10px;
+    width: 80%;
+    border: 2px solid #d6d5d6;
+    padding: 5px;
+    -webkit-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    margin-top: 50px;
+}
+
+#botoneraReport {
+    position: fixed;
+    z-index: 1;
+    background: #FFF;
+    border-radius: 10px;
+    width: 30%;
+    border: 2px solid #d6d5d6;
+    padding: 5px;
+    -webkit-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+}
+
+#botoneraOT {
+    position: fixed;
+    z-index: 1;
+    background: #FFF;
+    border-radius: 10px;
+    width: 39%;
+    border: 2px solid #d6d5d6;
+    padding: 5px;
+    -webkit-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 25px 0px rgba(0,0,0,0.75);
+    margin-top: 50px;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .wrapper {
+        width: 90%;
+        min-width: 0;
+    }
+
+    
+}
+
+@media screen and (max-width: 1100px) {
+    .rowresponsive {
+        display: inline-grid;
+    }
+}
+
+/*table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid blue;
+    width: 125px;
+    word-wrap: break-word;
+}*/
+
+
+
+.btnEditarBoton_OT {
+    /*background-image: url('../../../Imagen/mantenimiento_icons/mantenimiento_icons/icon boton_editar.png');*/
+    /*background: url(../Imagen/lupa-azul.png);*/
+    /*background: url(../../../Imagen/mantenimiento_icons/mantenimiento_icons/iconboton_editar.png);*/
+    background-image: url('../../../Imagen/FRONTER/pencil.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnEquiposBoton_OT {
+    /*background: url(../../../Imagen/MENU_icons/icons_equiposyherramientas.png);*/
+    background-image: url('../../../Imagen/FRONTER/tools.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnIntegrantesBoton_OT {
+    /*background: url(../../../Imagen/mantenimiento_icons/gruposdetrabajo_icons/iconboton_equipos.png);*/
+    background-image: url('../../../Imagen/FRONTER/people.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnActividadesBoton_OT {
+    /*background: url(../../../Imagen/ordendetrabajo_icons/iconboton_actividades.png);*/
+    background-image: url('../../../Imagen/FRONTER/card-checklist.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnItemsBoton_OT {
+    /*background: url(../../../Imagen/mantenimiento_icons/tiposdetrabajo_icons/iconboton_items.png);*/
+    background-image: url('../../../Imagen/FRONTER/list-task.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnMedidassBoton_OT {
+    /*background: url(../../../Imagen/ordendetrabajo_icons/iconboton_medidas.png);*/
+    background-image: url('../../../Imagen/FRONTER/clipboard-data.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnFormularioBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/icoboton_FORMULARIO.png);*/
+    background-image: url('../../../Imagen/FRONTER/layers.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnValorBoton_OT {
+    /*background: url(../../../Imagen/ordendetrabajo_icons/iconboton_valor.png);*/
+    background-image: url('../../../Imagen/FRONTER/funnel.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnEstadoBoton_OT {
+    /*background: url(../../../Imagen/ordendetrabajo_icons/iconboton_estado.png);*/
+    background-image: url('../../../Imagen/FRONTER/bell.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnCausaRaizBoton_OT {
+    /*background: url(../../../Imagen/planilla_icons/iconboton_detalle.png);*/
+    background-image: url('../../../Imagen/FRONTER/list-ol.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnAlertaBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/iconboton_ALERTA.png);*/
+    background-image: url('../../../Imagen/FRONTER/alarm.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+
+.btnEliminarBoton_OT {
+    
+    background-image: url('../../../Imagen/FRONTER/trash.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnParametroBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/iconboton_PARAMETROS.png);*/
+    background-image: url('../../../Imagen/FRONTER/columns-gap.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnProrrogaBoton_OT {
+    
+    background-image: url('../../../Imagen/FRONTER/card-list.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnFiscalizadorBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/iconboton_FISCALIZADOR.png);*/
+    background-image: url('../../../Imagen/FRONTER/person-check.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnPlayBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/iconboton_FISCALIZADOR.png);*/
+    background-image: url('../../../Imagen/FRONTER/play.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2;
+    /*position: absolute;*/
+}
+
+.btnStopBoton_OT {
+    /*background: url(../../../Imagen/contrato_icons/iconboton_FISCALIZADOR.png);*/
+    background-image: url('../../../Imagen/FRONTER/stop.svg');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px;
+    height: 20px;
+    width: 25px;
+    margin: 2px;
+    /*position: absolute;*/
+}
+.row-2{
+    display:inline-flex;
+}
+.col-100{
+    width:100%;
+}
+._css_cmb_100{
+    width:100%;
+}
+span.PROCESO, .PROCESO, td.PROCESO,
+span.ALERTA, .ALERTA, td.ALERTA,
+span.CAIDA, .CAIDA, td.CAIDA {
+    background: black !important;
+    text-align: center !important;
+    font-size: 18px;
+    display: block;
+}
+
+span.PROCESO, .PROCESO, td.PROCESO {
+    color: Green !important;
+}
+span.ALERTA, .ALERTA, td.ALERTA{
+    color: Yellow !important;
+}
+span.CAIDA, .CAIDA, td.CAIDA {
+    color: Red !important;
+}

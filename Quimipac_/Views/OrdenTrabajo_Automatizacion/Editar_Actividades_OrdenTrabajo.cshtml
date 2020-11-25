@@ -1,0 +1,201 @@
+﻿
+@model Quimipac_.Models.MT_OrdenTrabajo_Actividad
+
+@{
+    Layout = null;
+
+    //var listaActividadesOrden = ViewBag.listaActividadesOrden;
+    var listaEstadoActividadesOrden = ViewBag.listaEstados;
+    var fechaI = ViewBag.fechaI;
+    var fechaF = ViewBag.fechaF;
+    var listaActividad = ViewBag.listaActividad;
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarActividadesOrdenTrabajo");
+    attributes.Add("autocomplete", "off");
+
+    //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
+    //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
+
+
+
+}
+@*<link rel="stylesheet" href="~/Content/plugins/timepicker/bootstrap-timepicker.min.css">*@
+
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+<link href="~/Content/jquery.timepicker.css" rel="stylesheet" />
+
+
+
+@*Tamno imagen Info*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
+@*Pinta contorno txt Obligatorio
+    <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
+*@
+
+@*@using (Html.BeginForm("Editar_Actividades_MantTipoTrabajo", "Mantenimiento", FormMethod.Post, attributes))*@
+@using (Html.BeginForm("Editar_Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">*@
+
+<div class="form-horizontal">
+    @Html.HiddenFor(model => model.Id_OrdenTrabajo_Actividad)
+
+    <div class="row">
+        <div class="col-md-12">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Actividad:</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Id_Actividad, (SelectList)listaActividad, htmlAttributes: new { @class = "form-control select2", @Disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.Id_Actividad, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Estado, (SelectList)listaEstadoActividadesOrden, htmlAttributes: new { @class = "form-control select2" })
+            @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Orden:</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Orden, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Orden, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Fecha Inicio:</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Fecha_Ini, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenE", @type = "text", @required = "required", @Disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.Fecha_Ini, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label for="recipient-name" class="col-md-2 control-label">Fecha Fin:</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Fecha_Fin, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenE", @type = "text", @required = "required", @Disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.Fecha_Fin, "", new { @class = "text-danger" })
+
+        </div>
+
+    </div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Comentario:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" />
+        </div>
+    </div>
+</div>
+
+}
+
+
+@*<script src="~/Content/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+<script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+<script src="~/Content/jquery.timepicker.js"></script>
+
+<script src="~/Content/datepair.js"></script>
+<script src="~/Content/jquery.datepair.js"></script>
+
+@*filtro combox*@
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+
+<script type="text/javascript">
+
+
+
+    $('#comboObligatorioEditar').change(function (e) {
+
+        if ($(this).val() == "S") {
+
+            $('#pesoEditar').prop("hidden", false);
+        }
+        else {
+            $('#pesoEditar').prop("hidden", true);
+        }
+
+    });
+
+    //jQuery(documento).ready(función() {
+    //    jQuery( ' #datetimepicker' ) .datepicker();
+    //}) 
+    
+    //jQuery(document).ready(function ($) {
+    //    $(function () {
+    //        $('.datefield').datepicker();
+    //    });
+    //});
+
+    //$.noConflict();
+    //jQuery(document).ready(function ($) {
+    //        $(function () {
+
+
+
+
+
+
+
+
+    var $j = jQuery.noConflict();
+    
+    $j('#datepairExample .time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            minTime: '00:15:00',
+            maxTime: '23:59:59',
+            interval: 15,
+            step: 15
+        });
+
+    $j('#datepairExample').datepair();
+
+        $j('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+
+        ///////});
+
+
+        //$('.select2').select2({
+        //    dropdownParent: $('#modal1')
+        //});
+  ///////  });
+            
+
+
+
+
+</script>

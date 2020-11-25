@@ -1,0 +1,45 @@
+﻿
+@using Quimipac_.Models
+@using Quimipac_.Repositorio;
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    //var listaNotificacion = ViewBag.listaNotificacion as List<sp_Quimipac_ConsultaMT_TablaDetalle_Result>;
+}
+
+<title>Fronter | Notificaciones </title>
+
+<section class="content-header">
+    <h2 style="text-align:left">
+        <b>NOTIFICACIONES</b>
+    </h2>
+</section>
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+                @{var d = new DataBase_Externo(); }
+                <h3 class="box-title">Hola</h3><hr />
+                @foreach (var item in d.LkObtenerTitulos())
+                {
+                    <div class="box-header">
+
+                        <div class="pull-left">
+
+                            <img src="~/Content/bower_components/ImagenVQ/imgGrupo.png" id="demo" class="img-circle" alt="User Image">
+
+                        </div>
+                        <h4>Estimado</h4>
+                        <p>@item.Descripcion</p>
+
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+</section>

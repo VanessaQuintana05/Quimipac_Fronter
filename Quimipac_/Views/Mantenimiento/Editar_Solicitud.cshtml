@@ -1,0 +1,229 @@
+﻿@model Quimipac_.Models.InsertarSolicitud
+
+@{
+    Layout = null;
+
+    var listaSucursal = ViewBag.listaSucursal;
+    string fecha_a = Convert.ToDateTime(Model.hora).ToString("MM/dd/yyyy");
+    string fecha_b = Convert.ToDateTime(Model.fecha_pro_comp).ToString("MM/dd/yyyy");
+    string fecha_c = Convert.ToDateTime(Model.fecha_disp).ToString("MM/dd/yyyy");
+
+    var attributes = new Dictionary<string, object>();
+    attributes.Add("Id", "FormEditarSolicitudes");
+    attributes.Add("autocomplete", "off");
+
+}
+
+@using (Html.BeginForm("Editar_Solicitud", "Mantenimiento", new { @id = string.Empty }, FormMethod.Post, new { @id = "modal1" }))
+{
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.semana)
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Dia:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.dia, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.dia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fecha, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.fecha, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Estado:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.estado, new List<SelectListItem>() { new SelectListItem() { Value = "0", Text = "No Atendido", Selected = true }, new SelectListItem() { Value = "1", Text = "Parcial", Selected = true }, new SelectListItem() { Value = "2", Text = "Finalizada", Selected = true }, new SelectListItem() { Value = "3", Text = "Leido", Selected = true }, new SelectListItem() { Value = "4", Text = "No aplica", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha/Hora real:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.hora, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenA", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.hora, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Observaci&oacute;n:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.observacion, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Prometida/Compra:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fecha_pro_comp, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenB", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.fecha_pro_comp, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Observaci&oacute;n DPT Compras:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.observ_compras, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Centro:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.codcen, new List<SelectListItem>() { new SelectListItem() { Value = "011", Text = "No Centro", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.codcen, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Dias Proveerdor:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.dias_prov, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                @Html.ValidationMessageFor(model => model.dias_prov, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Fecha Tesoreria:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fecha_disp, new { htmlAttributes = new { @class = "form-control is-valid", @id = "datepickerOpenC", @type = "text", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.fecha_disp, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Observaci&oacute;n DPT Tesoreria:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.observ_disp, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Observaci&oacute;n Pago Prov:</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.observ_pago, new { @class = "form-control", @type = "text", @rows = "5" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Usuario Compra:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.usuario_compra, new List<SelectListItem>() { new SelectListItem() { Value = "NHERNANDEZ", Text = "NHERNANDEZ", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.usuario_compra, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="text-bold col-md-2 control-label">Sucursal:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.cod_suc, (SelectList)listaSucursal, new { @class = "form-control select2", @style = "width: 100%" })
+                @Html.ValidationMessageFor(model => model.cod_suc, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Categoria:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.categoria, new List<SelectListItem>() { new SelectListItem() { Value = "19", Text = "Categoria 1", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.categoria, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Elemento:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.elemento, new List<SelectListItem>() { new SelectListItem() { Value = "05", Text = "Elemento 1", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.elemento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">No Cotizacion:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.num_ped_cotiz, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                @Html.ValidationMessageFor(model => model.num_ped_cotiz, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient-name" class="col-md-2 control-label">Usuario Aprobador:</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.usuario_aprobador, new List<SelectListItem>() { new SelectListItem() { Value = "NHERNANDEZ", Text = "NHERNANDEZ", Selected = true } }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.usuario_aprobador, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@*
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>*@
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+
+
+    start = new Date('@fecha_a');
+    $('#datepickerOpenA').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerOpenA').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    start = new Date('@fecha_b');
+    $('#datepickerOpenB').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerOpenB').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+    start = new Date('@fecha_c');
+    $('#datepickerOpenC').val(moment(start).format('DD/MM/YYYY'))
+    $('#datepickerOpenC').datepicker(
+        {
+            format: "dd/mm/yyyy",
+            autoclose: true
+        });
+
+
+
+    $(document).ready(function () {
+
+        //$('.select2').select2();
+
+        $('.select2').select2({
+            dropdownParent: $('#modal1')
+        });
+    })
+
+</script>

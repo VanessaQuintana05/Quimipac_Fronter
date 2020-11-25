@@ -1,0 +1,459 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_Proyecto
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var listaProyecto = ViewBag.listaProyecto as List<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result>;
+    Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
+}
+
+<title>Fronter | Gestión de proyectos</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+
+
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+
+
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .vFlotante {
+        position: absolute;
+        left: 97%;
+        top: 15%;
+        width: 4500px;
+        height: 400px;
+        transition: all .4s ease-in;
+        -webkit-transition: all .4s ease-in;
+        -moz-transition: all .4s ease-in;
+        -o-transition: all .4s ease-in;
+    }
+
+        .vFlotante:hover {
+            left: 73%;
+        }
+
+    #imgnotificacion {
+        width: 40px;
+        height: 40px;
+    }
+
+    /*.titulo {
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+    }*/
+</style>
+
+
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Gestión de proyectos
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a><i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
+        </li>
+        <li class="breadcrumb-item active">Gestión de proyectos</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        @if (oPermiso != null)
+        {
+            if (oPermiso.Crear == true)
+            {
+                <div class="col-md-2">
+                    @*<button id="btnAgregarProyectos" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarProyectos">
+                        Agregar Gestión de proyectos
+                    </button>*@
+                    <a href="@Url.Action("Agregar_proyectos","Proyectos")" class="Crear_MTPR btn btn-warning">Agregar Gestión de Proyectos</a>
+                </div>
+            }
+        }
+        else
+        {
+
+            <div class="col-md-2" style="width: 40%; color:red">
+                <h2>Debe asignar permisos para poder agregar Proyectos</h2>
+
+            </div>
+        }
+        <div class="vFlotante">
+            <table class="table-responsive">
+                <tr>
+                    <td>
+                        <br />
+                        <br />
+                        <hgroup style="display:inline-block;">
+                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">
+                        </hgroup>&nbsp;&nbsp;
+                    </td>
+
+                    <td>
+
+                        <div class="box box-default">
+                            @*<div class="box-header"><h3 class="box-title">Tipo de vista</h3></div>*@
+                            <div class="box-header">
+                                <p>En esta Pagina se detallara la Gestión de proyectos</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Proyectos</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+
+
+                    @{
+                        if (listaProyecto.Count != 0)
+                        {
+
+                            <div class="table-responsive">
+                                <table id="tablaProyectos" class="js-dynamitable table table-bordered " style="font-size:12px">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Accion</th>
+                                            <th>Codigo Interno</th>
+                                            <th>Codigo Cliente</th>
+                                            <th>Cliente</th>
+                                            <th>Categoria</th>
+                                            <th>Subcategoria</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>Estado</th>
+                                            <th>Direccion </th>
+
+                                        </tr>
+
+                                        <tr>
+                                            <th></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Codigo Interno"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Codigo Cliente"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Cliente"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Categoria"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Subcategoria"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Fecha Registro"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Fecha Inicio"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Fecha Fin"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Estado"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" style="width:118px;font-size:9pt;height:24px" placeholder="Direccion"></th>
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @{int cntFila = 0; string estilo = string.Empty; }
+                                        @foreach (var proyecto in listaProyecto)
+                                        {
+                                            if ((cntFila % 2) == 0)
+                                            {
+                                                estilo = "background-color:#f9f9f9";
+                                            }
+                                            else
+                                            {
+                                                estilo = "";
+                                            }
+                                            <tr style="@estilo">
+                                                <td nowrap>
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Modificar == true)
+                                                        {
+                                                            @*<button type="button" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_Proyectos" title="Editar" style="text-align:center" data-toggle="modal" data-target="#modalEditarProyectos" data-id="@proyecto.Id_Proyecto">
+                                                                
+                                                            </button>*@
+                                                    <a href="@Url.Action("Editar_Proyectos", "Proyectos", new { id = proyecto.Id_Proyecto })" data-popup="tooltip" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_Proyectos" title="Editar" target="_self">
+
+                                                    </a>
+                                                        
+                                                        }
+                                                    }
+
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Consultar == true)
+                                                        {
+                                                            <a href="@Url.Action("Actividades_Proyecto", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnActividadesBoton_OT " title="Actividades" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt"> </span>*@
+
+                                                            </a>}
+                                                    }
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Consultar == true)
+                                                        {
+                                                            <a href="@Url.Action("Formularios_Proyectos", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Consultar_MTPR btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-file">
+                                                                    </span>*@
+                                                            </a>}
+                                                    }
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Consultar == true)
+                                                        {
+
+                                                            <a href="@Url.Action("Parametro_Proyecto", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Consultar_MTPR btn btnParametroBoton_OT" title="Parametro" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt">
+                                                                    </span>*@
+                                                            </a>}
+                                                    }
+
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Consultar == true)
+                                                        {
+                                                            <a href="@Url.Action("Alerta_Proyecto", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Consultar_MTPR btn btnAlertaBoton_OT" title="Alerta" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="fa fa-bell">
+                                                                    </span>*@
+                                                            </a>}
+                                                    }
+
+
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Consultar == true)
+                                                        {
+                                                            <a href="@Url.Action("Fiscalizador", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Consultar_MTPR btn btnFiscalizadorBoton_OT" title="Fiscalizador" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-user">
+                                                                    </span>*@
+                                                            </a>}
+                                                    }
+
+                                                    @if (oPermiso != null)
+                                                    {
+                                                        if (oPermiso.Eliminar == true)
+                                                        {
+                                                            <a href="@Url.Action("EliminarProyecto", "Proyectos", new { id = proyecto.Id_Proyecto })" target="_self" class="Eliminar_MTPR btn btnEliminarBoton_OT" title="Eliminar" style="text-align:center">
+                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-remove">
+                                                                    </span>*@
+                                                            </a>}
+                                                    }
+
+                                                <td>@Html.DisplayFor(model => proyecto.Codigo_Interno)</td>
+                                                <td>@Html.DisplayFor(model => proyecto.Codigo_Cliente)</td>
+                                                <td>@Html.DisplayFor(model => proyecto.nombreCliente)</td>
+                                                <td>@Html.DisplayFor(model => proyecto.nombre_Categoria)</td>
+                                                <td>@Html.DisplayFor(model => proyecto.nombre_Subcategoria)</td>
+                                                <td>
+                                                    @{
+                                                        string FechaRegistro = proyecto.Fecha_Registro.ToString();
+                                                        FechaRegistro = Convert.ToDateTime(FechaRegistro).ToString("dd/MM/yyyy");
+                                                    }
+                                                    @Html.DisplayName(FechaRegistro)
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        string FechaInicio = proyecto.Fecha_Inicio.ToString();
+                                                        if (FechaInicio != "")
+                                                        {
+                                                            FechaInicio = Convert.ToDateTime(FechaInicio).ToString("dd/MM/yyyy");
+                                                        }
+                                                    }
+                                                    @Html.DisplayName(FechaInicio)    @*@Html.DisplayFor(model => proyecto.Fecha_Inicio)*@
+                                                </td>
+
+                                                <td>
+                                                    @{
+                                                        string FechaFin = proyecto.Fecha_Fin.ToString();
+                                                        if (FechaFin != "")
+                                                        {
+                                                            FechaFin = Convert.ToDateTime(FechaFin).ToString("dd/MM/yyyy");
+                                                        }
+                                                    }
+                                                    @Html.DisplayName(FechaFin)    @*@Html.DisplayFor(model => proyecto.Fecha_Inicio)*@
+                                                </td>
+
+                                                <td>@Html.DisplayFor(model => proyecto.Estado)</td>
+                                                <td>@Html.DisplayFor(model => proyecto.Direccion)</td>
+
+                                            </tr>
+
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        } //Fin If
+                        else
+                        { <label class="col-md-12" style="background-color:#ecf0f5; text-align: center; height:30px;padding:5px 0 0 0;font-weight: normal;">
+                                <span class="glyphicon glyphicon-warning-sign"> </span> &nbsp;&nbsp; Actualmente no existen proyectos ingresados
+                            </label>
+
+                        }
+                    }
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</section>
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+    <script src="~/Content/bower_components/moment/min/moment.min.js"></script>
+    <script src="~/Content/SweetAlert/sweet.js"></script>
+    <script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+    
+    <script type="text/javascript">
+
+        //modalAdd('#btnAgregarProyectos', 'modal-agregaProyectos', ' @@Url.Action("Agregar_Proyectos", "Proyectos")');
+        //modalEdit('.class_editar_Proyectos', 'modal-editaProyectos', 'Url.Action("Editar_Proyectos", "Proyectos", new { id = "param-id" })');
+
+        $(document).ready(function () {
+
+
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+
+            $.noConflict();
+            $('#tablaProyectos').DataTable({
+
+                "language": {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "No Contiene registros",
+                    "infoEmpty": "No hay registros disponibles",
+                    "decimal": "",
+                    "emptyTable": "No hay datos",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered": "(Filtro de _MAX_ total registros)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "  Mostrar _MENU_ registros",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron coincidencias",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Atras"
+                    },
+                    "aria": {
+                        "sortAscending": ": Activar orden de columna ascendente",
+                        "sortDescending": ": Activar orden de columna desendente"
+                    },
+                },
+
+
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': true
+
+                //"scrollX": true
+            });
+
+            //$('#tablaTiposTrabajo').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': false,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
+        });
+            // Mostrar informacion de pagina
+                var i = 2;
+                function insertHtml() {
+                    if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento de proyectos</span><br>") }
+                    else {
+                        $("#htmlins").html("")//remove();
+                    }//.html("<span>este codigo html fue insertado</span>") }
+
+                    i++;
+                };
+
+    </script>
+}
