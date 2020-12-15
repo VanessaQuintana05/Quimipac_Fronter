@@ -9,7 +9,7 @@
 
 }
 
-    <title>Fronter |  Alerta de Contratos y Proyectos</title>
+    <title>Fronter |  Alerta </title>
 
 
 <link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
@@ -76,7 +76,7 @@
             }
 
         }*@
-            / Alerta Contratos y Proyectos
+            / Alerta 
 
         </h2>
     }
@@ -89,10 +89,11 @@
             </a><i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
         </li>
         <li>
-            <a href="@Url.Action("Contrato", "Contrato")">Contratos y Proyectos</a>
-            <i class="fa fa-caret-left mx-2" aria-hidden="true"></i>
+            <a href="@Url.Action("Contrato", "Contrato")">
+                <i class="fa fa-caret-left mx-2" aria-hidden="true"></i>Instrumentado por
+            </a>
         </li>
-        <li class="breadcrumb-item active">Alerta Contratos y Proyectos</li>
+        <li class="breadcrumb-item active">Alerta </li>
     </ol>
     <br>
 
@@ -102,7 +103,7 @@
             @if (oPermiso.Crear == true)
             {
             <button id="btnAgregarAlerta" type="button" class="Crear_MTPR btn btn-warning" data-toggle="modal" data-target="#modalAgregarAlerta">
-                Agregar Alerta Contratos y Proyectos
+                Agregar Alerta 
             </button>
             }
             </div>
@@ -305,7 +306,7 @@ cntFila++;
                     <table>
                         <tr>
                             <td>
-                                <h4 class="text-bold"> Agregar Alerta Contratos y Proyectos&nbsp;&nbsp; </h4>
+                                <h4 class="text-bold"> Agregar Alerta &nbsp;&nbsp; </h4>
                             </td>
 
                             <td>

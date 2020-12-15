@@ -26,9 +26,11 @@ namespace Quimipac_.Models
             public string GRUPOTRABAJO { set; get; }
             public string NOMBRECLIENTE { set; get; }
             public int? ID_ORDENTRABAJO_INTEGRANTE { get; set; }
+            public int? Id_GrupoTrabajo { get; set; }
             public int? ID_ORDEN_TRABAJO { get; set; }
             public int? Id_Proyecto { get; set; }
             public int? Id_Prospecto { get; set; }
+            public bool AUTOMATIZACION { get; set; }
         }
 
     }

@@ -77,6 +77,7 @@ namespace Quimipac_.Models
         public Nullable<bool> Desalojo { get; set; }
         public Nullable<bool> Automatizacion { get; set; }
         public Nullable<int> Id_Prospecto { get; set; }
+        public Nullable<int> Id_Postventa { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MT_OrdenTrabajo_Actividad> MT_OrdenTrabajo_Actividad { get; set; }

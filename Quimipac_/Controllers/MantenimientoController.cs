@@ -238,8 +238,8 @@ namespace Quimipac_.Controllers
                     if (ModelState.IsValid)
                     {
                         var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
-                        var tipoTrabajo = db.sp_Quimipac_ConsultaMT_TipoTrabajo(empresa_id.ToString()).ToList().Where(x => x.Codigo == mT_TipoTrabajo.Codigo && x.Id_Cliente == mT_TipoTrabajo.Id_Cliente);
-                        //var tipoTrabajo = db.MT_TipoTrabajo.Where(x => x.Codigo == mT_TipoTrabajo.Codigo);
+                        var tipoTrabajo = db.sp_Quimipac_ConsultaMT_TipoTrabajo(empresa_id.ToString()).ToList().Where(x => x.Codigo == mT_TipoTrabajo.Codigo && x.Id_Cliente == mT_TipoTrabajo.Id_Cliente && x.Tipo == mT_TipoTrabajo.Tipo);
+                        
 
 
 

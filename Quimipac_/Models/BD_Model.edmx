@@ -178,6 +178,23 @@
           <Property Name="Id_Persona_Origen" Type="int" />
           <Property Name="Id_Persona_Destino" Type="int" />
         </EntityType>
+        <EntityType Name="MT_Equipo_Referencia">
+          <Key>
+            <PropertyRef Name="Id_Equipo" />
+          </Key>
+          <Property Name="Id_Equipo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Proveedor" Type="varchar" MaxLength="50" />
+          <Property Name="Id_Persona_asignada" Type="int" />
+          <Property Name="Tipo" Type="int" />
+          <Property Name="Codigo" Type="varchar" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Numero_Serie" Type="varchar(max)" />
+          <Property Name="Marca" Type="varchar(max)" />
+          <Property Name="Modelo" Type="varchar(max)" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="Estado" Type="varchar" MaxLength="1" />
+          <Property Name="Horas_Usadas" Type="int" />
+        </EntityType>
         <EntityType Name="MT_Estacion">
           <Key>
             <PropertyRef Name="Id_Estacion" />
@@ -361,6 +378,7 @@
           <Property Name="Desalojo" Type="bit" />
           <Property Name="Automatizacion" Type="bit" />
           <Property Name="Id_Prospecto" Type="int" />
+          <Property Name="Id_Postventa" Type="int" />
         </EntityType>
         <EntityType Name="MT_OrdenTrabajo_Actividad">
           <Key>
@@ -543,6 +561,7 @@
           <Property Name="Estado" Type="varchar" MaxLength="1" />
           <Property Name="Id_Empresa" Type="varchar" MaxLength="2" />
           <Property Name="Id_Prospecto" Type="int" />
+          <Property Name="Id_PostVenta" Type="int" />
         </EntityType>
         <EntityType Name="MT_Planilla">
           <Key>
@@ -650,6 +669,70 @@
           <Property Name="Fecha_Pago_Sistema_Externo" Type="varchar" MaxLength="50" />
           <Property Name="Numero_Factura_Sistema_Externo" Type="varchar" MaxLength="50" />
           <Property Name="Cod_estado_orden" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta">
+          <Key>
+            <PropertyRef Name="Id_PostVenta" />
+          </Key>
+          <Property Name="Id_PostVenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Empresa" Type="varchar" MaxLength="5" />
+          <Property Name="Id_Cliente" Type="varchar" MaxLength="10" />
+          <Property Name="Id_Usuario" Type="varchar" MaxLength="10" />
+          <Property Name="Id_Linea" Type="varchar" MaxLength="10" />
+          <Property Name="Categoria" Type="varchar" MaxLength="10" />
+          <Property Name="Subcategoria" Type="varchar" MaxLength="13" />
+          <Property Name="tipo" Type="int" />
+          <Property Name="Responsable" Type="int" />
+          <Property Name="Localidad" Type="varchar" MaxLength="2" />
+          <Property Name="Fecha_Inicio" Type="datetime" />
+          <Property Name="Fecha_Fin" Type="datetime" />
+          <Property Name="Codigo_Interno" Type="varchar" MaxLength="75" />
+          <Property Name="Codigo_Cliente" Type="varchar" MaxLength="75" />
+          <Property Name="Nombre" Type="varchar(max)" />
+          <Property Name="Estado" Type="int" />
+          <Property Name="Dia_Plazo" Type="int" />
+          <Property Name="Valor_Referencial" Type="numeric" Precision="18" Scale="4" />
+          <Property Name="monto" Type="numeric" Precision="18" Scale="4" />
+          <Property Name="costo" Type="numeric" Precision="18" Scale="4" />
+          <Property Name="Secuencial" Type="int" />
+          <Property Name="Codigo_Interno_Ant" Type="varchar" MaxLength="75" />
+          <Property Name="Observaciones" Type="varchar(max)" />
+          <Property Name="Codigo_interno_padre" Type="varchar" MaxLength="75" />
+          <Property Name="Fecha_registro" Type="datetime" />
+          <Property Name="Fecha_modificacion" Type="datetime" />
+          <Property Name="Fecha_Aprobacion_Cot" Type="datetime" />
+          <Property Name="Recepcion_Servicio" Type="varchar(max)" />
+          <Property Name="Fecha_Firma_Conformidad" Type="datetime" />
+          <Property Name="Fecha_Cumplimiento_Inst" Type="datetime" />
+          <Property Name="Id_Equipo_Ref" Type="int" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta_Alerta">
+          <Key>
+            <PropertyRef Name="Id_PostVenta_Alerta" />
+          </Key>
+          <Property Name="Id_PostVenta_Alerta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_PostVenta" Type="int" />
+          <Property Name="Id_Usuario" Type="varchar" MaxLength="10" />
+          <Property Name="Fecha_Registro" Type="datetime" />
+          <Property Name="Fecha_Alerta" Type="datetime" />
+          <Property Name="Mensaje" Type="varchar(max)" />
+          <Property Name="Repetir" Type="int" />
+          <Property Name="Estado" Type="varchar" MaxLength="1" />
+          <Property Name="Correo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta_Documentado">
+          <Key>
+            <PropertyRef Name="Id_PostVenta_Documentado" />
+          </Key>
+          <Property Name="Id_PostVenta_Documentado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_PostVenta" Type="int" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Enlace" Type="varchar(max)" />
+          <Property Name="Fecha_Registro" Type="datetime" />
+          <Property Name="Fecha_Validez" Type="datetime" />
+          <Property Name="Estado" Type="varchar" MaxLength="1" />
+          <Property Name="NombreArchivo" Type="varchar(max)" />
+          <Property Name="Tipo" Type="int" />
         </EntityType>
         <EntityType Name="MT_PrecioReferencial">
           <Key>
@@ -812,6 +895,7 @@
           <Property Name="Proyecto_Padre" Type="int" />
           <Property Name="Dia_Plazo" Type="int" />
           <Property Name="Secuencial" Type="int" />
+          <Property Name="Nombre" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="MT_Proyecto_Actividad">
           <Key>
@@ -1304,6 +1388,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MT_PostVenta_Alerta_MT_PostVenta">
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="0..1" />
+          <End Role="MT_PostVenta_Alerta" Type="Self.MT_PostVenta_Alerta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_PostVenta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Principal>
+            <Dependent Role="MT_PostVenta_Alerta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MT_PostVenta_Documentado_MT_PostVenta">
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="0..1" />
+          <End Role="MT_PostVenta_Documentado" Type="Self.MT_PostVenta_Documentado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_PostVenta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Principal>
+            <Dependent Role="MT_PostVenta_Documentado">
+              <PropertyRef Name="Id_PostVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MT_PostVenta_MT_TablaDetalle">
+          <End Role="MT_TablaDetalle" Type="Self.MT_TablaDetalle" Multiplicity="0..1" />
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_TablaDetalle">
+              <PropertyRef Name="Id_TablaDetalle" />
+            </Principal>
+            <Dependent Role="MT_PostVenta">
+              <PropertyRef Name="tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Mt_Prospecto_Alerta_MT_Prospecto">
           <End Role="MT_Prospecto" Type="Self.MT_Prospecto" Multiplicity="0..1" />
           <End Role="Mt_Prospecto_Alerta" Type="Self.Mt_Prospecto_Alerta" Multiplicity="*" />
@@ -1485,8 +1605,16 @@
           <Parameter Name="version" Type="int" Mode="In" />
           <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
         </Function>
+        <Function Name="Sp_Dashboard_Cliente_Orden" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+          <Parameter Name="isAutomatizacion" Type="bit" Mode="In" />
+        </Function>
         <Function Name="Sp_Dashboard_EstadoOT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id_empresa" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_Dashboard_GrupoOrden_Etapa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+          <Parameter Name="isAutomatizacion" Type="bit" Mode="In" />
         </Function>
         <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -1831,6 +1959,21 @@
         </Function>
         <Function Name="sp_Quimipac_ConsultaMT_Planilla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="idTipoTablaDetalle" Type="int" Mode="In" />
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Quimipac_ConsultaMT_PostVenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Quimipac_ConsultaMT_PostVenta_TipoPadre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+          <Parameter Name="tipo" Type="int" Mode="In" />
+          <Parameter Name="cliente" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Quimipac_ConsultaMT_PostVentaDocumentado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPostVenta" Type="int" Mode="In" />
+          <Parameter Name="empresa" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Quimipac_ConsultaMT_PostVentaGeneral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="empresa" Type="varchar" Mode="In" />
         </Function>
         <Function Name="sp_Quimipac_ConsultaMT_PrecioReferencial" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -2572,6 +2715,36 @@
           <Parameter Name="Fecha_Cumplimiento_Inst" Type="datetime" Mode="In" />
           <Parameter Name="Referencia" Type="int" Mode="In" />
         </Function>
+        <Function Name="sp_Quimipac_UpdatePostVenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id_PostVenta" Type="int" Mode="In" />
+          <Parameter Name="cod_cliente" Type="varchar" Mode="In" />
+          <Parameter Name="fecha_inicial" Type="datetime" Mode="In" />
+          <Parameter Name="fecha_fin" Type="datetime" Mode="In" />
+          <Parameter Name="codigo_secuencial_interno" Type="varchar" Mode="In" />
+          <Parameter Name="codigo_postventa_asociado" Type="varchar" Mode="In" />
+          <Parameter Name="unidad" Type="varchar" Mode="In" />
+          <Parameter Name="cod_servicio" Type="varchar" Mode="In" />
+          <Parameter Name="codcen" Type="varchar" Mode="In" />
+          <Parameter Name="detalle" Type="varchar(max)" Mode="In" />
+          <Parameter Name="id_estado" Type="int" Mode="In" />
+          <Parameter Name="plazo_postventa" Type="int" Mode="In" />
+          <Parameter Name="cod_tipo" Type="int" Mode="In" />
+          <Parameter Name="valorrefer" Type="numeric" Mode="In" />
+          <Parameter Name="monto" Type="numeric" Mode="In" />
+          <Parameter Name="costo" Type="numeric" Mode="In" />
+          <Parameter Name="Responsable" Type="int" Mode="In" />
+          <Parameter Name="secuencial" Type="int" Mode="In" />
+          <Parameter Name="codigo_secuencial_interno_anterior" Type="varchar" Mode="In" />
+          <Parameter Name="observaciones" Type="varchar(max)" Mode="In" />
+          <Parameter Name="codigo_interno_padre" Type="varchar" Mode="In" />
+          <Parameter Name="fecha_registro" Type="datetime" Mode="In" />
+          <Parameter Name="fecha_modificacion" Type="datetime" Mode="In" />
+          <Parameter Name="Localidad" Type="varchar" Mode="In" />
+          <Parameter Name="Fecha_Aprobacion_Cot" Type="datetime" Mode="In" />
+          <Parameter Name="Recepcion_Servicio" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Fecha_Firma_Conformidad" Type="datetime" Mode="In" />
+          <Parameter Name="Fecha_Cumplimiento_Inst" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="sp_Quimipac_UpdateProspecto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id_Prospecto" Type="int" Mode="In" />
           <Parameter Name="cod_cliente" Type="varchar" Mode="In" />
@@ -2640,6 +2813,7 @@
           <EntitySet Name="MT_EntregaOrden_Trabajo" EntityType="Self.MT_EntregaOrden_Trabajo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Equipo" EntityType="Self.MT_Equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Equipo_Evento" EntityType="Self.MT_Equipo_Evento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MT_Equipo_Referencia" EntityType="Self.MT_Equipo_Referencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Estacion" EntityType="Self.MT_Estacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Fiscalizador" EntityType="Self.MT_Fiscalizador" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Formulario" EntityType="Self.MT_Formulario" Schema="dbo" store:Type="Tables" />
@@ -2666,6 +2840,9 @@
           <EntitySet Name="MT_Permiso" EntityType="Self.MT_Permiso" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Planilla" EntityType="Self.MT_Planilla" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Planilla_Detalle" EntityType="Self.MT_Planilla_Detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MT_PostVenta" EntityType="Self.MT_PostVenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MT_PostVenta_Alerta" EntityType="Self.MT_PostVenta_Alerta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MT_PostVenta_Documentado" EntityType="Self.MT_PostVenta_Documentado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_PrecioReferencial" EntityType="Self.MT_PrecioReferencial" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Presupuesto" EntityType="Self.MT_Presupuesto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MT_Presupuesto_Detalle" EntityType="Self.MT_Presupuesto_Detalle" Schema="dbo" store:Type="Tables" />
@@ -2756,6 +2933,18 @@
           <AssociationSet Name="FK_MT_OrdenTrabajo_Valor_MT_OrdenTrabajo" Association="Self.FK_MT_OrdenTrabajo_Valor_MT_OrdenTrabajo">
             <End Role="MT_OrdenTrabajo" EntitySet="MT_OrdenTrabajo" />
             <End Role="MT_OrdenTrabajo_Valor" EntitySet="MT_OrdenTrabajo_Valor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_Alerta_MT_PostVenta" Association="Self.FK_MT_PostVenta_Alerta_MT_PostVenta">
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
+            <End Role="MT_PostVenta_Alerta" EntitySet="MT_PostVenta_Alerta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_Documentado_MT_PostVenta" Association="Self.FK_MT_PostVenta_Documentado_MT_PostVenta">
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
+            <End Role="MT_PostVenta_Documentado" EntitySet="MT_PostVenta_Documentado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_MT_TablaDetalle" Association="Self.FK_MT_PostVenta_MT_TablaDetalle">
+            <End Role="MT_TablaDetalle" EntitySet="MT_TablaDetalle" />
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
           </AssociationSet>
           <AssociationSet Name="FK_Mt_Prospecto_Alerta_MT_Prospecto" Association="Self.FK_Mt_Prospecto_Alerta_MT_Prospecto">
             <End Role="MT_Prospecto" EntitySet="MT_Prospecto" />
@@ -2998,6 +3187,23 @@
           <Property Name="Id_Persona_Origen" Type="Int32" />
           <Property Name="Id_Persona_Destino" Type="Int32" />
         </EntityType>
+        <EntityType Name="MT_Equipo_Referencia">
+          <Key>
+            <PropertyRef Name="Id_Equipo" />
+          </Key>
+          <Property Name="Id_Equipo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Proveedor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Persona_asignada" Type="Int32" />
+          <Property Name="Tipo" Type="Int32" />
+          <Property Name="Codigo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Numero_Serie" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Marca" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Horas_Usadas" Type="Int32" />
+        </EntityType>
         <EntityType Name="MT_Estacion">
           <Key>
             <PropertyRef Name="Id_Estacion" />
@@ -3181,6 +3387,7 @@
           <Property Name="Desalojo" Type="Boolean" />
           <Property Name="Automatizacion" Type="Boolean" />
           <Property Name="Id_Prospecto" Type="Int32" />
+          <Property Name="Id_Postventa" Type="Int32" />
           <NavigationProperty Name="MT_OrdenTrabajo_Actividad" Relationship="Self.FK_MT_OrdenTrabajo_Actividad_MT_OrdenTrabajo" FromRole="MT_OrdenTrabajo" ToRole="MT_OrdenTrabajo_Actividad" />
           <NavigationProperty Name="MT_OrdenTrabajo_Anexo" Relationship="Self.FK_MT_OrdenTrabajo_Anexo_MT_OrdenTrabajo" FromRole="MT_OrdenTrabajo" ToRole="MT_OrdenTrabajo_Anexo" />
           <NavigationProperty Name="MT_OrdenTrabajo_CausaRaiz" Relationship="Self.FK_MT_OrdenTrabajo_CausaRaiz_MT_OrdenTrabajo" FromRole="MT_OrdenTrabajo" ToRole="MT_OrdenTrabajo_CausaRaiz" />
@@ -3385,6 +3592,7 @@
           <Property Name="Estado" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Name="Id_Empresa" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="Id_Prospecto" Type="Int32" />
+          <Property Name="Id_PostVenta" Type="Int32" />
         </EntityType>
         <EntityType Name="MT_Planilla">
           <Key>
@@ -3492,6 +3700,75 @@
           <Property Name="Fecha_Pago_Sistema_Externo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Numero_Factura_Sistema_Externo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Cod_estado_orden" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta">
+          <Key>
+            <PropertyRef Name="Id_PostVenta" />
+          </Key>
+          <Property Name="Id_PostVenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Empresa" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Cliente" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Usuario" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Linea" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Categoria" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Subcategoria" Type="String" MaxLength="13" FixedLength="false" Unicode="false" />
+          <Property Name="tipo" Type="Int32" />
+          <Property Name="Responsable" Type="Int32" />
+          <Property Name="Localidad" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Inicio" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Fin" Type="DateTime" Precision="3" />
+          <Property Name="Codigo_Interno" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Codigo_Cliente" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="Int32" />
+          <Property Name="Dia_Plazo" Type="Int32" />
+          <Property Name="Valor_Referencial" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="monto" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="costo" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="Secuencial" Type="Int32" />
+          <Property Name="Codigo_Interno_Ant" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Codigo_interno_padre" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_registro" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_modificacion" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Aprobacion_Cot" Type="DateTime" Precision="3" />
+          <Property Name="Recepcion_Servicio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Firma_Conformidad" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Cumplimiento_Inst" Type="DateTime" Precision="3" />
+          <Property Name="Id_Equipo_Ref" Type="Int32" />
+          <NavigationProperty Name="MT_PostVenta_Alerta" Relationship="Self.FK_MT_PostVenta_Alerta_MT_PostVenta" FromRole="MT_PostVenta" ToRole="MT_PostVenta_Alerta" />
+          <NavigationProperty Name="MT_PostVenta_Documentado" Relationship="Self.FK_MT_PostVenta_Documentado_MT_PostVenta" FromRole="MT_PostVenta" ToRole="MT_PostVenta_Documentado" />
+          <NavigationProperty Name="MT_TablaDetalle" Relationship="Self.FK_MT_PostVenta_MT_TablaDetalle" FromRole="MT_PostVenta" ToRole="MT_TablaDetalle" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta_Alerta">
+          <Key>
+            <PropertyRef Name="Id_PostVenta_Alerta" />
+          </Key>
+          <Property Name="Id_PostVenta_Alerta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_PostVenta" Type="Int32" />
+          <Property Name="Id_Usuario" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Registro" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Alerta" Type="DateTime" Precision="3" />
+          <Property Name="Mensaje" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Repetir" Type="Int32" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MT_PostVenta" Relationship="Self.FK_MT_PostVenta_Alerta_MT_PostVenta" FromRole="MT_PostVenta_Alerta" ToRole="MT_PostVenta" />
+        </EntityType>
+        <EntityType Name="MT_PostVenta_Documentado">
+          <Key>
+            <PropertyRef Name="Id_PostVenta_Documentado" />
+          </Key>
+          <Property Name="Id_PostVenta_Documentado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_PostVenta" Type="Int32" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Enlace" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Registro" Type="DateTime" Precision="3" />
+          <Property Name="Fecha_Validez" Type="DateTime" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="NombreArchivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Tipo" Type="Int32" />
+          <NavigationProperty Name="MT_PostVenta" Relationship="Self.FK_MT_PostVenta_Documentado_MT_PostVenta" FromRole="MT_PostVenta_Documentado" ToRole="MT_PostVenta" />
         </EntityType>
         <EntityType Name="MT_PrecioReferencial">
           <Key>
@@ -3659,6 +3936,7 @@
           <Property Name="Proyecto_Padre" Type="Int32" />
           <Property Name="Dia_Plazo" Type="Int32" />
           <Property Name="Secuencial" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="MT_Proyecto_Actividad" Relationship="Self.FK_MT_Proyecto_Actividad_MT_Proyecto" FromRole="MT_Proyecto" ToRole="MT_Proyecto_Actividad" />
           <NavigationProperty Name="MT_Proyecto_Alerta" Relationship="Self.FK_MT_Proyecto_Alerta_MT_Proyecto" FromRole="MT_Proyecto" ToRole="MT_Proyecto_Alerta" />
           <NavigationProperty Name="MT_Proyecto_Documento" Relationship="Self.FK_MT_Proyecto_Documento_MT_Proyecto" FromRole="MT_Proyecto" ToRole="MT_Proyecto_Documento" />
@@ -3872,6 +4150,7 @@
           <Property Name="Id_Padre" Type="Int32" />
           <Property Name="Orden" Type="Int32" />
           <NavigationProperty Name="MT_Contrato" Relationship="Self.FK_MT_Contrato_MT_TablaDetalle" FromRole="MT_TablaDetalle" ToRole="MT_Contrato" />
+          <NavigationProperty Name="MT_PostVenta" Relationship="Self.FK_MT_PostVenta_MT_TablaDetalle" FromRole="MT_TablaDetalle" ToRole="MT_PostVenta" />
           <NavigationProperty Name="MT_Prospecto" Relationship="Self.FK_MT_Prospecto_MT_TablaDetalle" FromRole="MT_TablaDetalle" ToRole="MT_Prospecto" />
         </EntityType>
         <EntityType Name="MT_Tablas">
@@ -4175,6 +4454,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MT_PostVenta_Alerta_MT_PostVenta">
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="0..1" />
+          <End Role="MT_PostVenta_Alerta" Type="Self.MT_PostVenta_Alerta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_PostVenta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Principal>
+            <Dependent Role="MT_PostVenta_Alerta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MT_PostVenta_Documentado_MT_PostVenta">
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="0..1" />
+          <End Role="MT_PostVenta_Documentado" Type="Self.MT_PostVenta_Documentado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_PostVenta">
+              <PropertyRef Name="Id_PostVenta" />
+            </Principal>
+            <Dependent Role="MT_PostVenta_Documentado">
+              <PropertyRef Name="Id_PostVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MT_PostVenta_MT_TablaDetalle">
+          <End Role="MT_TablaDetalle" Type="Self.MT_TablaDetalle" Multiplicity="0..1" />
+          <End Role="MT_PostVenta" Type="Self.MT_PostVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MT_TablaDetalle">
+              <PropertyRef Name="Id_TablaDetalle" />
+            </Principal>
+            <Dependent Role="MT_PostVenta">
+              <PropertyRef Name="tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Mt_Prospecto_Alerta_MT_Prospecto">
           <End Role="MT_Prospecto" Type="Self.MT_Prospecto" Multiplicity="0..1" />
           <End Role="Mt_Prospecto_Alerta" Type="Self.Mt_Prospecto_Alerta" Multiplicity="*" />
@@ -4355,6 +4670,7 @@
           <EntitySet Name="MT_EntregaOrden_Trabajo" EntityType="Self.MT_EntregaOrden_Trabajo" />
           <EntitySet Name="MT_Equipo" EntityType="Self.MT_Equipo" />
           <EntitySet Name="MT_Equipo_Evento" EntityType="Self.MT_Equipo_Evento" />
+          <EntitySet Name="MT_Equipo_Referencia" EntityType="Self.MT_Equipo_Referencia" />
           <EntitySet Name="MT_Estacion" EntityType="Self.MT_Estacion" />
           <EntitySet Name="MT_Fiscalizador" EntityType="Self.MT_Fiscalizador" />
           <EntitySet Name="MT_Formulario" EntityType="Self.MT_Formulario" />
@@ -4381,6 +4697,9 @@
           <EntitySet Name="MT_Permiso" EntityType="Self.MT_Permiso" />
           <EntitySet Name="MT_Planilla" EntityType="Self.MT_Planilla" />
           <EntitySet Name="MT_Planilla_Detalle" EntityType="Self.MT_Planilla_Detalle" />
+          <EntitySet Name="MT_PostVenta" EntityType="Self.MT_PostVenta" />
+          <EntitySet Name="MT_PostVenta_Alerta" EntityType="Self.MT_PostVenta_Alerta" />
+          <EntitySet Name="MT_PostVenta_Documentado" EntityType="Self.MT_PostVenta_Documentado" />
           <EntitySet Name="MT_PrecioReferencial" EntityType="Self.MT_PrecioReferencial" />
           <EntitySet Name="MT_Presupuesto" EntityType="Self.MT_Presupuesto" />
           <EntitySet Name="MT_Presupuesto_Detalle" EntityType="Self.MT_Presupuesto_Detalle" />
@@ -4472,6 +4791,18 @@
             <End Role="MT_OrdenTrabajo" EntitySet="MT_OrdenTrabajo" />
             <End Role="MT_OrdenTrabajo_Valor" EntitySet="MT_OrdenTrabajo_Valor" />
           </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_Alerta_MT_PostVenta" Association="Self.FK_MT_PostVenta_Alerta_MT_PostVenta">
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
+            <End Role="MT_PostVenta_Alerta" EntitySet="MT_PostVenta_Alerta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_Documentado_MT_PostVenta" Association="Self.FK_MT_PostVenta_Documentado_MT_PostVenta">
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
+            <End Role="MT_PostVenta_Documentado" EntitySet="MT_PostVenta_Documentado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MT_PostVenta_MT_TablaDetalle" Association="Self.FK_MT_PostVenta_MT_TablaDetalle">
+            <End Role="MT_TablaDetalle" EntitySet="MT_TablaDetalle" />
+            <End Role="MT_PostVenta" EntitySet="MT_PostVenta" />
+          </AssociationSet>
           <AssociationSet Name="FK_Mt_Prospecto_Alerta_MT_Prospecto" Association="Self.FK_Mt_Prospecto_Alerta_MT_Prospecto">
             <End Role="MT_Prospecto" EntitySet="MT_Prospecto" />
             <End Role="Mt_Prospecto_Alerta" EntitySet="Mt_Prospecto_Alerta" />
@@ -4540,8 +4871,16 @@
             <Parameter Name="version" Mode="In" Type="Int32" />
             <Parameter Name="definition" Mode="In" Type="Binary" />
           </FunctionImport>
+          <FunctionImport Name="Sp_Dashboard_Cliente_Orden" ReturnType="Collection(BD_QUIMIPACModel.Sp_Dashboard_Cliente_Orden_Result)">
+            <Parameter Name="empresa" Mode="In" Type="String" />
+            <Parameter Name="isAutomatizacion" Mode="In" Type="Boolean" />
+          </FunctionImport>
           <FunctionImport Name="Sp_Dashboard_EstadoOT" ReturnType="Collection(BD_QUIMIPACModel.Sp_Dashboard_EstadoOT_Result)">
           <Parameter Name="id_empresa" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_Dashboard_GrupoOrden_Etapa" ReturnType="Collection(BD_QUIMIPACModel.Sp_Dashboard_GrupoOrden_Etapa_Result)">
+            <Parameter Name="empresa" Mode="In" Type="String" />
+            <Parameter Name="isAutomatizacion" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="sp_dropdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
@@ -4888,6 +5227,21 @@
             <Parameter Name="idTipoTablaDetalle" Mode="In" Type="Int32" />
             <Parameter Name="empresa" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_PostVenta" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVenta_Result)">
+          <Parameter Name="empresa" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_PostVenta_TipoPadre" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVenta_TipoPadre_Result)">
+            <Parameter Name="empresa" Mode="In" Type="String" />
+            <Parameter Name="tipo" Mode="In" Type="Int32" />
+            <Parameter Name="cliente" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_PostVentaDocumentado" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVentaDocumentado_Result)">
+            <Parameter Name="idPostVenta" Mode="In" Type="Int32" />
+            <Parameter Name="empresa" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_PostVentaGeneral" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVentaGeneral_Result)">
+          <Parameter Name="empresa" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="sp_Quimipac_ConsultaMT_PrecioReferencial" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PrecioReferencial_Result)">
             <Parameter Name="idTipoTablaDetalle" Mode="In" Type="Int32" />
             <Parameter Name="empresa" Mode="In" Type="String" />
@@ -4929,6 +5283,9 @@
             <Parameter Name="idProspecto" Mode="In" Type="Int32" />
             <Parameter Name="empresa" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_ProspectoGeneral" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProspectoGeneral_Result)">
+          <Parameter Name="empresa" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="sp_Quimipac_ConsultaMT_Proyecto" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_Proyecto_Result)">
           <Parameter Name="empresa" Mode="In" Type="String" />
           </FunctionImport>
@@ -4956,6 +5313,9 @@
           <FunctionImport Name="sp_Quimipac_ConsultaMT_ProyectoDocumentado" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoDocumentado_Result)">
             <Parameter Name="idProyecto" Mode="In" Type="Int32" />
             <Parameter Name="empresa" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_ConsultaMT_ProyectoGeneral" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoGeneral_Result)">
+          <Parameter Name="empresa" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_Quimipac_ConsultaMT_ProyectoParametro" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoParametro_Result)">
             <Parameter Name="idProyecto" Mode="In" Type="Int32" />
@@ -5621,6 +5981,36 @@
             <Parameter Name="Fecha_Cumplimiento_Inst" Mode="In" Type="DateTime" />
             <Parameter Name="Referencia" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_Quimipac_UpdatePostVenta">
+            <Parameter Name="Id_PostVenta" Mode="In" Type="Int32" />
+            <Parameter Name="cod_cliente" Mode="In" Type="String" />
+            <Parameter Name="fecha_inicial" Mode="In" Type="DateTime" />
+            <Parameter Name="fecha_fin" Mode="In" Type="DateTime" />
+            <Parameter Name="codigo_secuencial_interno" Mode="In" Type="String" />
+            <Parameter Name="codigo_postventa_asociado" Mode="In" Type="String" />
+            <Parameter Name="unidad" Mode="In" Type="String" />
+            <Parameter Name="cod_servicio" Mode="In" Type="String" />
+            <Parameter Name="codcen" Mode="In" Type="String" />
+            <Parameter Name="detalle" Mode="In" Type="String" />
+            <Parameter Name="id_estado" Mode="In" Type="Int32" />
+            <Parameter Name="plazo_postventa" Mode="In" Type="Int32" />
+            <Parameter Name="cod_tipo" Mode="In" Type="Int32" />
+            <Parameter Name="valorrefer" Mode="In" Type="Decimal" />
+            <Parameter Name="monto" Mode="In" Type="Decimal" />
+            <Parameter Name="costo" Mode="In" Type="Decimal" />
+            <Parameter Name="Responsable" Mode="In" Type="Int32" />
+            <Parameter Name="secuencial" Mode="In" Type="Int32" />
+            <Parameter Name="codigo_secuencial_interno_anterior" Mode="In" Type="String" />
+            <Parameter Name="observaciones" Mode="In" Type="String" />
+            <Parameter Name="codigo_interno_padre" Mode="In" Type="String" />
+            <Parameter Name="fecha_registro" Mode="In" Type="DateTime" />
+            <Parameter Name="fecha_modificacion" Mode="In" Type="DateTime" />
+            <Parameter Name="Localidad" Mode="In" Type="String" />
+            <Parameter Name="Fecha_Aprobacion_Cot" Mode="In" Type="DateTime" />
+            <Parameter Name="Recepcion_Servicio" Mode="In" Type="String" />
+            <Parameter Name="Fecha_Firma_Conformidad" Mode="In" Type="DateTime" />
+            <Parameter Name="Fecha_Cumplimiento_Inst" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <FunctionImport Name="sp_Quimipac_UpdateProspecto">
             <Parameter Name="Id_Prospecto" Mode="In" Type="Int32" />
             <Parameter Name="cod_cliente" Mode="In" Type="String" />
@@ -5677,16 +6067,32 @@
           </FunctionImport>
           <FunctionImport Name="sp_service_mail_notificacion" ReturnType="Collection(BD_QUIMIPACModel.sp_service_mail_notificacion_Result)" />
           <FunctionImport Name="sp_upgraddiagrams" />
-          <FunctionImport Name="sp_Quimipac_ConsultaMT_ProspectoGeneral" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProspectoGeneral_Result)">
-            <Parameter Name="empresa" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_Quimipac_ConsultaMT_ProyectoGeneral" ReturnType="Collection(BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoGeneral_Result)">
-            <Parameter Name="empresa" Mode="In" Type="String" />
-          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="Sp_Dashboard_Cliente_Orden_Result">
+          <Property Type="String" Name="CODIGO_CLIENTE" Nullable="true" />
+          <Property Type="Int32" Name="Id_Proyecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="String" Name="ESTADO_P_A_C" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="PROSPECTO_PROYECTO" Nullable="true" />
+          <Property Type="String" Name="CLIENTEPROSPECTO" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CLIENTEPROYECTO" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NOMBRECLIENTE" Nullable="true" MaxLength="50" />
+        </ComplexType>
         <ComplexType Name="Sp_Dashboard_EstadoOT_Result">
           <Property Type="String" Name="Estado" Nullable="true" />
           <Property Type="Int32" Name="total" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Sp_Dashboard_GrupoOrden_Etapa_Result">
+          <Property Type="DateTime" Name="Fecha_asignacion" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_registro" Nullable="true" Precision="23" />
+          <Property Type="String" Name="GRUPOTRABAJO" Nullable="false" />
+          <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
+          <Property Type="Int32" Name="Id_Proyecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
+          <Property Type="Int32" Name="Id_GrupoTrabajo" Nullable="false" />
+          <Property Type="String" Name="Estado_P_A_C" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Prospecto_Proyecto" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -6045,6 +6451,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_Consulta_TipoTrabajoMedida_Result">
           <Property Type="Int32" Name="Id_Tipo_trabajo_Medida" Nullable="false" />
@@ -6168,6 +6575,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
           <Property Type="Int32" Name="Id_OrdenTrabajo_Integrante" Nullable="false" />
           <Property Type="Int32" Name="Id_Orden_Trabajo" Nullable="true" />
           <Property Type="Int32" Name="Id_Persona" Nullable="true" />
@@ -6418,10 +6826,10 @@
           <Property Type="String" Name="Codigo_Interno_Ant" Nullable="true" MaxLength="75" />
           <Property Type="String" Name="Codigo_interno_padre" Nullable="true" MaxLength="75" />
           <Property Type="String" Name="Id_Usuario" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="lineaContrato" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="lineaContrato" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="nombre_Categoria" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="nombre_Subcategoria" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="Nomb_ContratoPadre" Nullable="true" />
           <Property Type="String" Name="descripcion" Nullable="true" />
           <Property Type="String" Name="Tipo_Contrato" Nullable="true" />
@@ -6430,7 +6838,7 @@
           <Property Type="String" Name="Origen" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="nom_Referencia" Nullable="true" />
           <Property Type="String" Name="nom_Localidad" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Nombres_Completos" Nullable="false" MaxLength="95" />
+          <Property Type="String" Name="Nombres_Completos" Nullable="true" MaxLength="95" />
           <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_ContratoProrroga_Result">
@@ -6771,6 +7179,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
           <Property Type="String" Name="Descripcion" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_OrdenTrabajo_Result">
@@ -6802,6 +7211,7 @@
           <Property Type="Int32" Name="Id_campamento" Nullable="true" />
           <Property Type="Int32" Name="Id_sector" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
           <Property Type="String" Name="CodigoInternoProyecto" Nullable="true" MaxLength="75" />
           <Property Type="Int32" Name="Proceso" Nullable="true" />
           <Property Type="Int32" Name="Alerta" Nullable="true" />
@@ -6887,6 +7297,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
           <Property Type="String" Name="Descripcion" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_OrdenTrabajoEstado_Result">
@@ -6960,6 +7371,7 @@
           <Property Type="String" Name="Estado" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="2" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="true" />
           <Property Type="String" Name="NOMBRE" Nullable="true" />
           <Property Type="String" Name="CODIGO_INTERNO" Nullable="true" MaxLength="75" />
         </ComplexType>
@@ -7063,7 +7475,8 @@
           <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
           <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
           <Property Type="Int32" Name="Secuencial" Nullable="true" />
-          <Property Type="String" Name="nombre" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="String" Name="nombre1" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="nom_cli" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="DesTTrabajo" Nullable="true" />
           <Property Type="String" Name="DescLinea" Nullable="false" MaxLength="30" />
@@ -7085,6 +7498,73 @@
           <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
           <Property Type="String" Name="Descripcion" Nullable="true" />
           <Property Type="String" Name="DTipoTrabajo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_PostVenta_Result">
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="tipo" Nullable="true" />
+          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
+          <Property Type="Int32" Name="Estado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_PostVenta_TipoPadre_Result">
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_PostVentaDocumentado_Result">
+          <Property Type="Int32" Name="Id_PostVenta_Documentado" Nullable="false" />
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="true" />
+          <Property Type="String" Name="Descripcion" Nullable="true" />
+          <Property Type="String" Name="Enlace" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha_Registro" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Validez" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="NombreArchivo" Nullable="true" />
+          <Property Type="Int32" Name="Tipo" Nullable="true" />
+          <Property Type="String" Name="NombrePostVenta" Nullable="true" />
+          <Property Type="String" Name="CodigoC" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="DescripcionTipo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_PostVentaGeneral_Result">
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="false" />
+          <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="Int32" Name="Estado" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha_Inicio" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Fin" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="tipo" Nullable="true" />
+          <Property Type="String" Name="Subcategoria" Nullable="true" MaxLength="13" />
+          <Property Type="Int32" Name="Responsable" Nullable="true" />
+          <Property Type="String" Name="Localidad" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Id_Linea" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="Fecha_registro" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Secuencial" Nullable="true" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Decimal" Name="monto" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
+          <Property Type="Decimal" Name="costo" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="String" Name="Codigo_Interno_Ant" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_interno_padre" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Id_Usuario" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="lineaPostVenta" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="descripcion" Nullable="true" />
+          <Property Type="String" Name="Tipo_PostVenta" Nullable="true" />
+          <Property Type="String" Name="nom_Localidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres_Completos" Nullable="false" MaxLength="95" />
+          <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="Origen" Nullable="false" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_PrecioReferencial_Result">
           <Property Type="Int32" Name="Id_PrecioReferencial" Nullable="false" />
@@ -7288,6 +7768,42 @@
           <Property Type="String" Name="CodigoC" Nullable="true" MaxLength="75" />
           <Property Type="String" Name="DescripcionTipo" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_ProspectoGeneral_Result">
+          <Property Type="Int32" Name="Id_Prospecto" Nullable="false" />
+          <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
+          <Property Type="Int32" Name="Estado" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha_Inicio" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Fin" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="tipo" Nullable="true" />
+          <Property Type="String" Name="Subcategoria" Nullable="true" MaxLength="13" />
+          <Property Type="Int32" Name="Responsable" Nullable="true" />
+          <Property Type="String" Name="Localidad" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Id_Linea" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="Fecha_registro" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Secuencial" Nullable="true" />
+          <Property Type="String" Name="Observaciones" Nullable="true" />
+          <Property Type="Decimal" Name="monto" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
+          <Property Type="Decimal" Name="costo" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="String" Name="Codigo_Interno_Ant" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_interno_padre" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Id_Usuario" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="lineaProspecto" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="descripcion" Nullable="true" />
+          <Property Type="String" Name="Tipo_Prospecto" Nullable="true" />
+          <Property Type="String" Name="nom_Localidad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Nombres_Completos" Nullable="false" MaxLength="95" />
+          <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="Origen" Nullable="false" MaxLength="1" />
+        </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_Proyecto_Result">
           <Property Type="Int32" Name="Id_Proyecto" Nullable="false" />
           <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
@@ -7317,6 +7833,7 @@
           <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
           <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
           <Property Type="Int32" Name="Secuencial" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_ProyectoActividades_Result">
           <Property Type="Int32" Name="Id_Proyecto_Actividad" Nullable="false" />
@@ -7410,6 +7927,40 @@
           <Property Type="String" Name="DescripcionTipo" Nullable="true" />
           <Property Type="String" Name="CodProyecto" Nullable="true" MaxLength="75" />
         </ComplexType>
+        <ComplexType Name="sp_Quimipac_ConsultaMT_ProyectoGeneral_Result">
+          <Property Type="Int32" Name="Id_Proyecto" Nullable="false" />
+          <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Id_TipoTrabajo" Nullable="true" />
+          <Property Type="Int32" Name="Id_Presupuesto" Nullable="true" />
+          <Property Type="DateTime" Name="Fecha_Registro" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Inicio" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Fin" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Fecha_Prorroga" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Estado" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="Direccion" Nullable="true" />
+          <Property Type="String" Name="Ubicacion" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Comentario" Nullable="true" />
+          <Property Type="String" Name="Porcentaje_avance" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Valor_Inicial" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="Valor_Ajustado" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="String" Name="Linea" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Subcategoria" Nullable="true" MaxLength="13" />
+          <Property Type="Int32" Name="Id_contrato" Nullable="true" />
+          <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
+          <Property Type="String" Name="DescLinea" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Nomb_Contrato" Nullable="true" />
+          <Property Type="String" Name="Nombre_Prospecto" Nullable="true" />
+          <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="DesTTrabajo" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_ProyectoParametro_Result">
           <Property Type="Int32" Name="Id_Proyecto_Parametros" Nullable="false" />
           <Property Type="Int32" Name="Id_Proyecto" Nullable="true" />
@@ -7450,6 +8001,7 @@
           <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
           <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
           <Property Type="Int32" Name="Secuencial" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaMT_Sector_Result">
           <Property Type="Int32" Name="Id_Sector" Nullable="false" />
@@ -7792,6 +8344,7 @@
           <Property Type="String" Name="Estado" Nullable="true" MaxLength="1" />
           <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="2" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_PostVenta" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ConsultaUsuarios_Rol_Result">
           <Property Type="String" Name="user_id" Nullable="false" MaxLength="10" />
@@ -8038,6 +8591,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
           <Property Type="Int32" Name="Id_OrdenTrabajo_Actividad" Nullable="false" />
           <Property Type="Int32" Name="Id_Orden_Trabajo" Nullable="true" />
           <Property Type="Int32" Name="Id_Actividad" Nullable="true" />
@@ -8111,6 +8665,7 @@
           <Property Type="Boolean" Name="Desalojo" Nullable="true" />
           <Property Type="Boolean" Name="Automatizacion" Nullable="true" />
           <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
+          <Property Type="Int32" Name="Id_Postventa" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_Quimipac_ValidarTipoTraboProyecto_Result">
           <Property Type="Int32" Name="Id_Proyecto" Nullable="false" />
@@ -8141,6 +8696,7 @@
           <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
           <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
           <Property Type="Int32" Name="Secuencial" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_service_mail_notificacion_Result">
           <Property Type="String" Name="CORREO" Nullable="true" />
@@ -8159,76 +8715,6 @@
           <Property Type="Boolean" Name="Reenvio" Nullable="true" />
           <Property Type="String" Name="EmpresaID" Nullable="true" MaxLength="2" />
           <Property Type="Boolean" Name="Estado" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_Quimipac_ConsultaMT_ProspectoGeneral_Result">
-          <Property Type="Int32" Name="Id_Prospecto" Nullable="false" />
-          <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Nombre" Nullable="true" />
-          <Property Type="Int32" Name="Estado" Nullable="true" />
-          <Property Type="DateTime" Name="Fecha_Inicio" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Fecha_Fin" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="tipo" Nullable="true" />
-          <Property Type="String" Name="Subcategoria" Nullable="true" MaxLength="13" />
-          <Property Type="Int32" Name="Responsable" Nullable="true" />
-          <Property Type="String" Name="Localidad" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="Id_Linea" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
-          <Property Type="DateTime" Name="Fecha_registro" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="Secuencial" Nullable="true" />
-          <Property Type="String" Name="Observaciones" Nullable="true" />
-          <Property Type="Decimal" Name="monto" Nullable="true" Precision="18" Scale="4" />
-          <Property Type="Int32" Name="Dia_Plazo" Nullable="true" />
-          <Property Type="Decimal" Name="costo" Nullable="true" Precision="18" Scale="4" />
-          <Property Type="String" Name="Codigo_Interno_Ant" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Codigo_interno_padre" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Id_Usuario" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="lineaProspecto" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="descripcion" Nullable="true" />
-          <Property Type="String" Name="Tipo_Prospecto" Nullable="true" />
-          <Property Type="String" Name="nom_Localidad" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Nombres_Completos" Nullable="false" MaxLength="95" />
-          <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
-          <Property Type="String" Name="Origen" Nullable="false" MaxLength="1" />
-        </ComplexType>
-        <ComplexType Name="sp_Quimipac_ConsultaMT_ProyectoGeneral_Result">
-          <Property Type="Int32" Name="Id_Proyecto" Nullable="false" />
-          <Property Type="String" Name="Id_Empresa" Nullable="true" MaxLength="5" />
-          <Property Type="String" Name="Id_Cliente" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="Id_TipoTrabajo" Nullable="true" />
-          <Property Type="Int32" Name="Id_Presupuesto" Nullable="true" />
-          <Property Type="DateTime" Name="Fecha_Registro" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Fecha_Inicio" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Fecha_Fin" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="Fecha_Prorroga" Nullable="true" Precision="23" />
-          <Property Type="String" Name="Estado" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="Codigo_Interno" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Codigo_Cliente" Nullable="true" MaxLength="75" />
-          <Property Type="String" Name="Direccion" Nullable="true" />
-          <Property Type="String" Name="Ubicacion" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Comentario" Nullable="true" />
-          <Property Type="String" Name="Porcentaje_avance" Nullable="true" MaxLength="20" />
-          <Property Type="Decimal" Name="Valor_Inicial" Nullable="true" Precision="18" Scale="4" />
-          <Property Type="Decimal" Name="Valor_Ajustado" Nullable="true" Precision="18" Scale="4" />
-          <Property Type="String" Name="Linea" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Categoria" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Subcategoria" Nullable="true" MaxLength="13" />
-          <Property Type="Int32" Name="Id_contrato" Nullable="true" />
-          <Property Type="Int32" Name="Id_Prospecto" Nullable="true" />
-          <Property Type="Int32" Name="Proyecto_Padre" Nullable="true" />
-          <Property Type="String" Name="DescLinea" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="nombreCliente" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="nombre_Categoria" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="nombre_Subcategoria" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="Nomb_Contrato" Nullable="true" />
-          <Property Type="String" Name="Nombre_Prospecto" Nullable="true" />
-          <Property Type="String" Name="abreviatura_cliente" Nullable="true" MaxLength="3" />
-          <Property Type="String" Name="DesTTrabajo" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -8417,6 +8903,24 @@
                 <ScalarProperty Name="Comentario" ColumnName="Comentario" />
                 <ScalarProperty Name="Id_Persona_Origen" ColumnName="Id_Persona_Origen" />
                 <ScalarProperty Name="Id_Persona_Destino" ColumnName="Id_Persona_Destino" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MT_Equipo_Referencia">
+            <EntityTypeMapping TypeName="BD_QUIMIPACModel.MT_Equipo_Referencia">
+              <MappingFragment StoreEntitySet="MT_Equipo_Referencia">
+                <ScalarProperty Name="Id_Equipo" ColumnName="Id_Equipo" />
+                <ScalarProperty Name="Id_Proveedor" ColumnName="Id_Proveedor" />
+                <ScalarProperty Name="Id_Persona_asignada" ColumnName="Id_Persona_asignada" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Numero_Serie" ColumnName="Numero_Serie" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Horas_Usadas" ColumnName="Horas_Usadas" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8613,6 +9117,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8807,6 +9312,7 @@
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8916,6 +9422,73 @@
                 <ScalarProperty Name="Fecha_Pago_Sistema_Externo" ColumnName="Fecha_Pago_Sistema_Externo" />
                 <ScalarProperty Name="Numero_Factura_Sistema_Externo" ColumnName="Numero_Factura_Sistema_Externo" />
                 <ScalarProperty Name="Cod_estado_orden" ColumnName="Cod_estado_orden" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MT_PostVenta">
+            <EntityTypeMapping TypeName="BD_QUIMIPACModel.MT_PostVenta">
+              <MappingFragment StoreEntitySet="MT_PostVenta">
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+                <ScalarProperty Name="Id_Linea" ColumnName="Id_Linea" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
+                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
+                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
+                <ScalarProperty Name="Valor_Referencial" ColumnName="Valor_Referencial" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="costo" ColumnName="costo" />
+                <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Codigo_Interno_Ant" ColumnName="Codigo_Interno_Ant" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Codigo_interno_padre" ColumnName="Codigo_interno_padre" />
+                <ScalarProperty Name="Fecha_registro" ColumnName="Fecha_registro" />
+                <ScalarProperty Name="Fecha_modificacion" ColumnName="Fecha_modificacion" />
+                <ScalarProperty Name="Fecha_Aprobacion_Cot" ColumnName="Fecha_Aprobacion_Cot" />
+                <ScalarProperty Name="Recepcion_Servicio" ColumnName="Recepcion_Servicio" />
+                <ScalarProperty Name="Fecha_Firma_Conformidad" ColumnName="Fecha_Firma_Conformidad" />
+                <ScalarProperty Name="Fecha_Cumplimiento_Inst" ColumnName="Fecha_Cumplimiento_Inst" />
+                <ScalarProperty Name="Id_Equipo_Ref" ColumnName="Id_Equipo_Ref" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MT_PostVenta_Alerta">
+            <EntityTypeMapping TypeName="BD_QUIMIPACModel.MT_PostVenta_Alerta">
+              <MappingFragment StoreEntitySet="MT_PostVenta_Alerta">
+                <ScalarProperty Name="Id_PostVenta_Alerta" ColumnName="Id_PostVenta_Alerta" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+                <ScalarProperty Name="Fecha_Registro" ColumnName="Fecha_Registro" />
+                <ScalarProperty Name="Fecha_Alerta" ColumnName="Fecha_Alerta" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="Repetir" ColumnName="Repetir" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MT_PostVenta_Documentado">
+            <EntityTypeMapping TypeName="BD_QUIMIPACModel.MT_PostVenta_Documentado">
+              <MappingFragment StoreEntitySet="MT_PostVenta_Documentado">
+                <ScalarProperty Name="Id_PostVenta_Documentado" ColumnName="Id_PostVenta_Documentado" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Enlace" ColumnName="Enlace" />
+                <ScalarProperty Name="Fecha_Registro" ColumnName="Fecha_Registro" />
+                <ScalarProperty Name="Fecha_Validez" ColumnName="Fecha_Validez" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="NombreArchivo" ColumnName="NombreArchivo" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9086,6 +9659,7 @@
                 <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
                 <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
                 <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9419,11 +9993,41 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="BD_QUIMIPACModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="BD_QUIMIPACModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="Sp_Dashboard_Cliente_Orden" FunctionName="BD_QUIMIPACModel.Store.Sp_Dashboard_Cliente_Orden">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.Sp_Dashboard_Cliente_Orden_Result">
+                <ScalarProperty Name="CODIGO_CLIENTE" ColumnName="CODIGO_CLIENTE" />
+                <ScalarProperty Name="Id_Proyecto" ColumnName="Id_Proyecto" />
+                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="ESTADO_P_A_C" ColumnName="ESTADO_P_A_C" />
+                <ScalarProperty Name="PROSPECTO_PROYECTO" ColumnName="PROSPECTO_PROYECTO" />
+                <ScalarProperty Name="CLIENTEPROSPECTO" ColumnName="CLIENTEPROSPECTO" />
+                <ScalarProperty Name="CLIENTEPROYECTO" ColumnName="CLIENTEPROYECTO" />
+                <ScalarProperty Name="NOMBRECLIENTE" ColumnName="NOMBRECLIENTE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="Sp_Dashboard_EstadoOT" FunctionName="BD_QUIMIPACModel.Store.Sp_Dashboard_EstadoOT">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_QUIMIPACModel.Sp_Dashboard_EstadoOT_Result">
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="total" ColumnName="total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_Dashboard_GrupoOrden_Etapa" FunctionName="BD_QUIMIPACModel.Store.Sp_Dashboard_GrupoOrden_Etapa">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.Sp_Dashboard_GrupoOrden_Etapa_Result">
+                <ScalarProperty Name="Fecha_asignacion" ColumnName="Fecha_asignacion" />
+                <ScalarProperty Name="Fecha_registro" ColumnName="Fecha_registro" />
+                <ScalarProperty Name="GRUPOTRABAJO" ColumnName="GRUPOTRABAJO" />
+                <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
+                <ScalarProperty Name="Id_Proyecto" ColumnName="Id_Proyecto" />
+                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
+                <ScalarProperty Name="Id_GrupoTrabajo" ColumnName="Id_GrupoTrabajo" />
+                <ScalarProperty Name="Estado_P_A_C" ColumnName="Estado_P_A_C" />
+                <ScalarProperty Name="Prospecto_Proyecto" ColumnName="Prospecto_Proyecto" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -9893,6 +10497,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -10054,6 +10659,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
                 <ScalarProperty Name="Id_OrdenTrabajo_Integrante" ColumnName="Id_OrdenTrabajo_Integrante" />
                 <ScalarProperty Name="Id_Orden_Trabajo" ColumnName="Id_Orden_Trabajo" />
                 <ScalarProperty Name="Id_Persona" ColumnName="Id_Persona" />
@@ -10822,6 +11428,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -10857,6 +11464,7 @@
                 <ScalarProperty Name="Id_campamento" ColumnName="Id_campamento" />
                 <ScalarProperty Name="Id_sector" ColumnName="Id_sector" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
                 <ScalarProperty Name="CodigoInternoProyecto" ColumnName="CodigoInternoProyecto" />
                 <ScalarProperty Name="Proceso" ColumnName="Proceso" />
                 <ScalarProperty Name="Alerta" ColumnName="Alerta" />
@@ -10954,6 +11562,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -11047,6 +11656,7 @@
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CODIGO_INTERNO" ColumnName="CODIGO_INTERNO" />
               </ComplexTypeMapping>
@@ -11163,7 +11773,8 @@
                 <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
                 <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
                 <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="nombre1" ColumnName="nombre1" />
                 <ScalarProperty Name="nom_cli" ColumnName="nom_cli" />
                 <ScalarProperty Name="DesTTrabajo" ColumnName="DesTTrabajo" />
                 <ScalarProperty Name="DescLinea" ColumnName="DescLinea" />
@@ -11189,6 +11800,89 @@
                 <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="DTipoTrabajo" ColumnName="DTipoTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_PostVenta" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_PostVenta">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVenta_Result">
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_PostVenta_TipoPadre" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_PostVenta_TipoPadre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVenta_TipoPadre_Result">
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_PostVentaDocumentado" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_PostVentaDocumentado">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVentaDocumentado_Result">
+                <ScalarProperty Name="Id_PostVenta_Documentado" ColumnName="Id_PostVenta_Documentado" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Enlace" ColumnName="Enlace" />
+                <ScalarProperty Name="Fecha_Registro" ColumnName="Fecha_Registro" />
+                <ScalarProperty Name="Fecha_Validez" ColumnName="Fecha_Validez" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="NombreArchivo" ColumnName="NombreArchivo" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="NombrePostVenta" ColumnName="NombrePostVenta" />
+                <ScalarProperty Name="CodigoC" ColumnName="CodigoC" />
+                <ScalarProperty Name="DescripcionTipo" ColumnName="DescripcionTipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_PostVentaGeneral" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_PostVentaGeneral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_PostVentaGeneral_Result">
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
+                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
+                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
+                <ScalarProperty Name="Id_Linea" ColumnName="Id_Linea" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="Fecha_registro" ColumnName="Fecha_registro" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
+                <ScalarProperty Name="costo" ColumnName="costo" />
+                <ScalarProperty Name="Codigo_Interno_Ant" ColumnName="Codigo_Interno_Ant" />
+                <ScalarProperty Name="Codigo_interno_padre" ColumnName="Codigo_interno_padre" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+                <ScalarProperty Name="lineaPostVenta" ColumnName="lineaPostVenta" />
+                <ScalarProperty Name="nombreCliente" ColumnName="nombreCliente" />
+                <ScalarProperty Name="nombre_Categoria" ColumnName="nombre_Categoria" />
+                <ScalarProperty Name="nombre_Subcategoria" ColumnName="nombre_Subcategoria" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="Tipo_PostVenta" ColumnName="Tipo_PostVenta" />
+                <ScalarProperty Name="nom_Localidad" ColumnName="nom_Localidad" />
+                <ScalarProperty Name="Nombres_Completos" ColumnName="Nombres_Completos" />
+                <ScalarProperty Name="abreviatura_cliente" ColumnName="abreviatura_cliente" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -11435,6 +12129,46 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_ProspectoGeneral" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_ProspectoGeneral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProspectoGeneral_Result">
+                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
+                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
+                <ScalarProperty Name="Id_Linea" ColumnName="Id_Linea" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="Fecha_registro" ColumnName="Fecha_registro" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
+                <ScalarProperty Name="costo" ColumnName="costo" />
+                <ScalarProperty Name="Codigo_Interno_Ant" ColumnName="Codigo_Interno_Ant" />
+                <ScalarProperty Name="Codigo_interno_padre" ColumnName="Codigo_interno_padre" />
+                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
+                <ScalarProperty Name="lineaProspecto" ColumnName="lineaProspecto" />
+                <ScalarProperty Name="nombreCliente" ColumnName="nombreCliente" />
+                <ScalarProperty Name="nombre_Categoria" ColumnName="nombre_Categoria" />
+                <ScalarProperty Name="nombre_Subcategoria" ColumnName="nombre_Subcategoria" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="Tipo_Prospecto" ColumnName="Tipo_Prospecto" />
+                <ScalarProperty Name="nom_Localidad" ColumnName="nom_Localidad" />
+                <ScalarProperty Name="Nombres_Completos" ColumnName="Nombres_Completos" />
+                <ScalarProperty Name="abreviatura_cliente" ColumnName="abreviatura_cliente" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_Proyecto" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_Proyecto">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_Proyecto_Result">
@@ -11466,6 +12200,7 @@
                 <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
                 <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
                 <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -11589,6 +12324,44 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_ProyectoGeneral" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_ProyectoGeneral">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoGeneral_Result">
+                <ScalarProperty Name="Id_Proyecto" ColumnName="Id_Proyecto" />
+                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
+                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
+                <ScalarProperty Name="Id_TipoTrabajo" ColumnName="Id_TipoTrabajo" />
+                <ScalarProperty Name="Id_Presupuesto" ColumnName="Id_Presupuesto" />
+                <ScalarProperty Name="Fecha_Registro" ColumnName="Fecha_Registro" />
+                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
+                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
+                <ScalarProperty Name="Fecha_Prorroga" ColumnName="Fecha_Prorroga" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
+                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
+                <ScalarProperty Name="Porcentaje_avance" ColumnName="Porcentaje_avance" />
+                <ScalarProperty Name="Valor_Inicial" ColumnName="Valor_Inicial" />
+                <ScalarProperty Name="Valor_Ajustado" ColumnName="Valor_Ajustado" />
+                <ScalarProperty Name="Linea" ColumnName="Linea" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
+                <ScalarProperty Name="Id_contrato" ColumnName="Id_contrato" />
+                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
+                <ScalarProperty Name="DescLinea" ColumnName="DescLinea" />
+                <ScalarProperty Name="nombreCliente" ColumnName="nombreCliente" />
+                <ScalarProperty Name="nombre_Categoria" ColumnName="nombre_Categoria" />
+                <ScalarProperty Name="nombre_Subcategoria" ColumnName="nombre_Subcategoria" />
+                <ScalarProperty Name="Nomb_Contrato" ColumnName="Nomb_Contrato" />
+                <ScalarProperty Name="Nombre_Prospecto" ColumnName="Nombre_Prospecto" />
+                <ScalarProperty Name="abreviatura_cliente" ColumnName="abreviatura_cliente" />
+                <ScalarProperty Name="DesTTrabajo" ColumnName="DesTTrabajo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_ProyectoParametro" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_ProyectoParametro">
             <ResultMapping>
               <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoParametro_Result">
@@ -11635,6 +12408,7 @@
                 <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
                 <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
                 <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12050,6 +12824,7 @@
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_PostVenta" ColumnName="Id_PostVenta" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12312,6 +13087,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_Quimipac_UpdateContrato" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_UpdateContrato" />
+          <FunctionImportMapping FunctionImportName="sp_Quimipac_UpdatePostVenta" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_UpdatePostVenta" />
           <FunctionImportMapping FunctionImportName="sp_Quimipac_UpdateProspecto" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_UpdateProspecto" />
           <FunctionImportMapping FunctionImportName="sp_Quimipac_ValidarActividadesTipoTrabEjec_OrdeTrabajo" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ValidarActividadesTipoTrabEjec_OrdeTrabajo">
             <ResultMapping>
@@ -12363,6 +13139,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
                 <ScalarProperty Name="Id_OrdenTrabajo_Actividad" ColumnName="Id_OrdenTrabajo_Actividad" />
                 <ScalarProperty Name="Id_Orden_Trabajo" ColumnName="Id_Orden_Trabajo" />
                 <ScalarProperty Name="Id_Actividad" ColumnName="Id_Actividad" />
@@ -12444,6 +13221,7 @@
                 <ScalarProperty Name="Desalojo" ColumnName="Desalojo" />
                 <ScalarProperty Name="Automatizacion" ColumnName="Automatizacion" />
                 <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
+                <ScalarProperty Name="Id_Postventa" ColumnName="Id_Postventa" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12478,6 +13256,7 @@
                 <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
                 <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
                 <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12505,84 +13284,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="BD_QUIMIPACModel.Store.sp_upgraddiagrams" />
-          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_ProspectoGeneral" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_ProspectoGeneral">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProspectoGeneral_Result">
-                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
-                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
-                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
-                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
-                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
-                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
-                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
-                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
-                <ScalarProperty Name="Id_Linea" ColumnName="Id_Linea" />
-                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
-                <ScalarProperty Name="Fecha_registro" ColumnName="Fecha_registro" />
-                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
-                <ScalarProperty Name="Secuencial" ColumnName="Secuencial" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="monto" ColumnName="monto" />
-                <ScalarProperty Name="Dia_Plazo" ColumnName="Dia_Plazo" />
-                <ScalarProperty Name="costo" ColumnName="costo" />
-                <ScalarProperty Name="Codigo_Interno_Ant" ColumnName="Codigo_Interno_Ant" />
-                <ScalarProperty Name="Codigo_interno_padre" ColumnName="Codigo_interno_padre" />
-                <ScalarProperty Name="Id_Usuario" ColumnName="Id_Usuario" />
-                <ScalarProperty Name="lineaProspecto" ColumnName="lineaProspecto" />
-                <ScalarProperty Name="nombreCliente" ColumnName="nombreCliente" />
-                <ScalarProperty Name="nombre_Categoria" ColumnName="nombre_Categoria" />
-                <ScalarProperty Name="nombre_Subcategoria" ColumnName="nombre_Subcategoria" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="Tipo_Prospecto" ColumnName="Tipo_Prospecto" />
-                <ScalarProperty Name="nom_Localidad" ColumnName="nom_Localidad" />
-                <ScalarProperty Name="Nombres_Completos" ColumnName="Nombres_Completos" />
-                <ScalarProperty Name="abreviatura_cliente" ColumnName="abreviatura_cliente" />
-                <ScalarProperty Name="Origen" ColumnName="Origen" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_Quimipac_ConsultaMT_ProyectoGeneral" FunctionName="BD_QUIMIPACModel.Store.sp_Quimipac_ConsultaMT_ProyectoGeneral">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="BD_QUIMIPACModel.sp_Quimipac_ConsultaMT_ProyectoGeneral_Result">
-                <ScalarProperty Name="Id_Proyecto" ColumnName="Id_Proyecto" />
-                <ScalarProperty Name="Id_Empresa" ColumnName="Id_Empresa" />
-                <ScalarProperty Name="Id_Cliente" ColumnName="Id_Cliente" />
-                <ScalarProperty Name="Id_TipoTrabajo" ColumnName="Id_TipoTrabajo" />
-                <ScalarProperty Name="Id_Presupuesto" ColumnName="Id_Presupuesto" />
-                <ScalarProperty Name="Fecha_Registro" ColumnName="Fecha_Registro" />
-                <ScalarProperty Name="Fecha_Inicio" ColumnName="Fecha_Inicio" />
-                <ScalarProperty Name="Fecha_Fin" ColumnName="Fecha_Fin" />
-                <ScalarProperty Name="Fecha_Prorroga" ColumnName="Fecha_Prorroga" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="Codigo_Interno" ColumnName="Codigo_Interno" />
-                <ScalarProperty Name="Codigo_Cliente" ColumnName="Codigo_Cliente" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
-                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
-                <ScalarProperty Name="Porcentaje_avance" ColumnName="Porcentaje_avance" />
-                <ScalarProperty Name="Valor_Inicial" ColumnName="Valor_Inicial" />
-                <ScalarProperty Name="Valor_Ajustado" ColumnName="Valor_Ajustado" />
-                <ScalarProperty Name="Linea" ColumnName="Linea" />
-                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
-                <ScalarProperty Name="Subcategoria" ColumnName="Subcategoria" />
-                <ScalarProperty Name="Id_contrato" ColumnName="Id_contrato" />
-                <ScalarProperty Name="Id_Prospecto" ColumnName="Id_Prospecto" />
-                <ScalarProperty Name="Proyecto_Padre" ColumnName="Proyecto_Padre" />
-                <ScalarProperty Name="DescLinea" ColumnName="DescLinea" />
-                <ScalarProperty Name="nombreCliente" ColumnName="nombreCliente" />
-                <ScalarProperty Name="nombre_Categoria" ColumnName="nombre_Categoria" />
-                <ScalarProperty Name="nombre_Subcategoria" ColumnName="nombre_Subcategoria" />
-                <ScalarProperty Name="Nomb_Contrato" ColumnName="Nomb_Contrato" />
-                <ScalarProperty Name="Nombre_Prospecto" ColumnName="Nombre_Prospecto" />
-                <ScalarProperty Name="abreviatura_cliente" ColumnName="abreviatura_cliente" />
-                <ScalarProperty Name="DesTTrabajo" ColumnName="DesTTrabajo" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

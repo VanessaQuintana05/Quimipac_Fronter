@@ -41,5 +41,6 @@ namespace Quimipac_.Models
         public Nullable<int> Proyecto_Padre { get; set; }
         public Nullable<int> Dia_Plazo { get; set; }
         public Nullable<int> Secuencial { get; set; }
+        public string Nombre { get; set; }
     }
 }

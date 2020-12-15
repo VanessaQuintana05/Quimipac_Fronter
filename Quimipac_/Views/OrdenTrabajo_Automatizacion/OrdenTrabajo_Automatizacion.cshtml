@@ -154,7 +154,7 @@
                 {
 
                     <a href="@Url.Action("Agregar_OrdenTrabajo", "OrdenTrabajo_Automatizacion")" type="button" class="btn btn-sm btn-warning" data-original-title="Agrega Orden Trabajo">
-                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Agregar Orden Trabajo
+                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Agregar Orden Trabajo Automatización
                     </a>
                 }
             </div>
@@ -550,8 +550,8 @@
                                             <th>C&oacute;digo</th>
                                             <th>Tipo de Trabajo Planeado</th>
                                             <th>Alerta</th>
-                                            <th>Clasificacion</th>
-                                            <th>Fecha asignacion</th>
+                                            <th>Clasificación</th>
+                                            <th>Fecha asignación</th>
                                             <th>Estado</th>
                                             <th>Tipo de Trabajo Ejecutado</th>
                                             @*<th>Padre</th>*@
@@ -560,15 +560,15 @@
                                             <th>Tiempo transcurrido</th>
                                             <th>Grupo de Trabajo</th>
                                             <th>Fecha Fin Obra</th>
-                                            <th>Fecha Finalizacion</th>
+                                            <th>Fecha Finalización</th>
                                         </tr>
                                         <tr>
                                             <th></th>
-                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Código"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Planeado"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Alerta"></th>
-                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Clasificacion"></th>
-                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha asignacion"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Clasificación"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha asignación"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Ejecutado"></th>
                                             @*<th><input class="js-filter form-control" type="text" value="" placeholder="Padre"></th>*@
@@ -577,7 +577,7 @@
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Tiempo Transcurrido"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Grupo Trabajo"></th>
                                             <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Fin obra"></th>
-                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Finalizacion"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Finalización"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -605,145 +605,151 @@
                                                 */
 
                                                 @*<tr class="TRRows" style="@estilo">*@
-                                                <tr class="TRRows">
-                                                    <td class="TDRows">
-                                                        @{
-                                                            //aqui es para ver si la actividad ha sido iniciada si no lo ha sido pues presenta el icono editar coso contrario no
-                                                            //DataBase_Externo dbi = new DataBase_Externo();
-                                                            //var iniciada = dbi.Actividad_Iniciada(ordenTrabajo.Id_OrdenTrabajo);
-                                                            //if (iniciada == false)
-                                                            //{
-                                                            if (oPermiso.Modificar == true)
-                                                            {
-                                                                <a href="@Url.Action("Editar_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = @ordenTrabajo.Id_OrdenTrabajo })" data-popup="tooltip" title="Editar" target="_self" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_OrdenTrabajo" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
-                                            </span>*@
-                                                                </a>
-                                                            }
-                                                            //}
+                                        <tr class="TRRows">
+                                            <td class="TDRows">
+                                                @{
+                                                    //aqui es para ver si la actividad ha sido iniciada si no lo ha sido pues presenta el icono editar coso contrario no
+                                                    //DataBase_Externo dbi = new DataBase_Externo();
+                                                    //var iniciada = dbi.Actividad_Iniciada(ordenTrabajo.Id_OrdenTrabajo);
+                                                    //if (iniciada == false)
+                                                    //{
+                                                    if (oPermiso.Modificar == true)
+                                                    {
+                                                        <a href="@Url.Action("Editar_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = @ordenTrabajo.Id_OrdenTrabajo })" data-popup="tooltip" title="Editar" target="_self" class="Modificar_MTPR btn btnEditarBoton_OT class_editar_OrdenTrabajo" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-edit">
+                        </span>*@
+                                                        </a>
+                                                    }
+                                                    //}
 
-                                                        }
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            <a href="@Url.Action("Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnActividadesBoton_OT " title="Actividades" style="text-align:center">
-                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
-                                                            </a>
-                                                        }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    <a href="@Url.Action("Actividades_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnActividadesBoton_OT " title="Actividades" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                    </a>
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            if (ordenTrabajo.Control_Equipo.Equals("S"))
-                                                            {
-                                                                <a href="@Url.Action("Equipos_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEquiposBoton_OT" title="Equipos" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-wrench"> </span>*@
-                                                                </a>
-                                                            }
-                                                        }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    if (ordenTrabajo.Control_Equipo.Equals("S"))
+                                                    {
+                                                        <a href="@Url.Action("Equipos_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEquiposBoton_OT" title="Equipos" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-wrench"> </span>*@
+                                                        </a>
+                                                    }
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
+                                                @if (oPermiso.Consultar == true)
+                                                {
 
-                                                            if (ordenTrabajo.Control_Integrante.Equals("S"))
-                                                            {
-                                                                <a href="@Url.Action("Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnIntegrantesBoton_OT" title="Integrantes" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-user"> </span>*@
-                                                                </a>
-                                                            }
-                                                        }
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            if (ordenTrabajo.Control_Item.Equals("S"))
-                                                            {
-                                                                <a href="@Url.Action("Items_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnItemsBoton_OT" title="Items" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt"> </span>*@
-                                                                </a>
-                                                            }
-                                                        }
+                                                    if (ordenTrabajo.Control_Integrante.Equals("S"))
+                                                    {
+                                                        <a href="@Url.Action("Integrantes_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnIntegrantesBoton_OT" title="Integrantes" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-user"> </span>*@
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    if (ordenTrabajo.Control_Item.Equals("S"))
+                                                    {
+                                                        <a href="@Url.Action("Items_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnItemsBoton_OT" title="Items" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-list-alt"> </span>*@
+                                                        </a>
+                                                    }
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            if (ordenTrabajo.Control_Medida.Equals("S"))
-                                                            {
-                                                                <a href="@Url.Action("Medidas_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnMedidassBoton_OT " title="Medidas" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
-                                                                </a>
-                                                            }
-                                                        }
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            <a href="@Url.Action("Formularios_OT", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
-                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-file">
-                                        </span>*@
-                                                            </a>
-                                                        }
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            <a href="@Url.Action("OrdenTrabajo_Valor", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnValorBoton_OT" title="Valor" style="text-align:center">
-                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
-                                                            </a>
-                                                        }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    if (ordenTrabajo.Control_Medida.Equals("S"))
+                                                    {
+                                                        <a href="@Url.Action("Medidas_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR Consultar_MTPR btn btnMedidassBoton_OT " title="Medidas" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                        </a>
+                                                    }
+                                                }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    <a href="@Url.Action("Formularios_OT", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnFormularioBoton_OT" title="Formulario" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-file">
+                    </span>*@
+                                                    </a>
+                                                }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    <a href="@Url.Action("OrdenTrabajo_Valor", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnValorBoton_OT" title="Valor" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                    </a>
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            <a href="@Url.Action("OrdenTrabajo_Estado", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEstadoBoton_OT" title="Estado" style="text-align:center">
-                                                                @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
-                                                            </a>
-                                                        }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    <a href="@Url.Action("OrdenTrabajo_Estado", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnEstadoBoton_OT" title="Estado" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                    </a>
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
+                                                @if (oPermiso.Consultar == true)
+                                                {
 
-                                                            if (ordenTrabajo.Control_Raiz.Equals("S"))
-                                                            {
+                                                    if (ordenTrabajo.Control_Raiz.Equals("S"))
+                                                    {
 
-                                                                <a href="@Url.Action("OrdenTrabajo_CausaRaiz", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnCausaRaizBoton_OT" title="Causa Raiz" style="text-align:center">
-                                                                    @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
-                                                                </a>
-                                                            }
-                                                        }
+                                                        <a href="@Url.Action("OrdenTrabajo_CausaRaiz", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="btn btnCausaRaizBoton_OT" title="Causa Raiz" style="text-align:center">
+                                                            @*<span aria-hidden="true" class="glyphicon glyphicon-list"> </span>*@
+                                                        </a>
+                                                    }
+                                                }
 
-                                                        @if (oPermiso.Consultar == true)
-                                                        {
-                                                            <a href="@Url.Action("Alerta_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnAlertaBoton_OT" title="Alerta" style="text-align:center">
-                                                                @*<span aria-hidden="true" class="fa fa-bell">
-                                        </span>*@
-                                                            </a>
-                                                        }
+                                                @if (oPermiso.Consultar == true)
+                                                {
+                                                    <a href="@Url.Action("Alerta_OrdenTrabajo", "OrdenTrabajo_Automatizacion", new { id = ordenTrabajo.Id_OrdenTrabajo })" target="_self" class="Consultar_MTPR btn btnAlertaBoton_OT" title="Alerta" style="text-align:center">
+                                                        @*<span aria-hidden="true" class="fa fa-bell">
+                    </span>*@
+                                                    </a>
+                                                }
 
 
 
-                                                    </td>
+                                            </td>
 
-                                                    @*<td>@Html.DisplayFor(model => ordenTrabajo.Codigo_Cliente)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Dtrabajo)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.descripcionPadre)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.NombreContrato)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Porcentaje_avance)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Tiempo_transcurrido)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Descripcion)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Nombre)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_asignacion)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_finalizacion_obra)</td>
-                            <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_fin_ejecucion)</td>*@
-                                                    <td>@ordenTrabajo.Codigo_Cliente</td>
-                                                    <td>@ordenTrabajo.Dtrabajo</td>
-                                                    @*<td style="@colorOT">@ordenTrabajo.Estado_P_A_C</td>*@
-                                                    <td class="@ordenTrabajo.Estado_P_A_C">@ordenTrabajo.Estado_P_A_C</td>
-                                                    <td>@ordenTrabajo.clasif_orden_ttrabajoej</td>
-                                                    <td>@ordenTrabajo.Fecha_asignacion</td>
-                                                    <td>@ordenTrabajo.Descripcion</td>
-                                                    <td>@ordenTrabajo.trabajoejecutado</td>
-                                                    @*<td>@ordenTrabajo.descripcionPadre</td>*@
-                                                    <td>@ordenTrabajo.Prospecto_Proyecto</td>
-                                                    <td>@ordenTrabajo.Porcentaje_avance</td>
-                                                    <td>@ordenTrabajo.Tiempo_transcurrido</td>
-                                                    <td>@ordenTrabajo.Nombre</td>
-                                                    <td>@ordenTrabajo.Fecha_finalizacion_obra</td>
-                                                    <td>@ordenTrabajo.Fecha_fin_ejecucion</td>
-                                                    @*<td style="@colorOT">@Html.DisplayFor(model => parametros)</td>*@
+                                            @*<td>@Html.DisplayFor(model => ordenTrabajo.Codigo_Cliente)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Dtrabajo)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.descripcionPadre)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.NombreContrato)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Porcentaje_avance)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Tiempo_transcurrido)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Descripcion)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Nombre)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_asignacion)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_finalizacion_obra)</td>
+        <td>@Html.DisplayFor(model => ordenTrabajo.Fecha_fin_ejecucion)</td>*@
+                                            <td>@ordenTrabajo.Codigo_Cliente</td>
+                                            <td>@ordenTrabajo.Dtrabajo</td>
+                                            @*<td style="@colorOT">@ordenTrabajo.Estado_P_A_C</td>*@
+                                            @*<td class="@ordenTrabajo.Estado_P_A_C">@ordenTrabajo.Estado_P_A_C</td>*@
+                                            <td>
+                                                <span class="fa fa-circle @ordenTrabajo.Estado_P_A_C" style="font-size:14px">
+                                                    <span class="text-estado-ot">@ordenTrabajo.Estado_P_A_C</span>  
+                                                </span>
+                                                @*@ordenTrabajo.Estado_P_A_C*@
+                                            </td>
+                                            <td>@ordenTrabajo.clasif_orden_ttrabajoej</td>
+                                            <td>@ordenTrabajo.Fecha_asignacion</td>
+                                            <td>@ordenTrabajo.Descripcion</td>
+                                            <td>@ordenTrabajo.trabajoejecutado</td>
+                                            @*<td>@ordenTrabajo.descripcionPadre</td>*@
+                                            <td>@ordenTrabajo.Prospecto_Proyecto</td>
+                                            <td>@ordenTrabajo.Porcentaje_avance</td>
+                                            <td>@ordenTrabajo.Tiempo_transcurrido</td>
+                                            <td>@ordenTrabajo.Nombre</td>
+                                            <td>@ordenTrabajo.Fecha_finalizacion_obra</td>
+                                            <td>@ordenTrabajo.Fecha_fin_ejecucion</td>
+                                            @*<td style="@colorOT">@Html.DisplayFor(model => parametros)</td>*@
 
-                                                </tr>
+                                        </tr>
                                                 /* cntFila++;*/
                                             }
 

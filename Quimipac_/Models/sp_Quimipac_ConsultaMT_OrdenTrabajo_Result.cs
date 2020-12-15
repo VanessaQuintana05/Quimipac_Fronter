@@ -41,6 +41,7 @@ namespace Quimipac_.Models
         public Nullable<int> Id_campamento { get; set; }
         public Nullable<int> Id_sector { get; set; }
         public Nullable<int> Id_Prospecto { get; set; }
+        public Nullable<int> Id_Postventa { get; set; }
         public string CodigoInternoProyecto { get; set; }
         public Nullable<int> Proceso { get; set; }
         public Nullable<int> Alerta { get; set; }

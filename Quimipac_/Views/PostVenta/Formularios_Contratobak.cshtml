@@ -1,0 +1,419 @@
+﻿@using Quimipac_.Models
+@model Quimipac_.Models.MT_Contrato_Documentado
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var listaFormulariosC = ViewBag.listaFormulariosC as List<sp_Quimipac_ConsultaMT_ContratoDocumentado_Result>;
+}
+
+<title>Fronter |  Formulario de Contrato</title>
+
+
+<link rel="stylesheet" href="~/Content/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+
+@*@*BotonInf*@
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/cssImgInf/Iicono.css" />
+<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css" />
+<!-- EstiloGeneral-->
+<link rel="stylesheet" href="~/Content/bower_components/EstiloExterno/EstiloGral.css" />
+<style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .vFlotante {
+        position: absolute;
+        left: 97%;
+        top: 15%;
+        width: 4500px;
+        height: 400px;
+        transition: all .4s ease-in;
+        -webkit-transition: all .4s ease-in;
+        -moz-transition: all .4s ease-in;
+        -o-transition: all .4s ease-in;
+    }
+
+        .vFlotante:hover {
+            left: 73%;
+        }
+
+    #imgnotificacion {
+        width: 40px;
+        height: 40px;
+    }
+
+    /*.titulo {
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+    }*/
+</style>
+
+
+<section class="content-header">
+
+    <h2 style="text-align:left">
+        Formulario de Contrato
+    </h2>
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Default", "Main")">
+                <i class="fa fa-link">
+                </i>Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Contrato", "Contrato")">Contrato</a>
+        </li>
+        <li class="breadcrumb-item active">Formulario de Contrato</li>
+    </ol>
+    <br>
+
+
+    <div class="row">
+        <div class="col-md-2">
+            <button id="btnAgregarFormularioContrato" type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalAgregarFormularioContrato">
+                <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;  Agregar Formulario Contrato
+            </button>
+        </div>
+        <div class="vFlotante">
+            <table class="table-responsive">
+                <tr>
+                    <td>
+                        <br />
+                        <br />
+                        <hgroup style="display:inline-block;">
+                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="imgnotificacion">
+                        </hgroup>&nbsp;&nbsp;
+                    </td>
+
+                    <td>
+                        <br />
+                        <br />
+                        <div class="box box-default">
+                            @*<div class="box-header"><h3 class="box-title">Tipo de vista</h3></div>*@
+                            <div class="box-header">
+                                <p>En esta Pagina se detallara el contrato</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (TempData["mensaje_error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>@TempData["mensaje_error"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_correcto"] != null)
+            {
+                <div class="alert alert-success">
+                    <strong>@TempData["mensaje_correcto"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["mensaje_actualizado"] != null)
+            {
+                <div class="alert alert-warning">
+                    <strong>@TempData["mensaje_actualizado"]</strong>
+                    <button type="button" id="alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id ="BordeDiv">
+                @*<div class="box-header">
+                        <h3 class="box-title">Formulario Contrato</h3>
+                    </div>*@
+
+                <div class="box-body" id="CssDivBox">
+
+                    @{
+
+                        if (listaFormulariosC.Count != 0)
+                        {
+
+                            <div class="table-responsive">
+                                <table id="tablaContrato" class="js-dynamitable table table-bordered  ">
+                                    @*          table table-bordered table-hover  ">*@
+                                    <thead>
+                                        <tr>
+
+                                            <th>Acci&oacute;n</th>
+                                            <th>C&oacute;digo Contrato</th>
+                                            <th>Descripci&oacute;n Formulario</th>
+                                            <th>Archivo</th>
+                                            <th>F. Registro</th>
+                                            <th>Estado</th>
+                                            <th>Tipo</th>
+                                            <th>F. Vigencia</th>
+                                            
+
+                                        </tr>
+
+                                        <tr><th></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo Contrato"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Descripcion"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Archivo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Registro"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo"></th>
+                                            <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha Vigencia"></th>
+                                            
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        @{int cntFila = 0;string estilo = string.Empty; }
+                                        @foreach (var formularioC in listaFormulariosC)
+                                        {
+                                           if ((cntFila % 2) == 0)
+                    {
+                        estilo = "background-color:#f9f9f9";
+                    }
+                    else
+                    {
+                        estilo = "";
+                    }
+
+                    <tr style="@estilo">
+<td>
+
+                                                        @*<button type="button" class="btn btn-primary class_editar_FormularioContrato" title="Editar" style="background:#f5b024;text-align:center" data-toggle="modal" data-target="#modalEditarContrato" data-id="@formularioC.Id_Contrato_Documentado">
+                                                            <span aria-hidden="true" class="glyphicon glyphicon-edit"> </span>
+                                                             </button>*@
+
+                                                        <a href="@Url.Action("EliminarFormularioContrato", "Contrato", new { id = formularioC.Id_Contrato_Documentado })" target="_self" class="btn btn-primary" style="background:#f5b024;text-align:center">
+                                                            <span aria-hidden="true" class="glyphicon glyphicon-remove">
+                                                            </span>
+                                                        </a>
+
+                                                    </td>
+                                                    <td>@Html.DisplayFor(model => formularioC.CodigoC)</td>
+
+                                                    <td>@Html.DisplayFor(model => formularioC.Descripcion)</td>
+                                                    <td>
+                                                        <a href="@Url.Action("DescargarArchivoFormularioC", "Contrato", new { nombre = formularioC.NombreArchivo })">@formularioC.NombreArchivo</a>
+                                                    </td>
+                                                    <td>@Html.DisplayFor(model => formularioC.Fecha_Registro)</td>
+                                                    <td>@Html.DisplayFor(model => formularioC.Estado)</td>
+                                                    <td>@Html.DisplayFor(model => formularioC.DescripcionTipo)</td>
+                                                    <td>@Html.DisplayFor(model => formularioC.Fecha_Validez)</td>
+                                                    @{
+                                                        string Fecha_Validez = formularioC.Fecha_Validez.ToString();
+                                                        Fecha_Validez = Convert.ToDateTime(Fecha_Validez).ToString("dd/MM/yyyy");
+
+                                                    }
+
+                                                    
+
+
+                                        </tr>
+                                            cntFila++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div id="modalAgregarFormularioContrato" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"> <font size="2"><span class="glyphicon glyphicon-plus"></span></font>&nbsp;Agregrar Formulario Contrato &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Formulario de ingreso, recuerde que lo campos resaltados de color verde son obligatorios [*]" class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modal-agregaFormularioContrato">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalEditarFormularioContrato" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h4 class="text-bold"><font size="3"><span class="fa fa-edit"></span></font>&nbsp;Formulario Contrato &nbsp;&nbsp; </h4>
+                                </td>
+
+                                <td>
+                                    <h6>
+                                        <a href="#" title="Este Formulario le permitira Editar los campos que desee." class="tooltip_elemento center">
+                                            <img class="img-responsive" src="~/Content/bower_components/ImagenVQ/Info.png" id="purple">
+                                        </a>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+            <div class="modal-body">
+                <div id="modal-editaFormularioContrato">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/Content/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+    @*<script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/js/jquery-1.11.3.min.js"></script>*@
+
+    <!--Filtro de tabla-->
+    <script src="~/Content/bower_components/FiltroDataTable/MantTipoTrabajo/Dynamitablevq/dynamitable.jquery.min.js"></script>
+    <script src="~/Scripts/Modales.js"></script>
+    <script type="text/javascript">
+    function Redirigir() {
+					location.href = "@Url.Action("Default1", "Main")";
+                    location.href = "@Url.Action("Contrato", "Contrato")";
+                    location.href = "@Url.Action("Formulario", "Contrato")";
+				}
+    </script>
+    <script type="text/javascript">
+
+            modalAdd('#btnAgregarFormularioContrato', 'modal-agregaFormularioContrato', '@Url.Action("AgregarFormulario_Contrato", "Contrato")');
+            modalEdit('.class_editar_FormularioContrato', 'modal-editaFormularioContrato', '@Url.Action("Editar_FormularioContrato", "Contrato", new { id = "param-id" })');
+
+                $(document).ready(function () {
+
+
+                    $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                        $(".alert").slideUp(500);
+                    });
+
+                    $.noConflict();
+                    $('#tablaContrato').DataTable({
+
+                        "language": {
+                            "lengthMenu": "Display _MENU_ records per page",
+                            "zeroRecords": "No Contiene registros",
+                            "infoEmpty": "No hay registros disponibles",
+                            "decimal": "",
+                            "emptyTable": "No hay datos",
+                            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                            "infoFiltered": "(Filtro de _MAX_ total registros)",
+                            "infoPostFix": "",
+                            "thousands": ",",
+                            "lengthMenu": "  Mostrar _MENU_ registros",
+                            "loadingRecords": "Cargando...",
+                            "processing": "Procesando...",
+                            "search": "Buscar:",
+                            "zeroRecords": "No se encontraron coincidencias",
+                            "paginate": {
+                                "first": "Primero",
+                                "last": "Ultimo",
+                                "next": "Siguiente",
+                                "previous": "Atras"
+                            },
+                            "aria": {
+                                "sortAscending": ": Activar orden de columna ascendente",
+                                "sortDescending": ": Activar orden de columna desendente"
+                            },
+                        },
+
+
+                        'paging': true,
+                        'lengthChange': true,
+                        'searching': true,
+                        'ordering': false,
+                        'info': true,
+                        'autoWidth': true
+                    })
+
+                    //$('#tablaTiposTrabajo').DataTable({
+                    //    'paging': true,
+                    //    'lengthChange': true,
+                    //    'searching': true,
+                    //    'ordering': false,
+                    //    'info': true,
+                    //    'autoWidth': false
+                    //})
+                })
+
+                // Mostrar informacion de pagina
+                var i = 2;
+                function insertHtml() {
+                    if (i % 2 == 0) { $("#htmlins").html("<h4>Estimado usuario</h4></hr><span>En esta pantalla administrara el proceso de mantenimiento de trabajo</span><br>") }
+                    else {
+                        $("#htmlins").html("")//remove();
+                    }//.html("<span>este codigo html fue insertado</span>") }
+
+                    i++;
+                };
+    </script>
+}

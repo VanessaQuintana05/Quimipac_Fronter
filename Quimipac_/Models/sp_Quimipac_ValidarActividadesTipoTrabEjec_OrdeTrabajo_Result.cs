@@ -60,6 +60,7 @@ namespace Quimipac_.Models
         public Nullable<bool> Desalojo { get; set; }
         public Nullable<bool> Automatizacion { get; set; }
         public Nullable<int> Id_Prospecto { get; set; }
+        public Nullable<int> Id_Postventa { get; set; }
         public int Id_OrdenTrabajo_Actividad { get; set; }
         public Nullable<int> Id_Orden_Trabajo { get; set; }
         public Nullable<int> Id_Actividad { get; set; }

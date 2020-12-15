@@ -1140,9 +1140,6 @@ namespace Quimipac_.Repositorio
             }
         }
 
-
-
-
         public List<sp_Quimipac_ConsultaUsuarios_Permisos_Result> ObtenerUsuariosPermisos()
         {
             using (var ctx = new BD_QUIMIPACEntities())
@@ -2410,18 +2407,50 @@ namespace Quimipac_.Repositorio
         //#..public List<ConsultaMT_OrdenTrabajo_AuxVM> execute_filter_OrdenTrabajo(DateTime? fi, DateTime? ff, List<string> parametro, string criterio_and_or, int? chkFecha, int automatizacion)
         public List<sp_Quimipac_ConsultaMT_OrdenTrabajo_Result> execute_filter_OrdenTrabajo(DateTime? fi, DateTime? ff, List<string> parametro, string criterio_and_or, int? chkFecha, int automatizacion)
         {
-            var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
+            string empresa_id = System.Web.HttpContext.Current.Session["empresa"].ToString();
             bool band_etapa = false;
             string valor_etapa = "";
-            string sql_filter = " select  DISTINCT (a_hijo.Fecha_asignacion) Fecha_asignacion	 ,a_hijo.Fecha_registro	 ,a_hijo.Id_tipo_trabajo_recibido      ,a_hijo.Id_tipo_trabajo_ejecutado	  ,a_hijo.Id_estacion ,a_hijo.Id_Proyecto ,a_hijo.Id_sucursal ,a_hijo.Estado ,a_hijo.Id_OrdenTrabajo  ,a_hijo.Codigo_Cliente  , mtp_PLA.descripcion as Dtrabajo	   , " +
+            string sql_filter = $@" select  DISTINCT (a_hijo.Fecha_asignacion) Fecha_asignacion	 ,a_hijo.Fecha_registro	 ,a_hijo.Id_tipo_trabajo_recibido      ,a_hijo.Id_tipo_trabajo_ejecutado	  ,a_hijo.Id_estacion ,a_hijo.Id_Proyecto ,a_hijo.Id_sucursal ,a_hijo.Estado ,a_hijo.Id_OrdenTrabajo  ,a_hijo.Codigo_Cliente  , mtp_PLA.descripcion as Dtrabajo	   , mttej.Descripcion as clasif_orden_ttrabajoej , mtdet.Descripcion,mtp.Descripcion as trabajoejecutado  , pry.Codigo_Cliente as Cod_ClientePry	   ,a_hijo.Porcentaje_avance	   ,a_hijo.Tiempo_transcurrido	   , mtgrupo.Nombre	   ,a_hijo.Fecha_inicio_ejecucion      ,a_hijo.Fecha_fin_ejecucion      ,a_hijo.Fecha_finalizacion_obra	  ,a_hijo.Id_orden_padre	  , a_hijo.EstadoEditOrden,	   a_hijo.Automatizacion	   ,a_hijo.Id_usuario  ,a_hijo.Id_campamento       ,a_hijo.Id_sector     ,a_hijo.Id_Prospecto,pry.Codigo_Interno as CodigoInternoProyecto, 
+                                     mtp.Proceso, mtp.Alerta, mtp.Caida	,
+                                     ISNULL( a_padre.Codigo_Cliente ,'') as descripcionPadre, a_hijo.Fecha_maxima_contratista, a_hijo.Desalojo,	
+                                     CASE WHEN (GETDATE() > (convert (datetime,(DATEADD(DAY,ISNULL(mtp.Proceso, 0),a_hijo.Fecha_asignacion)),111))) 
+	                                    THEN  
+		                                    CASE WHEN (GETDATE() > (convert (datetime,(DATEADD(DAY,ISNULL(mtp.Alerta, 0) ,a_hijo.Fecha_asignacion)),111)))
+			                                    THEN 'CAIDA'
+			                                    ELSE
+			                                    'ALERTA'		
+		                                    END	ELSE		
+	                                    'EN PROCESO'
+                                     END AS Estado_P_A_C,
+                                     CASE WHEN (a_hijo.Id_Proyecto != 0) 
+	                                    THEN  pry.Codigo_Cliente 
+	                                    ELSE	 prosp.Codigo_Cliente + ' ' + prosp.Nombre	
+                                     END AS Prospecto_Proyecto,	
+                                     mtp.Control_Anexo, mtp.Control_Costo, mtp.Control_Equipo, mtp.Control_Integrante, mtp.Control_Item, mtp.Control_Medida, mtp.Control_Raiz
+                                     ,prosp.Codigo_Cliente as Cod_ClienteProsp	 ,a_hijo.Id_Prospecto,a_hijo.Id_PostVenta 
+                                     from MT_OrdenTrabajo a_hijo	
+                                     left join MT_OrdenTrabajo a_padre on a_hijo.Id_orden_padre = a_padre.Id_OrdenTrabajo 	
+                                     left outer join MT_Proyecto pry on a_hijo.Id_Proyecto = pry.Id_Proyecto and  pry.Id_Empresa = '{empresa_id}'
+                                     left outer join MT_TipoTrabajo mtp_PLA on a_hijo.Id_tipo_trabajo_recibido = mtp_PLA.Id_TipoTrabajo	
+                                     left outer join MT_TipoTrabajo mtp on a_hijo.Id_tipo_trabajo_ejecutado = mtp.Id_TipoTrabajo		
+                                     left outer join MT_OrdenTrabajo_Integrante oi on a_hijo.Id_OrdenTrabajo = oi.Id_Orden_Trabajo and oi.Estado = 'A'	
+                                     left outer join [SADATABASE]..[DBA].[rh_persona] as p on oi.ID_Persona = p.id_persona	
+                                     inner join MT_TablaDetalle  mtdet on a_hijo.Estado = mtdet.Id_TablaDetalle
+                                     left outer join MT_TablaDetalle  mttej on mtp.Clasificacion = mttej.Id_TablaDetalle 
+                                     left outer join MT_GrupoTrabajo mtgrupo on oi.Id_GrupoTrabajo = mtgrupo.Id_GrupoTrabajo 
+                                     left outer join MT_Prospecto prosp on a_hijo.Id_Prospecto = prosp.Id_Prospecto and prosp.Id_Empresa = '{empresa_id}' ";
+                                                /*string sql_filter = " select  DISTINCT (a_hijo.Fecha_asignacion) Fecha_asignacion	 ,a_hijo.Fecha_registro	 ,a_hijo.Id_tipo_trabajo_recibido      ,a_hijo.Id_tipo_trabajo_ejecutado	  ,a_hijo.Id_estacion ,a_hijo.Id_Proyecto ,a_hijo.Id_sucursal ,a_hijo.Estado ,a_hijo.Id_OrdenTrabajo  ,a_hijo.Codigo_Cliente  , mtp_PLA.descripcion as Dtrabajo	   , " +
                 "mttej.Descripcion as clasif_orden_ttrabajoej , mtdet.Descripcion,mtp.Descripcion as trabajoejecutado  , pry.Codigo_Cliente as Cod_ClientePry	   ,a_hijo.Porcentaje_avance	   ,a_hijo.Tiempo_transcurrido	   , mtgrupo.Nombre	   ,a_hijo.Fecha_inicio_ejecucion      ,a_hijo.Fecha_fin_ejecucion      ,a_hijo.Fecha_finalizacion_obra	  ,a_hijo.Id_orden_padre	  ," +
                 " a_hijo.EstadoEditOrden,	   a_hijo.Automatizacion	   ,a_hijo.Id_usuario  ,a_hijo.Id_campamento       ,a_hijo.Id_sector     ,a_hijo.Id_Prospecto,pry.Codigo_Interno as CodigoInternoProyecto, mtp.Proceso, mtp.Alerta, mtp.Caida	,ISNULL( a_padre.Codigo_Cliente ,'') as descripcionPadre, a_hijo.Fecha_maxima_contratista, a_hijo.Desalojo,	" +
                 "CASE WHEN (GETDATE() > (convert (datetime,(DATEADD(DAY,ISNULL(mtp.Proceso, 0),a_hijo.Fecha_asignacion)),111))) THEN  			CASE WHEN (GETDATE() > (convert (datetime,(DATEADD(DAY,ISNULL(mtp.Alerta, 0) ,a_hijo.Fecha_asignacion)),111))) THEN 'CAIDA'			ELSE				 'ALERTA'			END	ELSE		 'EN PROCESO'	END AS Estado_P_A_C," +
-                " CASE WHEN (a_hijo.Id_Proyecto != 0) THEN  pry.Codigo_Cliente  ELSE	 prosp.Codigo_Cliente + ' ' + prosp.Nombre	END AS Prospecto_Proyecto,	mtp.Control_Anexo, mtp.Control_Costo, mtp.Control_Equipo, mtp.Control_Integrante, mtp.Control_Item, mtp.Control_Medida, mtp.Control_Raiz	   , prosp.Codigo_Cliente as Cod_ClienteProsp	from MT_OrdenTrabajo a_hijo	" +
+                " CASE WHEN (a_hijo.Id_Proyecto != 0) THEN  pry.Codigo_Cliente  ELSE	 prosp.Codigo_Cliente + ' ' + prosp.Nombre	END AS Prospecto_Proyecto,	mtp.Control_Anexo, mtp.Control_Costo, mtp.Control_Equipo, mtp.Control_Integrante, mtp.Control_Item, mtp.Control_Medida, mtp.Control_Raiz	   , prosp.Codigo_Cliente as Cod_ClienteProsp	"
+
+                + " ,a_hijo.Id_Prospecto,a_hijo.Id_PostVenta"
+                + " from MT_OrdenTrabajo a_hijo	" +
                 "left join MT_OrdenTrabajo a_padre on a_hijo.Id_orden_padre = a_padre.Id_OrdenTrabajo 	left outer join MT_Proyecto pry on a_hijo.Id_Proyecto = pry.Id_Proyecto and  pry.Id_Empresa = '" + empresa_id.ToString() + "'	left outer join MT_TipoTrabajo mtp_PLA on a_hijo.Id_tipo_trabajo_recibido = mtp_PLA.Id_TipoTrabajo	left outer join MT_TipoTrabajo mtp on a_hijo.Id_tipo_trabajo_ejecutado = mtp.Id_TipoTrabajo		" +
                 "left outer join MT_OrdenTrabajo_Integrante oi on a_hijo.Id_OrdenTrabajo = oi.Id_Orden_Trabajo and oi.Estado = 'A'	left outer join [SADATABASE]..[DBA].[rh_persona] as p on oi.ID_Persona = p.id_persona	inner join MT_TablaDetalle  mtdet on a_hijo.Estado = mtdet.Id_TablaDetalle	left outer join MT_TablaDetalle  mttej on mtp.Clasificacion = mttej.Id_TablaDetalle	" +
                 "left outer join MT_GrupoTrabajo mtgrupo on oi.Id_GrupoTrabajo = mtgrupo.Id_GrupoTrabajo	left outer join MT_Prospecto prosp on a_hijo.Id_Prospecto = prosp.Id_Prospecto and prosp.Id_Empresa = '" + empresa_id.ToString() + "'";
-
+            */
             string sql_where_dinamic = " Where (a_hijo.EstadoEditOrden = 'A' and a_hijo.Automatizacion= " + automatizacion + " )";
 
             criterio_and_or = (criterio_and_or == null || criterio_and_or == "") ? " and " : criterio_and_or;
@@ -2457,6 +2486,9 @@ namespace Quimipac_.Repositorio
                         case "CLIENTE": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " (pry.Id_Cliente='" + aux_split[1] + "' or prosp.Id_Cliente='" + aux_split[1] + "') "; break;
                         case "ETAPA": sql_where_dinamic = sql_where_dinamic + " "; band_etapa = true; valor_etapa = aux_split[1]; break;
                         case "ORDENPADRE": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " a_hijo.Id_orden_padre=" + aux_split[1] + " "; break;
+                            
+                        case "PROSPECTO": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " a_hijo.Id_Prospecto =" + aux_split[1] + " "; break;
+                        case "POSTVENTA": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " a_hijo.Id_PostVenta =" + aux_split[1] + " "; break;
                         default: break;
                     }
                 }
@@ -2570,6 +2602,165 @@ namespace Quimipac_.Repositorio
             }
         }
 
+        #region POSTVENTA
 
+        public List<Insertar_Contratosysbase> InsertarPostVenta(int Id_Prospecto, string cia_codigo, string cod_cliente, DateTime? fecha_inicial, DateTime? fecha_fin, string codigo_secuencial_interno, string codigo_prospecto_asociado, string user_id, string unidad, string cod_servicio, string codcen, string detalle, int? id_estado,
+           int? plazo_prospecto, int? cod_tipo, decimal? Valor_Referencial, decimal? monto, decimal? costo, int? Responsable, int? secuencial, string Codigo_Interno_Ant, string observaciones, string codigo_secuencial_interno_padre, DateTime? Fecha_registro, DateTime? Fecha_modificacion, string Localidad, DateTime? Fecha_Aprobacion_Cot, string Recepcion_Servicio, DateTime? Fecha_Firma_Conformidad, DateTime? Fecha_Cumplimiento_Inst)
+        {
+            using (var ctx = new BD_QUIMIPACEntities())
+            {
+                try
+                {
+                    //var ac = ctx.Database.SqlQuery<Insertar_Contratosysbase>("sp_Quimipac_InsertarContratoSysbase @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19,@p20,@p21,@p22,@p23,@p24,@p25", Id_Contrato, cia_codigo, cod_cliente, fecha_inicial, fecha_fin, codigo_secuencial_interno, codigo_prospecto_asociado, user_id, unidad, cod_servicio, codcen, detalle, id_estado, plazo_prospecto, cod_tipo, Contrato_Padre, Valor_Referencial, monto, costo, Responsable, secuencial, Codigo_Interno_Ant, observaciones, codigo_secuencial_interno_padre, Fecha_registro, Fecha_modificacion).ToList();
+                    var ac = ctx.Database.SqlQuery<Insertar_Contratosysbase>("sp_Quimipac_InsertarProspectoSysbase @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19,@p20,@p21,@p22,@p23,@p24,@p25,@p26,@p27,@p28,@p29,@p30", Id_Prospecto, cia_codigo, cod_cliente, fecha_inicial, fecha_fin, codigo_secuencial_interno, codigo_prospecto_asociado, user_id, unidad, cod_servicio, codcen, detalle, id_estado, plazo_prospecto, cod_tipo, Valor_Referencial, monto, costo, Responsable, secuencial, Codigo_Interno_Ant, observaciones, codigo_secuencial_interno_padre, Fecha_registro, Fecha_modificacion, Localidad, Fecha_Aprobacion_Cot, Recepcion_Servicio, Fecha_Firma_Conformidad, Fecha_Cumplimiento_Inst).ToList();
+                    //25,'02','1', '28/06/2019 0:00:00', '01/07/2019 0:00:00', 'HYDIWSTYAPRO0022019', 'Req # 19001269-01', 'BSALTO',
+                    //'TYA','02','080', 'Elementos para Estaciones de Bombeo: Fuente conmutable (12) y supresores de voltaje para cable coaxial (20)',75,3,146,null,0.0000,8160.0000,6456.0000,
+                    //null,2,'HYDIWSTYAPRO0022019','REQUISICION SOLICITADA POR LA ING. JANETA','HYDIWSTYAPRO0022019','19/03/2020 0:00:00',null
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+                return null;
+            }
+        }
+
+
+        public List<MT_Prospecto> UpdatePostVenta(int Id_Prospecto, string Id_Cliente, DateTime? Fecha_Inicio, DateTime? Fecha_Fin, string Codigo_Interno, string Codigo_Cliente, string Id_Linea, string Categoria, string Subcategoria, string Nombre, int? Estado, int? Dia_Plazo, int? tipo, decimal? Valor_Referencial, decimal? monto, decimal? costo, int? Responsable, int? Secuencial, string Codigo_Interno_Ant, string Observaciones, string Codigo_interno_padre, DateTime? Fecha_registro, DateTime? Fecha_modificacion, string Localidad, DateTime? Fecha_Aprobacion_Cot, string Recepcion_Servicio, DateTime? Fecha_Firma_Conformidad, DateTime? Fecha_Cumplimiento_Inst)
+        {
+            using (var ctx = new BD_QUIMIPACEntities())
+            {
+                try
+                {
+                    var ac = ctx.Database.ExecuteSqlCommand("sp_Quimipac_UpdatePostVenta @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27", Id_Prospecto, Id_Cliente, Fecha_Inicio, Fecha_Fin, Codigo_Interno, Codigo_Cliente, Id_Linea, Categoria, Subcategoria, Nombre, Estado, Dia_Plazo, tipo, Valor_Referencial, monto, costo, Responsable, Secuencial, Codigo_Interno_Ant, Observaciones, Codigo_interno_padre, Fecha_registro, Fecha_modificacion, Localidad, Fecha_Aprobacion_Cot, Recepcion_Servicio, Fecha_Firma_Conformidad, Fecha_Cumplimiento_Inst);
+
+                    return null;
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw new System.Exception(ex.Message);
+                }
+            }
+        }
+
+        public List<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result> BusquedaXParametro_PostVenta(string fi, string fregistro, DateTime? ff, string criterio, int? tipo, string Id_Cliente, int? Estado, string Id_Linea, string Categoria, string Subcategoria, string Localidad, int? Responsable)
+        {
+            var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
+            string empresa = empresa_id.ToString();
+            //var dbe = new DataBase_Externo();
+            using (var ctx = new BD_QUIMIPACEntities())
+            {
+                string XParametro = string.Empty;
+                int? XParametroInt = 0;
+
+                if (criterio.Equals("Ninguno")) { XParametroInt = 0; }
+                else if (criterio.Equals("Tipo")) { XParametroInt = tipo; }
+                else if (criterio.Equals("Cliente")) { XParametro = Id_Cliente; }
+                else if (criterio.Equals("Estado")) { XParametroInt = Estado; }
+                else if (criterio.Equals("Unidad_Negocio")) { XParametro = Id_Linea; }
+                else if (criterio.Equals("Categoria")) { XParametro = Categoria; }
+                else if (criterio.Equals("Subcategoria")) { XParametro = Subcategoria; }
+                //else if (criterio.Equals("Etapa"))
+                //{
+                //    XParametro = Etapa;
+
+
+                //    var lksqlAux = (ctx.Database.SqlQuery<ParametrosBusquedaOT>("sp_Quimipac_MT_OrdenTrabajo_QryXParametro @p0, @p1, @p2,@p3,@p4,@p5", fi, ff, criterio, XParametroInt, XParametro, empresa).ToList());
+                //    if (lksqlAux != null)
+                //    {
+                //        List<ParametrosBusquedaOT> listaPAC = new List<ParametrosBusquedaOT>();
+                //        foreach (var item in lksqlAux)
+                //        {
+                //            var listaNueva = dbe.IsValidParametroCANVAS_OT(item.Id_OrdenTrabajo, item.Id_tipo_trabajo_ejecutado);
+
+                //            if (listaNueva.Equals(XParametro))
+                //            {
+                //                listaPAC.Add(item);
+                //            }
+                //        }
+                //        return listaPAC;
+                //    }
+                //}
+                else if (criterio.Equals("Localidad")) { XParametro = Localidad; }
+                else if (criterio.Equals("Responsable")) { XParametroInt = Responsable; }
+
+                //sp_Quimipac_ConsultaMT_ProspectoGeneral_Result
+                var lksql = (ctx.Database.SqlQuery<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result>("sp_Quimipac_MT_Contrato_QryXParametro @p0, @p1, @p2,@p3,@p4,@p5", fi, fregistro, criterio, XParametroInt, XParametro, empresa).ToList());
+                return lksql;
+            }
+        }
+
+
+        public List<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result> execute_filter_postventa(DateTime? fi, DateTime? ff, List<string> parametro, string criterio_and_or, int? chkFecha)
+        {
+            string empresa_id = System.Web.HttpContext.Current.Session["empresa"].ToString();
+
+            string sql_filter = $@"select C.*, l.descripcion as lineaPostVenta, cl.nom_cli as nombreCliente,  categ.nombre as nombre_Categoria, subcateg.nombre as nombre_Subcategoria,
+                                         (select Descripcion from MT_TablaDetalle where C.Estado = Id_TablaDetalle ) as descripcion,
+                                         (select Descripcion from MT_TablaDetalle where C.tipo = Id_TablaDetalle ) as Tipo_PostVenta, 
+                                         '' as Origen, Localidad.descripcion as nom_Localidad, persona.primer_nombre as Nombres_Completos, cl.abreviatura_cliente
+                                         from MT_PostVenta C
+                                         inner join[SADATABASE]..[DBA].[lineas] l on l.codigo = c.Id_Linea and l.cia_codigo = '{empresa_id}'
+                                         inner join[SADATABASE]..[DBA].[clientes] cl on  cl.cod_cli = c.Id_Cliente and cl.cia_codigo = '{empresa_id}'
+                                         LEFT OUTER join[SADATABASE]..[DBA].[tb_quimi_tipo_servicios] categ on categ.cod_linea = C.Id_Linea and c.Categoria = categ.cod_servicio and categ.cia_codigo = '{empresa_id}'
+                                         left outer join[SADATABASE]..[DBA].[centro_consumo] subcateg on subcateg.quimi_linea = C.Id_Linea and c.Subcategoria = subcateg.codcen and subcateg.cia_codigo = '{empresa_id}'
+                                         left outer join[SADATABASE]..[DBA].[LOCALIDAD] localidad on c.Localidad = localidad.codigo_loc and localidad.cia_codigo = '{empresa_id}'
+                                         inner join[SADATABASE]..[DBA].[rh_persona] persona on c.Responsable = persona.id_persona";
+
+            //+ " --inner join MT_TablaDetalle t on t.Id_TablaDetalle = c.estado "
+            //+ " --inner join MT_TablaDetalle tipo on tipo.Id_TablaDetalle = C.tipo ";
+            //+ " where c.Id_Empresa = @empresa and c.Estado !=1160 --
+
+            string sql_where_dinamic = " Where ( c.Id_Empresa = '" + empresa_id.ToString() + "' and c.Estado !=1160)";
+
+            criterio_and_or = (criterio_and_or == null || criterio_and_or == "") ? " and " : criterio_and_or;
+            string Fecha_registro = "";
+            if (chkFecha != null)
+            {
+                if (fi != null && ff != null)
+                {
+                    DateTime finicio = Convert.ToDateTime(fi);
+                    DateTime ffin = Convert.ToDateTime(ff);
+                    ffin = ffin.AddDays(1);
+                    Fecha_registro = criterio_and_or + " c.Fecha_registro >='" + finicio.ToString("yyyy-MM-dd") + "' " + criterio_and_or + " c.Fecha_registro < '" + ffin.ToString("yyyy-MM-dd") + "' ";
+
+                }
+            }
+            sql_where_dinamic = sql_where_dinamic + " " + Fecha_registro;
+            if (parametro != null)
+            {
+                for (int i = 0; i < parametro.Count(); i++)//paramametro = "Tipo:1" 
+                {
+                    var aux_split = parametro[i].Split(':');
+                    criterio_and_or = (i <= (parametro.Count() - 1)) ? criterio_and_or : "";
+                    string lista_parametros = "";
+                    switch (aux_split[0].ToUpper())
+                    {
+                        case "TIPO": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.tipo=" + aux_split[1] + " "; break;
+                        case "CONT_PADRE": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Contrato_Padre=" + aux_split[1] + " "; break;
+                        case "LINEA": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Id_Linea='" + aux_split[1] + "' "; break;
+                        case "CATEGORIA": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Categoria='" + aux_split[1] + "' "; break;
+                        case "SUBCATEGORIA": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Subcategoria='" + aux_split[1] + "' "; break;
+                        case "LOCALIDAD": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Localidad='" + aux_split[1] + "' "; break;
+                        case "CLIENTE": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Id_Cliente='" + aux_split[1] + "'  "; break;
+                        case "ESTADO": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Estado=" + aux_split[1] + " "; break;
+                        case "REFERENCIA": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Referencia=" + aux_split[1] + " "; break;
+                        case "RESPONSABLE": sql_where_dinamic = sql_where_dinamic + " " + criterio_and_or + " C.Responsable=" + aux_split[1] + " "; break;
+                        default: break;
+                    }
+                }   // sql_filter = sql_filter + " " + sql_where_dinamic;
+            }
+
+            sql_filter = sql_filter + " " + sql_where_dinamic;
+
+            var ctx = new BD_QUIMIPACEntities();
+            var ListaParametros = ctx.Database.SqlQuery<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result>(sql_filter).ToList();
+
+            return ListaParametros;
+        }
+
+        #endregion
     }
 }

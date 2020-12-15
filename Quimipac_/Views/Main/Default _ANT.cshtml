@@ -1,0 +1,495 @@
+﻿@using Newtonsoft.Json;
+@*@using static Quimipac_.Models.CustomChartRender;*@
+@using Quimipac_.Models
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+
+    /*
+    System.Web.Script.Serialization.JavaScriptSerializer oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    string StudentJson = oSerializer.Serialize(CharDemo);*/
+
+
+    //var nn = (JsonConvert.DeserializeObject<List<Quimipac_.Models.CustomChartRender.CustomChart>>(CharDemo));
+    var CharDemo = ViewBag.chartDataPie;// as List<Quimipac_.Controllers.MainController>;
+    var nn = JsonConvert.SerializeObject(CharDemo);
+
+    var CharAutomatizacionFecha = ViewBag.chart_Automatizacion;// as List<Quimipac_.Controllers.MainController>;
+    var dataFechaAutomatizacion = JsonConvert.SerializeObject(CharAutomatizacionFecha);
+
+    //AUTOMATIZACION xGrupo, xClte
+    var chart_grupo_automatizacion = ViewBag.chart_grupo_automatizacion;
+    var data_chart_grupo_automatizacion = JsonConvert.SerializeObject(chart_grupo_automatizacion);
+
+    var chart_cliente_automatizacion = ViewBag.chart_cliente_automatizacion;
+    var data_chart_cliente_automatizacion = JsonConvert.SerializeObject(chart_cliente_automatizacion);
+
+
+    int borrar = 0;
+}
+
+<link rel="stylesheet" href="~/Content/bower_components/select2/dist/css/select2.css">
+<style>
+    .content {
+        min-height: 0px;
+        padding: 0 !important;
+    }
+
+    #divFondo,
+    .box-body {
+        background: #f5f5f9 !important;
+    }
+
+    .box-title {
+        padding: 16px 15px 0 !important;
+    }
+
+    .borderpri {
+        border: 1px solid #dadada;
+    }
+
+    .borderShadow {
+        box-shadow: -2px 2px 6px 0px black;
+    }
+
+    span.select2.select2-container.select2-container--default { /*.select2-container--focus {*/
+        width: auto !important;
+    }
+
+    .select2-hidden-accessible {
+        padding-bottom: 15px !important;
+        width: auto !important;
+    }
+
+    select.select2 {
+        padding-bottom: 10px !important;
+    }
+</style>
+
+<title>Fronter | Home</title>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" id="BordeDiv" style="height:auto;">
+                <div class="box-header" style="background-color:#f5f5f9;align-content:center">
+                    <h3 class="box-title">Dashboard </h3>
+                </div>
+
+                <div class="box-body">
+                    <div class="col-md-12" style="padding-bottom:10px;">
+                        @Html.DropDownList("Id_Proyecto",null, new { @class = "form-control select2" }  )
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-cube dsh-total-gral"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Total General</span>
+                                            <span>@(ViewBag.N_OTRedes +ViewBag.N_OT_AUTOM)</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-refresh dsh-tot-proceso"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Proceso:</span>
+                                            <span>@(ViewBag.Nlista_ProcesoRedes +ViewBag.Nlista_Proceso_Autom)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-warning dsh-tot-alerta"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Alerta:</span>
+                                            <span>@(ViewBag.Nlista_AlertaRedes + ViewBag.Nlista_Alerta_Autom)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-minus-square dsh-tot-caida"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Caidas:</span>
+                                            <span>@(ViewBag.Nlista_CaidaRedes +ViewBag.Nlista_Caida_Autom)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Ordenes de Rede-->
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-cube dsh-total-gral"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Ordenes de Redes</span>
+                                            <span>@ViewBag.N_OTRedes</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-refresh dsh-tot-proceso"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Proceso:</span>
+                                            <span>@ViewBag.Nlista_ProcesoRedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-warning dsh-tot-alerta"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Alerta:</span>
+                                            <span>@ViewBag.Nlista_AlertaRedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-minus-square dsh-tot-caida"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Caidas:</span>
+                                            <span>@ViewBag.Nlista_CaidaRedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Ordenes de trabajoautomatización-->
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-cube dsh-total-gral"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Ordenes Automatización</span>
+                                            <span>@ViewBag.N_OT_AUTOM</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-refresh dsh-tot-proceso"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Proceso:</span>
+                                            <span>@ViewBag.Nlista_Proceso_Autom</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-warning dsh-tot-alerta"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">En Alerta:</span>
+                                            <span>@ViewBag.Nlista_Alerta_Autom</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="borderpri" style="display:flex;background: #fff;">
+                                        <span class="fa fa-minus-square dsh-tot-caida"></span>
+                                        <div style="display: grid;padding: 2px 10px;font-size: 13px;">
+                                            <span class="Bold">Caidas:</span>
+                                            <span>@ViewBag.Nlista_Caida_Autom</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--TEST-->
+                            @*<div class="form-group borderpri" style="background: #fff; margin-left: 0; margin-right: 0;">
+            <div class="col-md-12">
+                <div style=" background: #fff;">
+                    <div id='barchart_CliOT_OT' style='width: auto; height: 350px;'></div>
+                </div>
+            </div>
+        </div>*@
+                            <!--    -->
+                            <div class="form-group borderpri" style="background: #fff; margin-left: 0; margin-right: 0;">
+                                <div class="col-md-12">
+                                    <div style=" background: #fff;">
+                                        @*<div id='polynomial2_div' style='width: 900px; height: 500px;'></div>*@
+                                        <div id='polynomial2_div' style='width: auto; height: 350px;'></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- START CHART AUTOMATIZACION X FECHA   -->
+                            @if (dataFechaAutomatizacion != "null")
+                            {
+                                <div class="form-group borderpri" style="background: #fff; margin-left: 0; margin-right: 0;">
+                                    <div class="col-md-12">
+                                        <div style=" background: #fff;">
+                                            <div id='chart_automatizacion_fecha' style='width: auto; height: 350px;'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <!-- END  CHART AUTOMATIZACION X FECHA   -->
+                            <!-- START CHART POR GRUPO REDES   -->
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="barchart_values" style="width: 500px; height: 250px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="barchart_CliOT" style="width: 500px; height:250px; margin-left:auto; margin-right:auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END CHART POR GRUPO REDES   -->
+                            <!-- START CHART POR CLIENTE AUTOMATIZACION   -->
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="chartGrupo_Automatizacion" style="width: 500px; height: 250px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="borderpri" style="background: #fff;">
+                                        <div id="chartCliente_Automatizacion" style="width: 500px; height:250px; margin-left:auto; margin-right:auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END CHART POR CLIENTE AUTOMATIZACION   -->
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+@*<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>*@
+
+<script src="~/Content/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+
+
+    $('.select2').select2();
+    $(document).ready(function () {
+
+        console.log('JS INIT');
+
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        var chart;
+
+        function drawChart() {
+            //Etapas();
+
+            //xFecha
+            OTxdd();
+            debugger;
+            if (@dataFechaAutomatizacion != null) OTxdd_automatizacion();
+
+            OtxGrupoTrab();
+            OtxClte();
+            //EstadoOrden();
+            OtxGrupoTrab_Automatizacion();
+            OtxClte_Automatizacion();
+        }
+        @*function Etapas() {
+        var optionsnn = {
+            title: 'Etapas Ordenes',
+            colors: ['#00d800', '#feff25', '#fe0000'],
+            is3D: true
+        };
+        @ *var nnn = @Html.Raw(StudentJson);* @
+        console.log(nnn);//CharDemo
+                var datann = google.visualization.arrayToDataTable(@Html.Raw(StudentJson));
+                chartnn = new google.visualization.PieChart(document.getElementById('barchart_CliOT_OT'));
+                chartnn.draw(datann, optionsnn);
+
+        }*@
+
+    @*function EstadoOrden() {
+
+        $.ajax({
+            url: "@Url.Action("GetChartPieData_Estado", "Main")",
+            data: "",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; chartset=utf-8",
+            success: function (data) { },
+            error: function () { }
+        }).done(function (data) {
+            console.log('data', data);
+
+            var options_ = {
+                title: 'Estados Ordenes',
+                pieHole: 0.4
+            };
+
+            var dataEstado = google.visualization.arrayToDataTable(data);
+            chart_ = new google.visualization.PieChart(document.getElementById('barchart_CliOT'));
+            chart_.draw(dataEstado, options_);
+        });
+    }*@
+
+        // after complete loading data
+        function OTxdd() {
+            var datachar = @Html.Raw(nn);
+            console.log('datachar',datachar);
+            var dataxdd = google.visualization.arrayToDataTable(datachar);
+            var optionsxdd = {
+                title: 'Orden de Trabajo',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                curveType: 'function',//legend: { position: 'bottom' }
+            };
+            var chartxdd = new google.visualization.LineChart(document.getElementById('polynomial2_div'));
+            chartxdd.draw(dataxdd, optionsxdd);
+        }
+
+
+        function OTxdd_automatizacion() {
+            var datachar_fecha2 = @Html.Raw(dataFechaAutomatizacion);
+            //if (datachar_fecha2 == null) { datachar_fecha2 = [];   }
+            console.log('datachar',datachar_fecha2);
+            var dataxdd_automatizacion = datachar_fecha2 != null ?google.visualization.arrayToDataTable(datachar_fecha2):google.visualization.arrayToDataTable([
+                ['', { role: 'annotation' }],
+                ['', '']
+            ]);
+            var optionsxdd_automatizacion = {
+                title: 'Orden de Trabajo Redes',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                curveType: 'function',
+                //legend: { position: 'bottom' }
+            };
+            var chartxdd_automatizacion = new google.visualization.LineChart(document.getElementById('chart_automatizacion_fecha'));
+            chartxdd_automatizacion.draw(dataxdd_automatizacion, optionsxdd_automatizacion);
+        }
+
+
+        //REDES
+        function OtxGrupoTrab() {
+            $.ajax({
+                url: "@Url.Action("GetChartxGrupo", "Main")",
+                data: "",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; chartset=utf-8",
+                success: function (data) { },
+                error: function () { }
+            }).done(function (data) {
+                console.log('dataGrupoOT', data);
+                var dataGrupoOT = google.visualization.arrayToDataTable(data);
+                var optionsGrupoOT = {
+                    title: 'Grupo de Trabajo',
+                    legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                    colors: ['#00d800', '#feff25', '#fe0000'],
+                    isStacked: true
+                };
+                var chartGrupoOT = new google.visualization.BarChart(document.getElementById('barchart_values'));
+                chartGrupoOT.draw(dataGrupoOT, optionsGrupoOT);
+            });
+            //var dataEstadoOT = google.visualization.arrayToDataTable([
+            //    ['Grupo', 'Proceso', 'Alerta','Caida'],
+            //    ['G1', 100, 20,0],
+            //    ['G2', 1, 4,80],
+            //    ['G3', 5, 0,85]
+            //]);
+            //prop
+            //var chart__EstadoOT = new google.visualization.BarChart(document.getElementById('barchart_values'));
+            //chart__EstadoOT.draw(dataEstadoOT, options_EstadoOT);
+
+
+            //--google.charts.setOnLoadCallback(drawChart);
+
+        }
+
+        function OtxClte() {
+            $.ajax({
+                url: "@Url.Action("getchartxclte", "main")",
+                data: "",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; chartset=utf-8",
+                success: function (data) { },
+                error: function () { }
+            }).done(function (data) {
+                console.log('dataClteOT', data);
+                var dataClteOT = google.visualization.arrayToDataTable(data);
+                var optionsClteOT = {
+                    title: 'Clientes',
+                    legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                    colors: ['#00d800', '#feff25', '#fe0000'],
+                    isStacked: true
+                };
+                var chartClteOT = new google.visualization.BarChart(document.getElementById('barchart_CliOT'));
+                chartClteOT.draw(dataClteOT, optionsClteOT);
+            });
+            /*var dataCliOT = google.visualization.arrayToDataTable([
+                ["Cliente", "Proceso", "Alerta", "Caida"],
+                ["Cli1", 10, 20, 0],
+                ["Cli2", 0, 40, 80],
+                ["Cli3", 5, 0,1]
+            ]);
+            var optionsCliOT = {
+                title: 'Cliente',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 8, bold: true } },
+                colors: ['#00d800', '#feff25', '#fe0000'],
+                isStacked: true
+            };
+            var chartCliOT = new google.visualization.BarChart(document.getElementById('barchart_CliOT'));
+            chartCliOT.draw(dataCliOT, optionsCliOT);*/
+        }
+
+        //AUTOMATIZACION
+        function OtxGrupoTrab_Automatizacion() {
+            var datachar_grupo_autom = @Html.Raw(data_chart_grupo_automatizacion);
+            var dataGrupoOT_Autom = google.visualization.arrayToDataTable(datachar_grupo_autom);
+            var optionsGrupoOT_Autom = {
+                title: 'Grupo de Trabajo',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                colors: ['#00d800', '#feff25', '#fe0000'],
+                isStacked: true
+            };
+            // chartGrupo_Automatizacion chartCliente_Automatizacion
+
+            var chartGrupoOT_Autom = new google.visualization.BarChart(document.getElementById('chartGrupo_Automatizacion'));
+            chartGrupoOT_Autom.draw(dataGrupoOT_Autom, optionsGrupoOT_Autom);
+        }
+
+        function OtxClte_Automatizacion() {
+            var datachar_ClteOT_autom = @Html.Raw(data_chart_cliente_automatizacion);
+            var dataClteOT_autom = google.visualization.arrayToDataTable(datachar_ClteOT_autom);
+            var optionsClteOT_autom = {
+                title: 'Clientes',
+                legend: { position: 'top', alignment: 'end', textStyle: { fontSize: 11, bold: true } },
+                colors: ['#00d800', '#feff25', '#fe0000'],
+                isStacked: true
+            };
+            var chartClteOT_autom = new google.visualization.BarChart(document.getElementById('chartCliente_Automatizacion'));
+            chartClteOT_autom.draw(datachar_ClteOT_autom, optionsClteOT_autom);
+        }
+
+
+    });
+
+    //
+</script>
+
+
+
+
+

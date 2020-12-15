@@ -26,7 +26,7 @@
     var listaProspectoexcel = ViewBag.listalkProspecto;
     Permisos_AccionUsuario oPermiso = ViewBag.MTPermiso_CONT;
     var listalkProspecto = ViewBag.listalkProspecto;
-
+    var listaPostventa = ViewBag.listaPostventa;
 
     //var lkFiltro = TempData["listaFiltro"] as List<ConsultaMT_OrdenTrabajo_AuxVM>;
     var lkFiltro = TempData["listaFiltro"] as List<sp_Quimipac_ConsultaMT_OrdenTrabajo_Result>;
@@ -452,7 +452,7 @@
                                                         <th>C&oacute;digo</th>
                                                         <th>Tipo de Trabajo Planeado</th>
                                                         <th>Alerta</th>
-                                                        <th>Clasificacion</th>
+                                                        <th>Clasificación</th>
                                                         <th>Fecha asignacion</th>
                                                         <th>Estado</th>
                                                         <th>Tipo de Trabajo Ejecutado</th>
@@ -462,15 +462,15 @@
                                                         <th>Tiempo transcurrido</th>
                                                         <th>Grupo de Trabajo</th>
                                                         <th>Fecha Fin Obra</th>
-                                                        <th>Fecha Finalizacion</th>
+                                                        <th>Fecha Finalización</th>
                                                     </tr>
                                                     <tr>
                                                         <th></th>
-                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Codigo"></th>
+                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Código"></th>
                                                         <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Planeado"></th>
                                                         <th><input class="js-filter form-control" type="text" value="" placeholder="Alerta"></th>
-                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Clasificacion"></th>
-                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha asignacion"></th>
+                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Clasificación"></th>
+                                                        <th><input class="js-filter form-control" type="text" value="" placeholder="Fecha asignación"></th>
                                                         <th><input class="js-filter form-control" type="text" value="" placeholder="Estado"></th>
                                                         <th><input class="js-filter form-control" type="text" value="" placeholder="Tipo Trabajo Ejecutado"></th>
                                                         <th><input class="js-filter form-control" type="text" value="" placeholder="Padre"></th>
@@ -665,7 +665,7 @@
                                                         <td>@ordenTrabajo.Dtrabajo</td>
                                                         @*<td class="@ordenTrabajo.Estado_P_A_C">@ordenTrabajo.Estado_P_A_C</td>*@
                                                         <td>
-                                                            <span class="fa fa-circle @ordenTrabajo.Estado_P_A_C" style="font-size:14px"></span>
+                                                            <span class="fa fa-circle @ordenTrabajo.Estado_P_A_C" style="font-size:14px"><span class="text-estado-ot">@ordenTrabajo.Estado_P_A_C</span></span>
                                                             @*@ordenTrabajo.Estado_P_A_C*@
                                                         </td>
                                                         <td>@ordenTrabajo.clasif_orden_ttrabajoej</td>

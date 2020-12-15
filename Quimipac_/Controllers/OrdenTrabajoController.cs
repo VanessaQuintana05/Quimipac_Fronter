@@ -257,6 +257,7 @@ namespace Quimipac_.Controllers
                     List<SelectListItem> itemsNivelPrioridad = new List<SelectListItem>();
                     List<SelectListItem> itemsGruposTrabajo = new List<SelectListItem>();
                     List<SelectListItem> itemsProspectos = new List<SelectListItem>();
+                    List<SelectListItem> itemsPostventa = new List<SelectListItem>();
 
                     var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
                     string empresa = empresa_id.ToString();
@@ -401,6 +402,19 @@ namespace Quimipac_.Controllers
                     SelectList selectlistaProspecto = new SelectList(itemsProspectos, "Value", "Text");
 
 
+                    var listaPostventa = db.sp_Quimipac_ConsultaMT_PostVenta(empresa).ToList();
+                    //aquiiiii agregue
+                    var ClienteLI2_p = db.sp_Quimipac_ConsultaMT_Permisos_xClienteUsuarioID(UserID, empresa, "CLIENTES").ToList();
+
+                    listaPostventa = listaPostventa.Where(vq => ClienteLI2_p.Contains(vq.Id_Cliente)).ToList();
+                    var PosvtventaLI = db.sp_Quimipac_ConsultaMT_Permisos_xClienteUsuarioID(UserID, empresa, "POSTVENTA").ToList();
+                    listaPostventa = listaPostventa.Where(vq => PosvtventaLI.Contains(vq.Id_PostVenta.ToString())).ToList();
+                    itemsPostventa.Insert(0, new SelectListItem() { Value = "0", Text = "Ninguno" });
+                    foreach (var postventa in listaPostventa)
+                    {
+                        itemsPostventa.Add(new SelectListItem { Value = Convert.ToString(postventa.Id_PostVenta), Text = postventa.Nombre + " " + postventa.Codigo_Cliente });
+                    }
+                    SelectList selectlistaPostventa = new SelectList(itemsPostventa, "Value", "Text");
 
                     ViewBag.listaOrdenes = selectlistaOrden;
                     ViewBag.listaProyecto = selectlistaProyecto;
@@ -414,6 +428,7 @@ namespace Quimipac_.Controllers
                     ViewBag.listaNivelPrioridad = selectlistaPrioridad;
                     ViewBag.listaGrupoTrabajo = selectlistaGrupoTrabajo;
                     ViewBag.listaProspecto = selectlistaProspecto;
+                    ViewBag.listaPostventa = selectlistaPostventa;
 
 
                     return View();
@@ -429,7 +444,7 @@ namespace Quimipac_.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Agregar_OrdenTrabajo([Bind(Include = "Id_Proyecto, Id_sucursal, Id_campamento, Id_tipo_trabajo_recibido, Id_tipo_trabajo_ejecutado, Estado, Id_sector, Id_orden_padre, Id_estacion, Id_entrega_orden_trabajo ,Nivel_prioridad, Fecha_creacion_cliente, Fecha_maxima_ejecucion_cliente, Fecha_asignacion_grupo_trabajo, Fecha_asignacion, Fecha_finalizacion_obra, Fecha_ini_permiso_municipal, Fecha_fin_permiso_municipal, Fecha_entrega, Fecha_max_legalizacion, Hora_acordada, Id_barrio ,Direccion, Referencia_direccion, Identificacion_suscriptor, Nombre_suscriptor, Tipo_suscriptor, Telefono_suscriptor, Origen, Comentario, Porcentaje_avance, Tiempo_transcurrido, Id_Planilla, Estado_orden_planilla, Codigo_Cliente, Interna, Fecha_maxima_contratista, Desalojo, Id_Prospecto")] MT_OrdenTrabajo mT_OrdenTrabajo)
+        public ActionResult Agregar_OrdenTrabajo([Bind(Include = "Id_Proyecto, Id_sucursal, Id_campamento, Id_tipo_trabajo_recibido, Id_tipo_trabajo_ejecutado, Estado, Id_sector, Id_orden_padre, Id_estacion, Id_entrega_orden_trabajo ,Nivel_prioridad, Fecha_creacion_cliente, Fecha_maxima_ejecucion_cliente, Fecha_asignacion_grupo_trabajo, Fecha_asignacion, Fecha_finalizacion_obra, Fecha_ini_permiso_municipal, Fecha_fin_permiso_municipal, Fecha_entrega, Fecha_max_legalizacion, Hora_acordada, Id_barrio ,Direccion, Referencia_direccion, Identificacion_suscriptor, Nombre_suscriptor, Tipo_suscriptor, Telefono_suscriptor, Origen, Comentario, Porcentaje_avance, Tiempo_transcurrido, Id_Planilla, Estado_orden_planilla, Codigo_Cliente, Interna, Fecha_maxima_contratista, Desalojo, Id_Prospecto, Id_Postventa")] MT_OrdenTrabajo mT_OrdenTrabajo)
         {
             if (System.Web.HttpContext.Current.Session["usuario"] != null)
             {
@@ -576,6 +591,7 @@ namespace Quimipac_.Controllers
                         List<SelectListItem> itemsSucursal = new List<SelectListItem>();
                         List<SelectListItem> itemsNivelPrioridad = new List<SelectListItem>();
                         List<SelectListItem> itemsProspectos = new List<SelectListItem>();
+                        List<SelectListItem> itemsPostVenta = new List<SelectListItem>();
 
                         var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
 
@@ -771,6 +787,28 @@ namespace Quimipac_.Controllers
                         SelectList selectlistaProspectos = new SelectList(itemsProspectos, "Value", "Text");
 
 
+                        var listaPostVenta = db.sp_Quimipac_ConsultaMT_PostVenta(empresa_id.ToString()).ToList();
+
+                        var ClienteLI2_post = db.sp_Quimipac_ConsultaMT_Permisos_xClienteUsuarioID(UserID, empresa_id.ToString(), "CLIENTES").ToList();
+
+
+                        listaPostVenta = listaPostVenta.Where(vq => ClienteLI2_post.Contains(vq.Id_Cliente)).ToList();
+                        var PostventaLI = db.sp_Quimipac_ConsultaMT_Permisos_xClienteUsuarioID(UserID, empresa_id.ToString(), "POSTVENTA").ToList();
+                        listaPostVenta = listaPostVenta.Where(vq => ProspectosLI.Contains(vq.Id_PostVenta.ToString())).ToList();
+
+                        itemsPostVenta.Insert(0, new SelectListItem() { Value = "0", Text = "Ninguno" });
+                        //foreach (var contrato in listaContratos) CAMBIE POR PROYECTO
+                        foreach (var postventa in listaPostVenta)
+                        {
+                            //if (contrato.Id_Contrato == mT_OrdenTrabajo.Id_contrato) cambie por proyecto
+                            if (postventa.Id_PostVenta == mT_OrdenTrabajo.Id_Postventa)
+                            {
+                                seleccion = true;
+                            }
+                            itemsPostVenta.Add(new SelectListItem { Value = Convert.ToString(postventa.Id_PostVenta), Text = postventa.Nombre + " " + postventa.Codigo_Cliente, Selected = seleccion });
+                        }
+                        SelectList selectlistaPostVenta = new SelectList(itemsPostVenta, "Value", "Text");
+
                         ViewBag.listaOrdenTrabajo = selectlistaOrdenTrabajo;
                         ViewBag.listaProyectos = selectlistaProyectos;
                         ViewBag.listaCampamento = selectlistaCampamento;
@@ -784,6 +822,7 @@ namespace Quimipac_.Controllers
                         ViewBag.tiempo_transcurrido = mT_OrdenTrabajo.Tiempo_transcurrido;
                         ViewBag.OrdenTcod_Edit = mT_OrdenTrabajo.Codigo_Cliente;
                         ViewBag.listaProspectos = selectlistaProspectos;
+                        ViewBag.listaPostVenta = selectlistaPostVenta;
 
 
                         return View(mT_OrdenTrabajo);
@@ -805,7 +844,7 @@ namespace Quimipac_.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Editar_OrdenTrabajo([Bind(Include = "Id_OrdenTrabajo, Id_Proyecto, Id_sucursal, Id_campamento, Id_tipo_trabajo_recibido, Id_tipo_trabajo_ejecutado, Estado, Id_sector, Id_orden_padre, Id_estacion, Id_entrega_orden_trabajo, Nivel_prioridad, Fecha_creacion_cliente, Fecha_maxima_ejecucion_cliente, Fecha_asignacion_grupo_trabajo, Fecha_asignacion, Fecha_finalizacion_obra, Fecha_ini_permiso_municipal, Fecha_fin_permiso_municipal, Fecha_entrega, Fecha_max_legalizacion, Hora_acordada, Id_barrio, Direccion, Referencia_direccion, Identificacion_suscriptor, Nombre_suscriptor, Tipo_suscriptor, Telefono_suscriptor, Origen, Comentario, Porcentaje_avance, Tiempo_transcurrido, Id_Planilla, Estado_orden_planilla, Codigo_Cliente, Interna, Fecha_maxima_contratista, Desalojo, Id_Prospecto")] MT_OrdenTrabajo mT_OrdenTrabajoedit)
+        public ActionResult Editar_OrdenTrabajo([Bind(Include = "Id_OrdenTrabajo, Id_Proyecto, Id_sucursal, Id_campamento, Id_tipo_trabajo_recibido, Id_tipo_trabajo_ejecutado, Estado, Id_sector, Id_orden_padre, Id_estacion, Id_entrega_orden_trabajo, Nivel_prioridad, Fecha_creacion_cliente, Fecha_maxima_ejecucion_cliente, Fecha_asignacion_grupo_trabajo, Fecha_asignacion, Fecha_finalizacion_obra, Fecha_ini_permiso_municipal, Fecha_fin_permiso_municipal, Fecha_entrega, Fecha_max_legalizacion, Hora_acordada, Id_barrio, Direccion, Referencia_direccion, Identificacion_suscriptor, Nombre_suscriptor, Tipo_suscriptor, Telefono_suscriptor, Origen, Comentario, Porcentaje_avance, Tiempo_transcurrido, Id_Planilla, Estado_orden_planilla, Codigo_Cliente, Interna, Fecha_maxima_contratista, Desalojo, Id_Prospecto, Id_Postventa")] MT_OrdenTrabajo mT_OrdenTrabajoedit)
         {
             if (System.Web.HttpContext.Current.Session["usuario"] != null)
             {
@@ -5573,7 +5612,8 @@ namespace Quimipac_.Controllers
             }
             catch (Exception e)
             {
-                return RedirectToAction("Error", "Errores");
+                TempData["mensaje_error"] = "Problemas al consultar, verificar red de conexiones del sitio";
+                return RedirectToAction("OrdenTrabajo"); //return RedirectToAction("Error", "Errores");
             }
         }
 

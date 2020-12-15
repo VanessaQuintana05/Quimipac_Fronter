@@ -1400,8 +1400,18 @@ public ActionResult Formularios_Prospecto(int id)
                 var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
                 System.Web.HttpContext.Current.Session["id_Prospecto"] = mT_Prospecto.Id_Prospecto;
                 var listaFormulariosC = db.sp_Quimipac_ConsultaMT_ProspectoDocumentado(id, empresa_id.ToString()).ToList();
-                var prospecto = mT_Prospecto.Codigo_Cliente;
-                ViewBag.listaFormulariosC = listaFormulariosC;
+                var prospecto = "";
+                        if (mT_Prospecto.Codigo_Cliente != null)
+                        {
+                            prospecto = mT_Prospecto.Codigo_Cliente;
+                        }
+                        else 
+                        {
+                            prospecto = mT_Prospecto.Nombre;
+
+                        }
+
+                        ViewBag.listaFormulariosC = listaFormulariosC;
                 ViewBag.prospecto = prospecto;
                 var dbe = new DataBase_Externo();
                 ViewBag.MTPermiso_CONT = dbe.Item_OpcPermiso();
@@ -1620,7 +1630,16 @@ public ActionResult EliminarFormularioProspecto(int id)
                         var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
                         System.Web.HttpContext.Current.Session["id_Prospecto"] = mT_Prospecto.Id_Prospecto;
                         var listaNotificaciones = db.sp_Quimipac_Consulta_Notificaciones_General(119, empresa_id.ToString(), id).ToList();
-                        var prospecto = mT_Prospecto.Codigo_Cliente;
+                        var prospecto = "";
+                        if (mT_Prospecto.Codigo_Cliente != null)
+                        {
+                            prospecto = mT_Prospecto.Codigo_Cliente;
+                        }
+                        else
+                        {
+                            prospecto = mT_Prospecto.Nombre;
+
+                        }
                         ViewBag.listaNotificaciones = listaNotificaciones;
                         ViewBag.prospecto = prospecto;
                         var dbe = new DataBase_Externo();
@@ -2525,7 +2544,16 @@ public ActionResult EliminarFormularioProspecto(int id)
                         var empresa_id = System.Web.HttpContext.Current.Session["empresa"];
                         System.Web.HttpContext.Current.Session["id_Prospecto"] = mT_Prospecto.Id_Prospecto;
                         var listaFiscalizadorC = db.sp_Quimipac_ConsultaMT_ContratoFiscalizador(id, "Prospecto", empresa_id.ToString()).ToList();
-                        var prospecto = mT_Prospecto.Codigo_Cliente;
+                        var prospecto = "";
+                        if (mT_Prospecto.Codigo_Cliente != null)
+                        {
+                            prospecto = mT_Prospecto.Codigo_Cliente;
+                        }
+                        else
+                        {
+                            prospecto = mT_Prospecto.Nombre;
+
+                        }
                         ViewBag.listaFiscalizadorC = listaFiscalizadorC;
                         ViewBag.prospecto = prospecto;
                         var dbe = new DataBase_Externo();

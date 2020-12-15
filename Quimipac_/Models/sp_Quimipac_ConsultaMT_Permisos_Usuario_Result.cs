@@ -31,6 +31,7 @@ namespace Quimipac_.Models
         public string Estado { get; set; }
         public string Id_Empresa { get; set; }
         public Nullable<int> Id_Prospecto { get; set; }
+        public Nullable<int> Id_PostVenta { get; set; }
         public string NOMBRE { get; set; }
         public string CODIGO_INTERNO { get; set; }
     }

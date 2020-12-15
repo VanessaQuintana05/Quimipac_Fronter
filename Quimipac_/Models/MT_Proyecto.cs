@@ -52,6 +52,7 @@ namespace Quimipac_.Models
         public Nullable<int> Proyecto_Padre { get; set; }
         public Nullable<int> Dia_Plazo { get; set; }
         public Nullable<int> Secuencial { get; set; }
+        public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MT_Proyecto_Actividad> MT_Proyecto_Actividad { get; set; }

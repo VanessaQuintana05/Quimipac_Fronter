@@ -18,6 +18,7 @@ namespace Quimipac_.Models
         public MT_TablaDetalle()
         {
             this.MT_Contrato = new HashSet<MT_Contrato>();
+            this.MT_PostVenta = new HashSet<MT_PostVenta>();
             this.MT_Prospecto = new HashSet<MT_Prospecto>();
         }
     
@@ -31,6 +32,8 @@ namespace Quimipac_.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MT_Contrato> MT_Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MT_PostVenta> MT_PostVenta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MT_Prospecto> MT_Prospecto { get; set; }
     }

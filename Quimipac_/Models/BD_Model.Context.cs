@@ -38,6 +38,7 @@ namespace Quimipac_.Models
         public virtual DbSet<MT_EntregaOrden_Trabajo> MT_EntregaOrden_Trabajo { get; set; }
         public virtual DbSet<MT_Equipo> MT_Equipo { get; set; }
         public virtual DbSet<MT_Equipo_Evento> MT_Equipo_Evento { get; set; }
+        public virtual DbSet<MT_Equipo_Referencia> MT_Equipo_Referencia { get; set; }
         public virtual DbSet<MT_Estacion> MT_Estacion { get; set; }
         public virtual DbSet<MT_Fiscalizador> MT_Fiscalizador { get; set; }
         public virtual DbSet<MT_Formulario> MT_Formulario { get; set; }
@@ -64,6 +65,9 @@ namespace Quimipac_.Models
         public virtual DbSet<MT_Permiso> MT_Permiso { get; set; }
         public virtual DbSet<MT_Planilla> MT_Planilla { get; set; }
         public virtual DbSet<MT_Planilla_Detalle> MT_Planilla_Detalle { get; set; }
+        public virtual DbSet<MT_PostVenta> MT_PostVenta { get; set; }
+        public virtual DbSet<MT_PostVenta_Alerta> MT_PostVenta_Alerta { get; set; }
+        public virtual DbSet<MT_PostVenta_Documentado> MT_PostVenta_Documentado { get; set; }
         public virtual DbSet<MT_PrecioReferencial> MT_PrecioReferencial { get; set; }
         public virtual DbSet<MT_Presupuesto> MT_Presupuesto { get; set; }
         public virtual DbSet<MT_Presupuesto_Detalle> MT_Presupuesto_Detalle { get; set; }
@@ -138,6 +142,19 @@ namespace Quimipac_.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
         }
     
+        public virtual ObjectResult<Sp_Dashboard_Cliente_Orden_Result> Sp_Dashboard_Cliente_Orden(string empresa, Nullable<bool> isAutomatizacion)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            var isAutomatizacionParameter = isAutomatizacion.HasValue ?
+                new ObjectParameter("isAutomatizacion", isAutomatizacion) :
+                new ObjectParameter("isAutomatizacion", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Dashboard_Cliente_Orden_Result>("Sp_Dashboard_Cliente_Orden", empresaParameter, isAutomatizacionParameter);
+        }
+    
         public virtual ObjectResult<Sp_Dashboard_EstadoOT_Result> Sp_Dashboard_EstadoOT(string id_empresa)
         {
             var id_empresaParameter = id_empresa != null ?
@@ -145,6 +162,19 @@ namespace Quimipac_.Models
                 new ObjectParameter("id_empresa", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Dashboard_EstadoOT_Result>("Sp_Dashboard_EstadoOT", id_empresaParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Dashboard_GrupoOrden_Etapa_Result> Sp_Dashboard_GrupoOrden_Etapa(string empresa, Nullable<bool> isAutomatizacion)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            var isAutomatizacionParameter = isAutomatizacion.HasValue ?
+                new ObjectParameter("isAutomatizacion", isAutomatizacion) :
+                new ObjectParameter("isAutomatizacion", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Dashboard_GrupoOrden_Etapa_Result>("Sp_Dashboard_GrupoOrden_Etapa", empresaParameter, isAutomatizacionParameter);
         }
     
         public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
@@ -1283,6 +1313,54 @@ namespace Quimipac_.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_Planilla_Result>("sp_Quimipac_ConsultaMT_Planilla", idTipoTablaDetalleParameter, empresaParameter);
         }
     
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_PostVenta_Result> sp_Quimipac_ConsultaMT_PostVenta(string empresa)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_PostVenta_Result>("sp_Quimipac_ConsultaMT_PostVenta", empresaParameter);
+        }
+    
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_PostVenta_TipoPadre_Result> sp_Quimipac_ConsultaMT_PostVenta_TipoPadre(string empresa, Nullable<int> tipo, string cliente)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            var tipoParameter = tipo.HasValue ?
+                new ObjectParameter("tipo", tipo) :
+                new ObjectParameter("tipo", typeof(int));
+    
+            var clienteParameter = cliente != null ?
+                new ObjectParameter("cliente", cliente) :
+                new ObjectParameter("cliente", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_PostVenta_TipoPadre_Result>("sp_Quimipac_ConsultaMT_PostVenta_TipoPadre", empresaParameter, tipoParameter, clienteParameter);
+        }
+    
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_PostVentaDocumentado_Result> sp_Quimipac_ConsultaMT_PostVentaDocumentado(Nullable<int> idPostVenta, string empresa)
+        {
+            var idPostVentaParameter = idPostVenta.HasValue ?
+                new ObjectParameter("idPostVenta", idPostVenta) :
+                new ObjectParameter("idPostVenta", typeof(int));
+    
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_PostVentaDocumentado_Result>("sp_Quimipac_ConsultaMT_PostVentaDocumentado", idPostVentaParameter, empresaParameter);
+        }
+    
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result> sp_Quimipac_ConsultaMT_PostVentaGeneral(string empresa)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_PostVentaGeneral_Result>("sp_Quimipac_ConsultaMT_PostVentaGeneral", empresaParameter);
+        }
+    
         public virtual ObjectResult<sp_Quimipac_ConsultaMT_PrecioReferencial_Result> sp_Quimipac_ConsultaMT_PrecioReferencial(Nullable<int> idTipoTablaDetalle, string empresa)
         {
             var idTipoTablaDetalleParameter = idTipoTablaDetalle.HasValue ?
@@ -1414,6 +1492,15 @@ namespace Quimipac_.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProspectoDocumentado_Result>("sp_Quimipac_ConsultaMT_ProspectoDocumentado", idProspectoParameter, empresaParameter);
         }
     
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_ProspectoGeneral_Result> sp_Quimipac_ConsultaMT_ProspectoGeneral(string empresa)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProspectoGeneral_Result>("sp_Quimipac_ConsultaMT_ProspectoGeneral", empresaParameter);
+        }
+    
         public virtual ObjectResult<sp_Quimipac_ConsultaMT_Proyecto_Result> sp_Quimipac_ConsultaMT_Proyecto(string empresa)
         {
             var empresaParameter = empresa != null ?
@@ -1500,6 +1587,15 @@ namespace Quimipac_.Models
                 new ObjectParameter("empresa", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProyectoDocumentado_Result>("sp_Quimipac_ConsultaMT_ProyectoDocumentado", idProyectoParameter, empresaParameter);
+        }
+    
+        public virtual ObjectResult<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result> sp_Quimipac_ConsultaMT_ProyectoGeneral(string empresa)
+        {
+            var empresaParameter = empresa != null ?
+                new ObjectParameter("empresa", empresa) :
+                new ObjectParameter("empresa", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result>("sp_Quimipac_ConsultaMT_ProyectoGeneral", empresaParameter);
         }
     
         public virtual ObjectResult<sp_Quimipac_ConsultaMT_ProyectoParametro_Result> sp_Quimipac_ConsultaMT_ProyectoParametro(Nullable<int> idProyecto, string empresa)
@@ -3988,6 +4084,123 @@ namespace Quimipac_.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Quimipac_UpdateContrato", id_ContratoParameter, cod_clienteParameter, fecha_inicialParameter, fecha_finParameter, codigo_secuencial_internoParameter, codigo_contrato_asociadoParameter, unidadParameter, cod_servicioParameter, codcenParameter, detalleParameter, id_estadoParameter, plazo_contratoParameter, cod_tipoParameter, cont_padreParameter, valorreferParameter, montoParameter, costoParameter, responsableParameter, secuencialParameter, codigo_secuencial_interno_anteriorParameter, observacionesParameter, codigo_interno_padreParameter, fecha_registroParameter, fecha_modificacionParameter, localidadParameter, fecha_Aprobacion_CotParameter, recepcion_ServicioParameter, fecha_Firma_ConformidadParameter, fecha_Cumplimiento_InstParameter, referenciaParameter);
         }
     
+        public virtual int sp_Quimipac_UpdatePostVenta(Nullable<int> id_PostVenta, string cod_cliente, Nullable<System.DateTime> fecha_inicial, Nullable<System.DateTime> fecha_fin, string codigo_secuencial_interno, string codigo_postventa_asociado, string unidad, string cod_servicio, string codcen, string detalle, Nullable<int> id_estado, Nullable<int> plazo_postventa, Nullable<int> cod_tipo, Nullable<decimal> valorrefer, Nullable<decimal> monto, Nullable<decimal> costo, Nullable<int> responsable, Nullable<int> secuencial, string codigo_secuencial_interno_anterior, string observaciones, string codigo_interno_padre, Nullable<System.DateTime> fecha_registro, Nullable<System.DateTime> fecha_modificacion, string localidad, Nullable<System.DateTime> fecha_Aprobacion_Cot, string recepcion_Servicio, Nullable<System.DateTime> fecha_Firma_Conformidad, Nullable<System.DateTime> fecha_Cumplimiento_Inst)
+        {
+            var id_PostVentaParameter = id_PostVenta.HasValue ?
+                new ObjectParameter("Id_PostVenta", id_PostVenta) :
+                new ObjectParameter("Id_PostVenta", typeof(int));
+    
+            var cod_clienteParameter = cod_cliente != null ?
+                new ObjectParameter("cod_cliente", cod_cliente) :
+                new ObjectParameter("cod_cliente", typeof(string));
+    
+            var fecha_inicialParameter = fecha_inicial.HasValue ?
+                new ObjectParameter("fecha_inicial", fecha_inicial) :
+                new ObjectParameter("fecha_inicial", typeof(System.DateTime));
+    
+            var fecha_finParameter = fecha_fin.HasValue ?
+                new ObjectParameter("fecha_fin", fecha_fin) :
+                new ObjectParameter("fecha_fin", typeof(System.DateTime));
+    
+            var codigo_secuencial_internoParameter = codigo_secuencial_interno != null ?
+                new ObjectParameter("codigo_secuencial_interno", codigo_secuencial_interno) :
+                new ObjectParameter("codigo_secuencial_interno", typeof(string));
+    
+            var codigo_postventa_asociadoParameter = codigo_postventa_asociado != null ?
+                new ObjectParameter("codigo_postventa_asociado", codigo_postventa_asociado) :
+                new ObjectParameter("codigo_postventa_asociado", typeof(string));
+    
+            var unidadParameter = unidad != null ?
+                new ObjectParameter("unidad", unidad) :
+                new ObjectParameter("unidad", typeof(string));
+    
+            var cod_servicioParameter = cod_servicio != null ?
+                new ObjectParameter("cod_servicio", cod_servicio) :
+                new ObjectParameter("cod_servicio", typeof(string));
+    
+            var codcenParameter = codcen != null ?
+                new ObjectParameter("codcen", codcen) :
+                new ObjectParameter("codcen", typeof(string));
+    
+            var detalleParameter = detalle != null ?
+                new ObjectParameter("detalle", detalle) :
+                new ObjectParameter("detalle", typeof(string));
+    
+            var id_estadoParameter = id_estado.HasValue ?
+                new ObjectParameter("id_estado", id_estado) :
+                new ObjectParameter("id_estado", typeof(int));
+    
+            var plazo_postventaParameter = plazo_postventa.HasValue ?
+                new ObjectParameter("plazo_postventa", plazo_postventa) :
+                new ObjectParameter("plazo_postventa", typeof(int));
+    
+            var cod_tipoParameter = cod_tipo.HasValue ?
+                new ObjectParameter("cod_tipo", cod_tipo) :
+                new ObjectParameter("cod_tipo", typeof(int));
+    
+            var valorreferParameter = valorrefer.HasValue ?
+                new ObjectParameter("valorrefer", valorrefer) :
+                new ObjectParameter("valorrefer", typeof(decimal));
+    
+            var montoParameter = monto.HasValue ?
+                new ObjectParameter("monto", monto) :
+                new ObjectParameter("monto", typeof(decimal));
+    
+            var costoParameter = costo.HasValue ?
+                new ObjectParameter("costo", costo) :
+                new ObjectParameter("costo", typeof(decimal));
+    
+            var responsableParameter = responsable.HasValue ?
+                new ObjectParameter("Responsable", responsable) :
+                new ObjectParameter("Responsable", typeof(int));
+    
+            var secuencialParameter = secuencial.HasValue ?
+                new ObjectParameter("secuencial", secuencial) :
+                new ObjectParameter("secuencial", typeof(int));
+    
+            var codigo_secuencial_interno_anteriorParameter = codigo_secuencial_interno_anterior != null ?
+                new ObjectParameter("codigo_secuencial_interno_anterior", codigo_secuencial_interno_anterior) :
+                new ObjectParameter("codigo_secuencial_interno_anterior", typeof(string));
+    
+            var observacionesParameter = observaciones != null ?
+                new ObjectParameter("observaciones", observaciones) :
+                new ObjectParameter("observaciones", typeof(string));
+    
+            var codigo_interno_padreParameter = codigo_interno_padre != null ?
+                new ObjectParameter("codigo_interno_padre", codigo_interno_padre) :
+                new ObjectParameter("codigo_interno_padre", typeof(string));
+    
+            var fecha_registroParameter = fecha_registro.HasValue ?
+                new ObjectParameter("fecha_registro", fecha_registro) :
+                new ObjectParameter("fecha_registro", typeof(System.DateTime));
+    
+            var fecha_modificacionParameter = fecha_modificacion.HasValue ?
+                new ObjectParameter("fecha_modificacion", fecha_modificacion) :
+                new ObjectParameter("fecha_modificacion", typeof(System.DateTime));
+    
+            var localidadParameter = localidad != null ?
+                new ObjectParameter("Localidad", localidad) :
+                new ObjectParameter("Localidad", typeof(string));
+    
+            var fecha_Aprobacion_CotParameter = fecha_Aprobacion_Cot.HasValue ?
+                new ObjectParameter("Fecha_Aprobacion_Cot", fecha_Aprobacion_Cot) :
+                new ObjectParameter("Fecha_Aprobacion_Cot", typeof(System.DateTime));
+    
+            var recepcion_ServicioParameter = recepcion_Servicio != null ?
+                new ObjectParameter("Recepcion_Servicio", recepcion_Servicio) :
+                new ObjectParameter("Recepcion_Servicio", typeof(string));
+    
+            var fecha_Firma_ConformidadParameter = fecha_Firma_Conformidad.HasValue ?
+                new ObjectParameter("Fecha_Firma_Conformidad", fecha_Firma_Conformidad) :
+                new ObjectParameter("Fecha_Firma_Conformidad", typeof(System.DateTime));
+    
+            var fecha_Cumplimiento_InstParameter = fecha_Cumplimiento_Inst.HasValue ?
+                new ObjectParameter("Fecha_Cumplimiento_Inst", fecha_Cumplimiento_Inst) :
+                new ObjectParameter("Fecha_Cumplimiento_Inst", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_Quimipac_UpdatePostVenta", id_PostVentaParameter, cod_clienteParameter, fecha_inicialParameter, fecha_finParameter, codigo_secuencial_internoParameter, codigo_postventa_asociadoParameter, unidadParameter, cod_servicioParameter, codcenParameter, detalleParameter, id_estadoParameter, plazo_postventaParameter, cod_tipoParameter, valorreferParameter, montoParameter, costoParameter, responsableParameter, secuencialParameter, codigo_secuencial_interno_anteriorParameter, observacionesParameter, codigo_interno_padreParameter, fecha_registroParameter, fecha_modificacionParameter, localidadParameter, fecha_Aprobacion_CotParameter, recepcion_ServicioParameter, fecha_Firma_ConformidadParameter, fecha_Cumplimiento_InstParameter);
+        }
+    
         public virtual int sp_Quimipac_UpdateProspecto(Nullable<int> id_Prospecto, string cod_cliente, Nullable<System.DateTime> fecha_inicial, Nullable<System.DateTime> fecha_fin, string codigo_secuencial_interno, string codigo_prospecto_asociado, string unidad, string cod_servicio, string codcen, string detalle, Nullable<int> id_estado, Nullable<int> plazo_prospecto, Nullable<int> cod_tipo, Nullable<decimal> valorrefer, Nullable<decimal> monto, Nullable<decimal> costo, Nullable<int> responsable, Nullable<int> secuencial, string codigo_secuencial_interno_anterior, string observaciones, string codigo_interno_padre, Nullable<System.DateTime> fecha_registro, Nullable<System.DateTime> fecha_modificacion, string localidad, Nullable<System.DateTime> fecha_Aprobacion_Cot, string recepcion_Servicio, Nullable<System.DateTime> fecha_Firma_Conformidad, Nullable<System.DateTime> fecha_Cumplimiento_Inst)
         {
             var id_ProspectoParameter = id_Prospecto.HasValue ?
@@ -4194,24 +4407,6 @@ namespace Quimipac_.Models
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
-        }
-    
-        public virtual ObjectResult<sp_Quimipac_ConsultaMT_ProspectoGeneral_Result> sp_Quimipac_ConsultaMT_ProspectoGeneral(string empresa)
-        {
-            var empresaParameter = empresa != null ?
-                new ObjectParameter("empresa", empresa) :
-                new ObjectParameter("empresa", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProspectoGeneral_Result>("sp_Quimipac_ConsultaMT_ProspectoGeneral", empresaParameter);
-        }
-    
-        public virtual ObjectResult<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result> sp_Quimipac_ConsultaMT_ProyectoGeneral(string empresa)
-        {
-            var empresaParameter = empresa != null ?
-                new ObjectParameter("empresa", empresa) :
-                new ObjectParameter("empresa", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Quimipac_ConsultaMT_ProyectoGeneral_Result>("sp_Quimipac_ConsultaMT_ProyectoGeneral", empresaParameter);
         }
     }
 }

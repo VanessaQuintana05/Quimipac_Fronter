@@ -28,26 +28,20 @@
 <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/contornoText.css">
 <link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/ValidaInputVQ/css/bootstrapValidator.min.css">
 
-
-
-
-
 @*<link rel="stylesheet" href="~/Content/bower_components/FiltroDataTable/Notificaciones/css/v3.3.7/bootstrap.min.css" />*@
 <!-- MODAL -->
 @*<link href="~/Content/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />*@
 
--------
-
 <section class="content-header">
     <h2 style="text-align:left">
-        Agregar Gestión de Proyectos
+        Agregar Proyecto
     </h2>
 
     <ol class="breadcrumb">
         <li><a href="@Url.Action("Default", "Main")"><i class="fa fa-dashboard"></i>Home</a></li>
         <li><a href="@Url.Action("Proyectos", "Proyectos")">Proyectos</a></li>
-        <li class="active">Agregar Gestion de Proyectos</li>
+        <li class="active">Agregar Proyecto</li>
     </ol>
 
 
@@ -102,7 +96,7 @@
                                 <div class="panel panel-default panel-default">
                                     <div class="panel-heading" style="text-align:center">
                                         <h5 class="panel-title text-bold" style="text-align: center;">
-                                            Agregar Gestión Proyectos
+                                            Agregar Proyecto
                                         </h5>
                                     </div>
                                     <div class="panel-body">
@@ -131,7 +125,18 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        @*<div class="form-group">*@
+                                                        <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Nombre:</label>
+                                                        <div class="col-md-9">
+                                                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                                                            <span class="text-danger" name="lbl-danger-NombreProyecto" id="lbl-danger-NombreProyecto">&nbsp;</span>
+                                                        </div>
+                                                        @*</div>*@
+                                                    </div>
+                                                </div>
 
                                                 <!--Codigo Cliente-->
                                                 <div class="col-md-12">
@@ -145,11 +150,11 @@
                                                             </div>
                                                         </div>
                                                         @*</div>
-                                                            </div>*@
+                </div>*@
 
                                                         <!--Estado-->
                                                         @*<div class="col-md-12">
-                                                            <div class="form-group">*@
+                <div class="form-group">*@
                                                         <label for="recipient-name" class="col-md-3 control-label" style="text-align:left">Estado:</label>
                                                         <div class="col-md-3">
                                                             @Html.DropDownListFor(model => model.Estado, new SelectList(new List<string>() { "Activo", "Inactivo" }), new { @class = "form-control", @style = "height:28px" })
@@ -165,12 +170,15 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="status" class="text-bold col-md-3 control-label" style="text-align:left">Instrumentado por:</label>
-                                                        <button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes col-md-5" title="Agregar Cliente" style="border-color:#000000;background:#ffffff;text-align:center;height:21px;width:auto;display: inline-flex;" data-toggle="modal" data-target="#modalAgregarCliente">
-                                                            <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">Agregar</font>
-                                                        </button>
+                                                        
                                                         <div class="col-md-7">
                                                             @Html.DropDownListFor(model => model.Id_contrato, (SelectList)listaContratoHijo, new { @class = "form-control select2", @style = "width: 100%", @id = "comboContrato" })
                                                             @Html.ValidationMessageFor(model => model.Id_contrato, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="button" class="form-control btn btn-xs class_Agregar_ManPermiso_UsuarioClientes col-md-5" title="Agregar " style="border-color: #a59c9c;background:#ffffff;text-align:center;height: 28px; " data-toggle="modal" data-target="#modalAgregarCliente">
+                                                                <font color="green"><span aria-hidden="true" class="fa fa-plus-circle"></span> </font><font color="black">Agregar</font>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -379,9 +387,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 
-            <div class="modal-header">
+            <div class="modal-header" style="padding:2px !important;">
                 <div class="modal-title">
-                    <div class="panel-heading">
+                    <div class="panel-heading" style="padding: 0 8px !important;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                         <table>

@@ -17,6 +17,7 @@
     var listaNivelPrioridad = ViewBag.listaNivelPrioridad;
     var listaGrupoTrabajo = ViewBag.listaGrupoTrabajo;
     var listaProspectos = ViewBag.listaProspecto;
+    var listaPostventa = ViewBag.listaPostventa;
 
     //string horaI_string = Convert.ToDateTime(Model.Tiempo_Estimado).ToString("HH:mm");
     //Model.Tiempo_Estimado = Convert.ToDateTime(horaI_string);
@@ -189,279 +190,286 @@
                                                     </div>
                                                     @*</div>*@
                                                 </div>
-                                                <div class="col-md-12">                                                    
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="status" class="text-bold col-md-2 control-label">Prospecto:</label>
                                                         <div class="col-md-2" style="padding:5px">
                                                             @Html.DropDownList("Id_Prospecto", (SelectList)listaProspectos, new { @class = "form-control select2", @style = "width: 100%", @id = "comboProspectos" })
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="status" class="text-bold col-md-2 control-label">Direcci&oacute;n:</label>
-                                                                <div class="col-md-10" style="padding:5px">
-                                                                    @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control", @type = "text", @rows = "3" })
-                                                                </div>
-
-                                                                <label for="status" class="text-bold col-md-2 control-label">Referencia Direcci&oacute;n:</label>
-                                                                <div class="col-md-10" style="padding:5px">
-                                                                    @Html.TextAreaFor(model => model.Referencia_direccion, new { @class = "form-control", @type = "text", @rows = "3" })
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="status" class="text-bold col-md-2 control-label">Sector:</label>
-                                                                <div class="col-md-2" style="padding:5px">
-                                                                    @Html.DropDownListFor(model => model.Id_sector, (SelectList)listaSector, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
-                                                                    @Html.ValidationMessageFor(model => model.Id_sector, "", new { @class = "text-danger" })
-                                                                </div>
-
-
-
-                                                                <label for="status" class="text-bold col-md-2 control-label">Campamento:</label>
-                                                                <div class="col-md-2" style="padding:5px">
-                                                                    @Html.DropDownListFor(model => model.Id_campamento, (SelectList)listaCampamento, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
-                                                                    @Html.ValidationMessageFor(model => model.Id_campamento, "", new { @class = "text-danger" })
-                                                                </div>
-
-                                                                <label for="status" class="text-bold col-md-2 control-label">Sucursal:</label>
-                                                                <div class="col-md-2" style="padding:5px">
-                                                                    @Html.DropDownListFor(model => model.Id_sucursal, (SelectList)listaSucursal, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
-                                                                    @Html.ValidationMessageFor(model => model.Id_sucursal, "", new { @class = "text-danger" })
-
-                                                                </div>
-
-
-                                                                <label for="status" class="text-bold col-md-2 control-label">Estaci&oacute;n:</label>
-                                                                <div class="col-md-2" style="padding:5px">
-                                                                    @Html.DropDownListFor(model => model.Id_estacion, (SelectList)listaEstacion, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
-                                                                    @Html.ValidationMessageFor(model => model.Id_estacion, "", new { @class = "text-danger" })
-                                                                </div>
-
-                                                            </div>
+                                                        <label for="status" class="text-bold col-md-2 control-label">PostVenta:</label>
+                                                        <div class="col-md-2" style="padding:5px">
+                                                            @Html.DropDownList("Id_Postventa", (SelectList)listaPostventa, new { @class = "form-control select2", @style = "width: 100%", @id = "comboPostVenta" })
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
 
-                                                        <div class="form-group">
-                                                            <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo Recibido:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.DropDownListFor(model => model.Id_tipo_trabajo_recibido, (SelectList)listaTiposTrabajorecibido, htmlAttributes: new { @class = "form-control select2", @id = "comboTipos", @style = "width: 100%" })
-                                                                @Html.ValidationMessageFor(model => model.Id_tipo_trabajo_recibido, "", new { @class = "text-danger" })
-                                                            </div>
+                                                
 
-                                                            <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo Ejecutado:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.DropDownListFor(model => model.Id_tipo_trabajo_ejecutado, (SelectList)listaTiposTrabajoejecutado, htmlAttributes: new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
-                                                                @Html.ValidationMessageFor(model => model.Id_tipo_trabajo_ejecutado, "", new { @class = "text-danger" })
-                                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-2 control-label">Direcci&oacute;n:</label>
+                                                        <div class="col-md-10" style="padding:5px">
+                                                            @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control", @type = "text", @rows = "3" })
+                                                        </div>
+
+                                                        <label for="status" class="text-bold col-md-2 control-label">Referencia Direcci&oacute;n:</label>
+                                                        <div class="col-md-10" style="padding:5px">
+                                                            @Html.TextAreaFor(model => model.Referencia_direccion, new { @class = "form-control", @type = "text", @rows = "3" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="status" class="text-bold col-md-2 control-label">Sector:</label>
+                                                        <div class="col-md-2" style="padding:5px">
+                                                            @Html.DropDownListFor(model => model.Id_sector, (SelectList)listaSector, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_sector, "", new { @class = "text-danger" })
+                                                        </div>
+
+
+
+                                                        <label for="status" class="text-bold col-md-2 control-label">Campamento:</label>
+                                                        <div class="col-md-2" style="padding:5px">
+                                                            @Html.DropDownListFor(model => model.Id_campamento, (SelectList)listaCampamento, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_campamento, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <label for="status" class="text-bold col-md-2 control-label">Sucursal:</label>
+                                                        <div class="col-md-2" style="padding:5px">
+                                                            @Html.DropDownListFor(model => model.Id_sucursal, (SelectList)listaSucursal, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_sucursal, "", new { @class = "text-danger" })
 
                                                         </div>
 
-                                                    </div>
-                                                </div>
 
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-
-                                                        <div class="form-group" style="padding:5px">
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Creaci&oacute;n Cliente:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_creacion_cliente, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_creacion_cliente, "", new { @class = "text-danger" })
-                                                            </div>
-
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Maxima Ejecuci&oacute;n Cliente:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_maxima_ejecucion_cliente, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit2" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_maxima_ejecucion_cliente, "", new { @class = "text-danger" })
-                                                            </div>
-
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Maxima Legalizaci&oacute;n:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_max_legalizacion, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit3" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_max_legalizacion, "", new { @class = "text-danger" })
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-
-
-                                                        <div class="form-group" style="padding:5px">
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Asignaci&oacute;n:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @*@Html.EditorFor(model => model.Fecha_asignacion_grupo_trabajo, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit5", @required = "required" } })
-                        @Html.ValidationMessageFor(model => model.Fecha_asignacion_grupo_trabajo, "", new { @class = "text-danger" })*@
-                                                                @Html.EditorFor(model => model.Fecha_asignacion, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit5", @required = "required" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_asignacion, "", new { @class = "text-danger" })
-                                                            </div>
-
-
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Finalizaci&oacute;n Obra:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_finalizacion_obra, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit8" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_finalizacion_obra, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Asignaci&oacute;n Grupo:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_asignacion_grupo_trabajo, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit12" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_asignacion_grupo_trabajo, "", new { @class = "text-danger" })
-
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-
-                                                        <div class="form-group" style="padding:5px">
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Inicio Permiso Municipal:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_ini_permiso_municipal, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit9" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_ini_permiso_municipal, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Fin Permiso Municipal:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_fin_permiso_municipal, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit0" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_fin_permiso_municipal, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Fecha Entrega:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Fecha_entrega, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit11" } })
-                                                                @Html.ValidationMessageFor(model => model.Fecha_entrega, "", new { @class = "text-danger" })
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-
-                                                        <div class="form-group" style="padding:5px">
-                                                            <label for="status" class="text-bold col-md-2 control-label">Hora acordada:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                <div class="bootstrap-timepicker">
-                                                                    <div class="input-group">
-                                                                        <p id="datepairExample">
-                                                                            @Html.TextBoxFor(model => model.Hora_acordada, new { @class = "form-control is-valid time start ui-timepicker-input", @id = "startHour", @type = "text", @autocomplete = "off" })   @*, @required = "required"*@
-                                                                        </p>
-                                                                        <div class="input-group-addon">
-                                                                            <i class="fa fa-clock-o"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <label for="recipient-name" class="text-bold col-md-2 control-label">Tiempo Transcurrido:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                <div class="bootstrap-timepicker">
-                                                                    <div class="input-group">
-                                                                        <p id="datepairExample">
-                                                                            @Html.TextBoxFor(model => model.Tiempo_transcurrido, new { @class = "form-control is-valid time start ui-timepicker-input", @id = "startHour", @type = "text", @autocomplete = "off", @disabled = "disabled", @Value = "00:00" })
-                                                                        </p>
-                                                                        <div class="input-group-addon">
-                                                                            <i class="fa fa-clock-o"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <label for="status" class="text-bold col-md-2 control-label">Identificaci&oacute;n Suscriptor:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Identificacion_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })   @*, @required = "required"*@
-                                                                @Html.ValidationMessageFor(model => model.Identificacion_suscriptor, "", new { @class = "text-danger" })
-                                                            </div>
-
-
+                                                        <label for="status" class="text-bold col-md-2 control-label">Estaci&oacute;n:</label>
+                                                        <div class="col-md-2" style="padding:5px">
+                                                            @Html.DropDownListFor(model => model.Id_estacion, (SelectList)listaEstacion, htmlAttributes: new { @class = "form-control select2", @style = "width: 100%" })
+                                                            @Html.ValidationMessageFor(model => model.Id_estacion, "", new { @class = "text-danger" })
                                                         </div>
 
-                                                        <div class="form-group" style="padding:5px">
-
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Nombre Suscriptor:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Nombre_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
-                                                                @Html.ValidationMessageFor(model => model.Nombre_suscriptor, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Tipo Suscriptor:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Tipo_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
-                                                                @Html.ValidationMessageFor(model => model.Tipo_suscriptor, "", new { @class = "text-danger" })
-                                                            </div>
-                                                            <label for="status" class="text-bold col-md-2 control-label">Telefono Suscriptor:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.EditorFor(model => model.Telefono_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
-                                                                @Html.ValidationMessageFor(model => model.Telefono_suscriptor, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="form-group" style="padding:5px">
-
-
-                                                            @*<label for="status" class="text-bold col-md-2 control-label">Origen:</label>*@
-                                                            <label for="recipient-name" class="text-bold col-md-2 control-label">Origen:</label>
-                                                            @*<div class="col-md-2" style="padding:5px">
-                        @Html.EditorFor(model => model.Origen, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
-                        @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
-                    </div>*@
-                                                            <div class="col-md-10" style="padding:5px">
-                                                                @Html.TextAreaFor(model => model.Origen, new { @class = "form-control", @type = "text", @rows = "2" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Interna:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.DropDownListFor(model => model.Interna, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control select2", @style = "width: 100%" })
-                                                                @Html.ValidationMessageFor(model => model.Interna, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                            <label for="status" class="text-bold col-md-2 control-label">Desalojo:</label>
-                                                            <div class="col-md-2" style="padding:5px">
-                                                                @Html.DropDownListFor(model => model.Desalojo, new List<SelectListItem>() { new SelectListItem() { Value = "True", Text = "Si", Selected = true }, new SelectListItem() { Value = "False", Text = "No", Selected = true } }, new { @class = "form-control select2", @style = "width: 100%" })
-                                                                @Html.ValidationMessageFor(model => model.Desalojo, "", new { @class = "text-danger" })
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-default">
-                                                    <div class="panel-body">
-                                                        <div class="form-group" style="padding:5px">
-                                                            <label for="status" class="col-md-2 control-label">Comentario:</label>
-                                                            <div class="col-md-10" style="padding:5px">
-                                                                @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "3" })
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" style="float:right;" />
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <div class="form-group">
+                                                    <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo Recibido:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.DropDownListFor(model => model.Id_tipo_trabajo_recibido, (SelectList)listaTiposTrabajorecibido, htmlAttributes: new { @class = "form-control select2", @id = "comboTipos", @style = "width: 100%" })
+                                                        @Html.ValidationMessageFor(model => model.Id_tipo_trabajo_recibido, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Tipo de Trabajo Ejecutado:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.DropDownListFor(model => model.Id_tipo_trabajo_ejecutado, (SelectList)listaTiposTrabajoejecutado, htmlAttributes: new { @class = "form-control select2", @id = "comboTipoTrabajo", @style = "width: 100%" })
+                                                        @Html.ValidationMessageFor(model => model.Id_tipo_trabajo_ejecutado, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <div class="form-group" style="padding:5px">
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Creaci&oacute;n Cliente:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_creacion_cliente, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_creacion_cliente, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Maxima Ejecuci&oacute;n Cliente:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_maxima_ejecucion_cliente, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit2" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_maxima_ejecucion_cliente, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Maxima Legalizaci&oacute;n:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_max_legalizacion, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit3" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_max_legalizacion, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+
+                                                <div class="form-group" style="padding:5px">
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Asignaci&oacute;n:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @*@Html.EditorFor(model => model.Fecha_asignacion_grupo_trabajo, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit5", @required = "required" } })
+                                                            @Html.ValidationMessageFor(model => model.Fecha_asignacion_grupo_trabajo, "", new { @class = "text-danger" })*@
+                                                        @Html.EditorFor(model => model.Fecha_asignacion, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit5", @required = "required" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_asignacion, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Finalizaci&oacute;n Obra:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_finalizacion_obra, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit8" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_finalizacion_obra, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Asignaci&oacute;n Grupo:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_asignacion_grupo_trabajo, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit12" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_asignacion_grupo_trabajo, "", new { @class = "text-danger" })
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <div class="form-group" style="padding:5px">
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Inicio Permiso Municipal:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_ini_permiso_municipal, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit9" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_ini_permiso_municipal, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Fin Permiso Municipal:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_fin_permiso_municipal, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit0" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_fin_permiso_municipal, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Fecha Entrega:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Fecha_entrega, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "datemask_edit11" } })
+                                                        @Html.ValidationMessageFor(model => model.Fecha_entrega, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+
+                                                <div class="form-group" style="padding:5px">
+                                                    <label for="status" class="text-bold col-md-2 control-label">Hora acordada:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        <div class="bootstrap-timepicker">
+                                                            <div class="input-group">
+                                                                <p id="datepairExample">
+                                                                    @Html.TextBoxFor(model => model.Hora_acordada, new { @class = "form-control is-valid time start ui-timepicker-input", @id = "startHour", @type = "text", @autocomplete = "off" })   @*, @required = "required"*@
+                                                                </p>
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-clock-o"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <label for="recipient-name" class="text-bold col-md-2 control-label">Tiempo Transcurrido:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        <div class="bootstrap-timepicker">
+                                                            <div class="input-group">
+                                                                <p id="datepairExample">
+                                                                    @Html.TextBoxFor(model => model.Tiempo_transcurrido, new { @class = "form-control is-valid time start ui-timepicker-input", @id = "startHour", @type = "text", @autocomplete = "off", @disabled = "disabled", @Value = "00:00" })
+                                                                </p>
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-clock-o"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <label for="status" class="text-bold col-md-2 control-label">Identificaci&oacute;n Suscriptor:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Identificacion_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })   @*, @required = "required"*@
+                                                        @Html.ValidationMessageFor(model => model.Identificacion_suscriptor, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="form-group" style="padding:5px">
+
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Nombre Suscriptor:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Nombre_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                        @Html.ValidationMessageFor(model => model.Nombre_suscriptor, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Tipo Suscriptor:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Tipo_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                        @Html.ValidationMessageFor(model => model.Tipo_suscriptor, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <label for="status" class="text-bold col-md-2 control-label">Telefono Suscriptor:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.EditorFor(model => model.Telefono_suscriptor, new { htmlAttributes = new { @class = "form-control is-valid", @type = "text" } })
+                                                        @Html.ValidationMessageFor(model => model.Telefono_suscriptor, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group" style="padding:5px">
+
+
+                                                    @*<label for="status" class="text-bold col-md-2 control-label">Origen:</label>*@
+                                                    <label for="recipient-name" class="text-bold col-md-2 control-label">Origen:</label>
+                                                    @*<div class="col-md-2" style="padding:5px">
+                                                            @Html.EditorFor(model => model.Origen, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                                            @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
+                                                        </div>*@
+                                                    <div class="col-md-10" style="padding:5px">
+                                                        @Html.TextAreaFor(model => model.Origen, new { @class = "form-control", @type = "text", @rows = "2" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Interna:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.DropDownListFor(model => model.Interna, new List<SelectListItem>() { new SelectListItem() { Value = "S", Text = "Si", Selected = true }, new SelectListItem() { Value = "N", Text = "No", Selected = true } }, new { @class = "form-control select2", @style = "width: 100%" })
+                                                        @Html.ValidationMessageFor(model => model.Interna, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <label for="status" class="text-bold col-md-2 control-label">Desalojo:</label>
+                                                    <div class="col-md-2" style="padding:5px">
+                                                        @Html.DropDownListFor(model => model.Desalojo, new List<SelectListItem>() { new SelectListItem() { Value = "True", Text = "Si", Selected = true }, new SelectListItem() { Value = "False", Text = "No", Selected = true } }, new { @class = "form-control select2", @style = "width: 100%" })
+                                                        @Html.ValidationMessageFor(model => model.Desalojo, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="form-group" style="padding:5px">
+                                                    <label for="status" class="col-md-2 control-label">Comentario:</label>
+                                                    <div class="col-md-10" style="padding:5px">
+                                                        @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", @type = "text", @rows = "3" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="submit" value="Guardar" class="Crear_MTPR btn btn-warning" style="float:right;" />
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -582,24 +590,46 @@
 
         $('#comboProspectos').on('change', function (event) {
 
-            var id_ContratoPadre_Change = $('#comboProspectos').val();
-            if (id_ContratoPadre_Change != 0) {                
+            var id_ProspectoPadre_Change = $('#comboProspectos').val();
+            if (id_ProspectoPadre_Change != 0) {
                 $('#comboProyectos').prop("disabled", true);
+                $('#comboPostVenta').prop("disabled", true);
             }
             else {
                 $('#comboProyectos').prop("disabled", false);
+                $('#comboPostVenta').prop("disabled", false);
+
             }
 
         });
 
         $('#comboProyectos').on('change', function (event) {
-  
+
             var id_ContratoPadre_Change = $('#comboProyectos').val();
             if (id_ContratoPadre_Change != 0) {
                 $('#comboProspectos').prop("disabled", true);
+                $('#comboPostVenta').prop("disabled", true);
+
             }
             else {
                 $('#comboProspectos').prop("disabled", false);
+                $('#comboPostVenta').prop("disabled", false);
+
+            }
+
+        });
+
+        $('#comboPostVenta').on('change', function (event) {
+
+            var id_ProspectoPadre_Change = $('#comboPostVenta').val();
+            if (id_ProspectoPadre_Change != 0) {
+                $('#comboProyectos').prop("disabled", true);
+                $('#comboProspectos').prop("disabled", true);
+            }
+            else {
+                $('#comboProyectos').prop("disabled", false);
+                $('#comboProspectos').prop("disabled", false);
+
             }
 
         });

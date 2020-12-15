@@ -287,7 +287,7 @@ namespace Quimipac_.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Agregar_Proyectos([Bind(Include = "Id_Sucursal,Id_Cliente,Id_TipoTrabajo,Fecha_Inicio,Fecha_Fin,Estado,Codigo_Interno,Codigo_Cliente,Direccion,Ubicacion,Comentario,Porcentaje_avance,Valor_Inicial,Valor_Ajustado,Linea,Categoria,Subcategoria, Id_contrato, Id_Prospecto, Proyecto_Padre, Valor_Ajustado_Aux, Valor_Inicial_Aux, Dia_Plazo")] MT_Proyecto mt_Proyecto)
+        public ActionResult Agregar_Proyectos([Bind(Include = "Id_Sucursal,Id_Cliente,Id_TipoTrabajo,Fecha_Inicio,Fecha_Fin,Estado,Codigo_Interno,Codigo_Cliente,Direccion,Ubicacion,Comentario,Porcentaje_avance,Valor_Inicial,Valor_Ajustado,Linea,Categoria,Subcategoria, Id_contrato, Id_Prospecto, Proyecto_Padre, Valor_Ajustado_Aux, Valor_Inicial_Aux, Dia_Plazo, Nombre")] MT_Proyecto mt_Proyecto)
         {
             if (System.Web.HttpContext.Current.Session["usuario"] != null)
             {
@@ -794,7 +794,7 @@ namespace Quimipac_.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Editar_Proyectos([Bind(Include = "Id_Proyecto,Id_Sucursal,Id_Cliente,Id_TipoTrabajo,Fecha_Inicio,Fecha_Fin,Fecha_Prorroga,EstadoProrroga,Estado,Codigo_Interno,Codigo_Cliente,Direccion,Ubicacion,Comentario,Porcentaje_avance,Valor_Inicial,Valor_Ajustado,Linea,Categoria,Subcategoria,Id_contrato, Id_Prospecto, Proyecto_Padre, Valor_Ajustado_Aux, Valor_Inicial_Aux, Dia_Plazo")] MT_Proyecto mT_Proyecto)
+        public ActionResult Editar_Proyectos([Bind(Include = "Id_Proyecto,Id_Sucursal,Id_Cliente,Id_TipoTrabajo,Fecha_Inicio,Fecha_Fin,Fecha_Prorroga,EstadoProrroga,Estado,Codigo_Interno,Codigo_Cliente,Direccion,Ubicacion,Comentario,Porcentaje_avance,Valor_Inicial,Valor_Ajustado,Linea,Categoria,Subcategoria,Id_contrato, Id_Prospecto, Proyecto_Padre, Valor_Ajustado_Aux, Valor_Inicial_Aux, Dia_Plazo, Nombre")] MT_Proyecto mT_Proyecto)
         {
             var codigointernoproyecto = System.Web.HttpContext.Current.Session["contrato_interno"].ToString();
             int secuencial = Convert.ToInt32(System.Web.HttpContext.Current.Session["secuencial"].ToString());
